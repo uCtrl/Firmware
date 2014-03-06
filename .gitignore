@@ -1,0 +1,17 @@
+build*
+*.user
+*.user.*
+*/.metadata/*
+*/.settings/*
+.settings/
+*/bin/*
+*/.hg/*
+
+*.orig
+
+# C++ objects
+
+*.o
+*.bin
+*.elf
+
