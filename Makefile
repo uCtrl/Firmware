@@ -18,8 +18,14 @@ OBJECTS =
 include ./Libraries/mbed/Makefile
 include ./Libraries/mbed-rtos/Makefile
 
-
+INCLUDE_PATHS += -I./Src
+INCLUDE_PATHS += -I./Src/Controller
+INCLUDE_PATHS += -I./Src/Communication
 OBJECTS += ./Src/main.o
+OBJECTS += ./Src/Controller/UController.o
+OBJECTS += ./Src/Communication/FakeMessageHandler.o
+OBJECTS += ./Src/Communication/UComDriver.o
+OBJECTS += ./Src/Communication/UMessageHandler.o
 #really hacky way to add object files (not functionnal)
 #CPP_OBJECTS = "find ./Src -name *.cpp"
 #OBJECTS += $(CPP_OBJECTS//.cpp/.o)
@@ -33,12 +39,19 @@ CPU = -mcpu=cortex-m0plus -mthumb
 #default release
 CC_OPTIMISATION = -Os
 PROJECT = uCtrl_Firmware_Release
+CC_SYMBOLS =
 
 
 
-ifeq ($(UCTRL_TYPE), Debug)
+ifeq ($(UCTRL_BUILD_TYPE), Debug)
 	CC_OPTIMISATION += -g3
     PROJECT = uCtrl_Firmware_Debug
+endif
+
+ifeq ($(UCTRL_BUILD_TYPE), DebugPrint)
+	CC_OPTIMISATION += -g3
+    PROJECT = uCtrl_Firmware_Debug_Print
+    CC_SYMBOLS += -DDEBUG_PRINT
 endif
 
 AS      = $(GCC_BIN)arm-none-eabi-as
@@ -48,12 +61,14 @@ LD      = $(GCC_BIN)arm-none-eabi-gcc
 OBJCOPY = $(GCC_BIN)arm-none-eabi-objcopy
 
 CC_FLAGS = $(CPU) -c $(CC_OPTIMISATION) -fno-common -fmessage-length=0 -Wall -fno-exceptions -ffunction-sections -fdata-sections
-CC_SYMBOLS = -DTARGET_KL25Z -DTARGET_M0P -DTARGET_Freescale -DTARGET_KLXX -DTOOLCHAIN_GCC_ARM -DTOOLCHAIN_GCC -D__CORTEX_M0PLUS -DARM_MATH_CM0PLUS -DMBED_BUILD_TIMESTAMP=1393616359.58 -D__MBED__=1 
+CC_SYMBOLS += -DTARGET_KL25Z -DTARGET_M0P -DTARGET_Freescale -DTARGET_KLXX -DTOOLCHAIN_GCC_ARM -DTOOLCHAIN_GCC -D__CORTEX_M0PLUS -DARM_MATH_CM0PLUS -DMBED_BUILD_TIMESTAMP=1393616359.58 -D__MBED__=1 
 
 LD_FLAGS = -mcpu=cortex-m0plus -mthumb -Wl,--gc-sections --specs=nano.specs -u _printf_float -u _scanf_float
 LD_SYS_LIBS = -lstdc++ -lsupc++ -lm -lc -lgcc -lnosys
 
 all: $(PROJECT).bin
+	 cp $(PROJECT).bin /media/MBED;sync;
+	 ../enableSerialPort.sh;
 
 clean:
 	rm -f $(PROJECT).bin $(PROJECT).elf $(OBJECTS)

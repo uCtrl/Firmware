@@ -1,43 +1,42 @@
 #include "mbed.h"
 #include "rtos.h"
+#include "UController.h"
+#include "UComDriver.h"
 
-Queue<uint32_t, 5> queue;
+DigitalOut led(LED_RED);
+//Mail<struc,3> mail_box;
 
-DigitalOut gpo(PTB8);
-DigitalOut myled(LED_RED);
-PwmOut myled2(LED_GREEN);
-
-void queue_isr() {
-    queue.put((uint32_t*)2);
-    myled = !myled;
+void controllerThread(void const *args) {
+	UController uController;
+	uController.start();
 }
 
-void queue_isr2() {
-    queue.put((uint32_t*)2);
-    myled2 = !myled2;
-}
-
-void queue_thread(void const *args) {
-    while (true) {
-        queue.put((uint32_t*)1);
-        Thread::wait(1000);
-    }
+void comDriverThread(void const *args) {
+	UComDriver uComDriver;
+	uComDriver.start();
 }
 
 int main (void) {
-    Thread thread(queue_thread);
+    Thread ctrlThread(controllerThread);
+    Thread comThread(comDriverThread);
+    //    osEvent evt;
+    while (true)
+    {
+    	/*evt = mail_box.get();
+		if (evt.status == osEventMail) {
+			UController *mail = (UController*)evt.value.p;
+			//mail->start();
 
-    Ticker ticker;
-    //Ticker ticker2;
-    ticker.attach(queue_isr, 1.0);
-    //ticker2.attach(queue_isr2, 3.0);
-
-    while (true) {
-        osEvent evt = queue.get();
-        if (evt.status != osEventMessage) {
-            printf("queue->get() returned %02x status\n\r", evt.status);
-        } else {
-            printf("queue->get() returned %d\n\r", evt.value.v);
-        }
+			mail_box.free(mail);
+		}*/
+    	Thread::wait(700);
+    	//led = !led;
+        Thread::wait(200);
+        led = !led;
+        Thread::wait(200);
+        led = !led;
+        Thread::wait(200);
+        //led = !led;
+        Thread::wait(700);
     }
 }
