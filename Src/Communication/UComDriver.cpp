@@ -57,5 +57,5 @@ void UComDriver::handleMsg()
 	#ifdef DEBUG_PRINT
 		m_uart.printf("%s","handle message");
 	#endif
-    m_uart.printf("%s",m_rxBuffer);
+    m_uart.printf("\r\nMessage Received : %s\r\n",m_rxBuffer);
 }
