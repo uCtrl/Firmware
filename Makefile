@@ -19,13 +19,21 @@ include ./Libraries/mbed/Makefile
 include ./Libraries/mbed-rtos/Makefile
 
 INCLUDE_PATHS += -I./Src
+INCLUDE_PATHS += -I./Src/Actuators
 INCLUDE_PATHS += -I./Src/Controller
 INCLUDE_PATHS += -I./Src/Communication
+INCLUDE_PATHS += -I./Src/Sensors
+INCLUDE_PATHS += -I./Src/Utils
 OBJECTS += ./Src/main.o
+OBJECTS += ./Src/Actuators/FakeActuator.o
+OBJECTS += ./Src/Actuators/UActuatorHandler.o
 OBJECTS += ./Src/Controller/UController.o
 OBJECTS += ./Src/Communication/FakeMessageHandler.o
 OBJECTS += ./Src/Communication/UComDriver.o
 OBJECTS += ./Src/Communication/UMessageHandler.o
+OBJECTS += ./Src/Sensors/FakeSensor.o
+OBJECTS += ./Src/Sensors/USensorHandler.o
+OBJECTS += ./Src/Utils/UPinUtils.o
 #really hacky way to add object files (not functionnal)
 #CPP_OBJECTS = "find ./Src -name *.cpp"
 #OBJECTS += $(CPP_OBJECTS//.cpp/.o)

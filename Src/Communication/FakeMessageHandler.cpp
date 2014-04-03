@@ -1,4 +1,4 @@
-/*#include "FakeMessageHandler.h"
+#include "FakeMessageHandler.h"
 
 bool FakeMessageHandler::instanceFlag = false;
 FakeMessageHandler* FakeMessageHandler::instance = NULL;
@@ -9,12 +9,12 @@ void FakeMessageHandler::OnMessageRecieved(char* message)
     if(strcmp(message, "CreateSensor1") == 0)
     {
         serial.printf("Creating MyNewFakeSensor1\n\r");
-        USensorHandler::GetInstance()->AddNewSensor(Fake, "MyNewFakeSensor1", 15);
+        USensorHandler::GetInstance()->AddNewSensor(Fake, "MyNewFakeSensor1", 0);
     }
     if(strcmp(message, "CreateSensor2") == 0)
     {
         serial.printf("Creating MyNewFakeSensor2\n\r");
-        USensorHandler::GetInstance()->AddNewSensor(Fake, "MyNewFakeSensor2", 16);
+        USensorHandler::GetInstance()->AddNewSensor(Fake, "MyNewFakeSensor2", 1);
     }
     if(strcmp(message, "DeleteSensor1") == 0)
     {
@@ -31,12 +31,12 @@ void FakeMessageHandler::OnMessageRecieved(char* message)
     if(strcmp(message, "CreateActuator1") == 0)
     {
         serial.printf("Creating MyNewFakeActuator1\n\r");
-        UActuatorHandler::GetInstance()->AddNewActuator(Actuator_Fake, "MyNewFakeActuator1", 1);
+        UActuatorHandler::GetInstance()->AddNewActuator(Actuator_Fake, "MyNewFakeActuator1", 0);
     }
     if(strcmp(message, "CreateActuator2") == 0)
     {
         serial.printf("Creating MyNewFakeActuator2\n\r");
-        UActuatorHandler::GetInstance()->AddNewActuator(Actuator_Fake, "MyNewFakeActuator2", 2);
+        UActuatorHandler::GetInstance()->AddNewActuator(Actuator_Fake, "MyNewFakeActuator2", 1);
     }
     if(strcmp(message, "DeleteActuator1") == 0)
     {
@@ -59,16 +59,22 @@ FakeMessageHandler::FakeMessageHandler() : serial(USBTX, USBRX)
     }
     
     m_RxCount = 0;
-    
-    serial.attach(this, &FakeMessageHandler::RxInterrupt, MODSERIAL::RxIrq);
-    
-    serial.printf("FakeMessageHandler ready.\r\n");     
+}
+
+void FakeMessageHandler::start()
+{
+    serial.printf("FakeMessageHandler ready.\r\n");
+    while(1)
+    {
+	    char c = serial.getc();
+	    CharReceived(c);
+	}
 }
 
 // Get the singleton instance
 FakeMessageHandler* FakeMessageHandler::GetInstance()
 {
-    if(! instanceFlag)
+    if(!instanceFlag)
     {
         instance = new FakeMessageHandler();
         instanceFlag = true;
@@ -76,8 +82,18 @@ FakeMessageHandler* FakeMessageHandler::GetInstance()
     }
     else
     {
-        return instance;
+        return instanceFlag;
     }
+}
+
+void FakeMessageHandler::resetBuffer()
+{
+    for(int i = 0; i < BUFFER_SIZE; i++)
+    {
+        m_RxBuffer[i] = 0;
+    }
+
+    m_RxCount = 0;
 }
 
 void FakeMessageHandler::SendMessage(char* message)
@@ -89,6 +105,7 @@ void FakeMessageHandler::SendMessage(char* message)
 void FakeMessageHandler::ReadValueFromSensor(char* sensorName, int value)
 {
     // Convert int to str
+	/*
     char tmp[10];
     sprintf(tmp,"%d",value);
     
@@ -97,8 +114,7 @@ void FakeMessageHandler::ReadValueFromSensor(char* sensorName, int value)
     strcat(buf,sensorName);
     strcat(buf,", value : ");
     strcat(buf,tmp);
-    
-    SendMessage(buf);
+    SendMessage(buf);//*/
     
     if(strcmp(sensorName, "MyNewFakeSensor1") == 0)
     {
@@ -119,14 +135,10 @@ void FakeMessageHandler::ReadValueFromSensor(char* sensorName, int value)
     }
 }
 
-// Stores the characters recieved in a rx buffer. If a enter is recieved, sends the message
+// Stores the characters received in a rx buffer. If a enter is received, sends the message
 // Really basic stuff for testing
-void FakeMessageHandler::RxInterrupt(MODSERIAL_IRQ_INFO *q) 
-{      
-    MODSERIAL *p_serial = q->serial;
-    char c = p_serial->getc();
-
-    
+void FakeMessageHandler::CharReceived(char c)
+{
     if(c == 13) // enter
     {
         serial.printf("\n\r");
@@ -135,21 +147,15 @@ void FakeMessageHandler::RxInterrupt(MODSERIAL_IRQ_INFO *q)
         serial.printf("\n\r");
         
         OnMessageRecieved(m_RxBuffer);
-        
-        for(int i = 0; i < BUFFER_SIZE; i++)
-        {
-            m_RxBuffer[i] = 0;
-        }
-        
-        m_RxCount = 0;      
+        resetBuffer();
     }    
     else
     {    
-        p_serial->putc(c);
+        serial.putc(c);
         m_RxBuffer[m_RxCount] = c;
 
         m_RxCount++;            
         if(m_RxCount == BUFFER_SIZE)
             m_RxCount = 0;         
     }
-}*/
+}

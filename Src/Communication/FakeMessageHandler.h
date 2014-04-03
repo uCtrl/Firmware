@@ -1,8 +1,7 @@
-/*#ifndef COMMUNICATION_FAKEMESSAGEHANDLER_H_
+#ifndef COMMUNICATION_FAKEMESSAGEHANDLER_H_
 #define COMMUNICATION_FAKEMESSAGEHANDLER_H_
 
 #include "mbed.h"
-#include "MODSERIAL.h"
 #include "defines.h"
 #include "USensorType.h"
 #include "USensorHandler.h"
@@ -13,7 +12,7 @@ class FakeMessageHandler
 private:
     static bool instanceFlag;
     static FakeMessageHandler *instance;
-    MODSERIAL serial; 
+    Serial serial;
     
     char m_RxBuffer[BUFFER_SIZE];
     int m_RxCount;
@@ -24,11 +23,13 @@ public:
     
     static FakeMessageHandler* GetInstance();
     
+    void start();
+    void resetBuffer();
     void ReadValueFromSensor(char* sensorName, int value);
     void SendMessage(char* message); 
-    void RxInterrupt(MODSERIAL_IRQ_INFO *q);
+    void CharReceived(char c);
     void OnMessageRecieved(char* message);
     
 };
 
-#endif  // COMMUNICATION_FAKEMESSAGEHANDLER_H_*/
+#endif  // COMMUNICATION_FAKEMESSAGEHANDLER_H_

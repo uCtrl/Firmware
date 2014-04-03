@@ -24,6 +24,5 @@ void UController::start()
 		m_activityLed = !m_activityLed;
 		//c = m_pcSerial.getc();
 		Thread::wait(700);
-		m_pcSerial.putc(c);
 	}
 }

@@ -47,9 +47,6 @@ void UComDriver::start()
 		}
 		m_uart.putc(c);
 	}
-    
-
-
 }
 
 void UComDriver::handleMsg()
