@@ -21,11 +21,13 @@ include ./Libraries/mbed-rtos/Makefile
 INCLUDE_PATHS += -I./Src
 INCLUDE_PATHS += -I./Src/Controller
 INCLUDE_PATHS += -I./Src/Communication
+INCLUDE_PATHS += -I./Src/TaskHandler
 OBJECTS += ./Src/main.o
 OBJECTS += ./Src/Controller/UController.o
 OBJECTS += ./Src/Communication/FakeMessageHandler.o
 OBJECTS += ./Src/Communication/UComDriver.o
 OBJECTS += ./Src/Communication/UMessageHandler.o
+OBJECTS += ./Src/TaskHandler/UTaskHandler.o
 #really hacky way to add object files (not functionnal)
 #CPP_OBJECTS = "find ./Src -name *.cpp"
 #OBJECTS += $(CPP_OBJECTS//.cpp/.o)
@@ -69,6 +71,9 @@ LD_SYS_LIBS = -lstdc++ -lsupc++ -lm -lc -lgcc -lnosys
 all: $(PROJECT).bin
 	 cp $(PROJECT).bin /media/MBED;sync;
 	 ../enableSerialPort.sh;
+#ifeq ($(UCTRL_BUILD_TYPE), Debug)
+#	 ../startDBGServer.sh
+#endif
 
 clean:
 	rm -f $(PROJECT).bin $(PROJECT).elf $(OBJECTS)

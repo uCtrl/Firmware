@@ -9,7 +9,6 @@ class UComDriver
 {
     private:
         Serial m_uart;
-        DigitalOut led;
         char m_rxBuffer[UCOM_BUFFER_SIZE];
         uint16_t m_rxCount;
     public:
