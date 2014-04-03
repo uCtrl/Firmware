@@ -1,7 +1,7 @@
 #include "UComDriver.h"
 
 // Private Constructor
-UComDriver::UComDriver() : m_uart(USBTX, USBRX), led(LED_GREEN)
+UComDriver::UComDriver() : m_uart(USBTX, USBRX)
 {
 	m_rxCount = 0;
 }
@@ -23,12 +23,10 @@ void UComDriver::resetBuffer()
 
 void UComDriver::start()
 {
-	led = true;
 	char c;
 	while(true)
 	{
 		c = m_uart.getc();
-		led = !led;
 		if(c == 13) // enterKey
 		{
 			handleMsg();

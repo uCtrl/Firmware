@@ -17,12 +17,9 @@ UController::~UController()
 
 void UController::start()
 {
-	char c = '!';
-	while(true)
+	for(;;)
 	{
 		Thread::wait(5000);
 		m_activityLed = !m_activityLed;
-		//c = m_pcSerial.getc();
-		Thread::wait(700);
 	}
 }
