@@ -8,7 +8,7 @@
 
 #ifdef DEBUG_PRINT
 extern Semaphore semMailUTaskHandler;
-extern Mail<UTaskCfg, MAIL_LEN_UTASKHANDLER>mailUTaskHandler;
+extern Mail<UTaskRequest, MAIL_LEN_UTASKHANDLER>mailUTaskHandler;
 #endif
 
 /*
@@ -81,14 +81,14 @@ int main (void)
     	//for testing purpose
 		#ifdef DEBUG_PRINT
     		semMailUTaskHandler.wait();
-    		UTaskCfg *mail = mailUTaskHandler.alloc();
+    		UTaskRequest *mail = mailUTaskHandler.alloc();
 			if(mail != NULL)
 			{
 				i++;
 				printf("%d",i);
-				mail->taskCfgType = UACTION;
-				mail->actionCfg.actuatorId = 123;
-				printf("Send actuatorId:%lu\n\r", mail->actionCfg.actuatorId);
+				mail->taskCfg.taskCfgType = UACTION;
+				mail->taskCfg.actionCfg.actuatorId = 123;
+				printf("Send actuatorId:%lu\n\r", mail->taskCfg.actionCfg.actuatorId);
 				mailUTaskHandler.put(mail);
 				printf("Sent");
 			}
