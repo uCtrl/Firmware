@@ -20,17 +20,20 @@ DigitalOut ledg(LED_GREEN);
 
 
 
-void controllerThread(void const *args) {
+void controllerThread(void const *args)
+{
 	UController uController;
 	uController.start();
 }
 
-void comDriverThread(void const *args) {
+void comDriverThread(void const *args)
+{
 	UComDriver uComDriver;
 	uComDriver.start();
 }
 
-void taskHandlerThread(void const *args) {
+void taskHandlerThread(void const *args)
+{
 	UTaskHandler uTaskHandler;
 	uTaskHandler.start();
 }
@@ -51,8 +54,8 @@ void messageHandlerThread(void const *args) {
 }
 */
 
-int main (void) {
-
+int main (void)
+{
 	led = true;
 	ledg = true;
     Thread ctrlThread(controllerThread,NULL,CONTROLLER_PRIORITY,CONTROLLER_STACK_SIZE);

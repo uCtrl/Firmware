@@ -11,6 +11,7 @@
 #include "UTaskCfgType.h"
 #include "UConditionCfg.h"
 #include "UActionCfg.h"
+#include "UTaskCfgMod.h"
 
 /** UTaskCfg struct contains all data for the creation of sceneries, tasks,
  * actions and conditions in the task system.
@@ -21,6 +22,7 @@
 typedef struct
 {
 	UTaskCfgType taskCfgType;
+	UTaskCfgMod taskCfgMod;
 	uint32_t id;
 	uint32_t parentId;
 	union

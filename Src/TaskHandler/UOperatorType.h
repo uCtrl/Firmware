@@ -10,7 +10,8 @@
 
 /** UTaskCfgType enum represent the comparison operator to use in each
  *  condition in the task system*/
-typedef enum {
+typedef enum
+{
 	OPERATOR_TYPE_NONE = 0,
 	EQUAL = 1,
 	GREATER_EQUAL = 2,
