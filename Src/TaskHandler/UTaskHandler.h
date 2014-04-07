@@ -14,7 +14,12 @@
 #include "UConditionCfg.h"
 #include "UActionCfg.h"
 #include "UTaskCfgType.h"
-#define MAIL_LEN_UTASKHANDLER 8
+#include "UScenery.h"
+#include "UTask.h"
+#include "UCondition.h"
+#include "UAction.h"
+#include "TaskHandlerConfigFile.h"
+
 extern Semaphore semMailUTaskHandler;
 extern Mail<UTaskCfg, MAIL_LEN_UTASKHANDLER>mailUTaskHandler;
 
@@ -23,6 +28,7 @@ extern Mail<UTaskCfg, MAIL_LEN_UTASKHANDLER>mailUTaskHandler;
 class UTaskHandler
 {
 public:
+	UScenery *MainScenery;
 	/** start the content of thread */
 	void start();
 };
