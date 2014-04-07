@@ -1,43 +1,106 @@
 #include "mbed.h"
 #include "rtos.h"
+#include "cfg.h"
+#include "UController.h"
+#include "UComDriver.h"
+#include "UMessageHandler.h"
+#include "UTaskHandler.h"
 
-Queue<uint32_t, 5> queue;
+#ifdef DEBUG_PRINT
+extern Semaphore semMailUTaskHandler;
+extern Mail<UTaskRequest, MAIL_LEN_UTASKHANDLER>mailUTaskHandler;
+#endif
 
-DigitalOut gpo(PTB8);
-DigitalOut myled(LED_RED);
-PwmOut myled2(LED_GREEN);
+/*
+#include "USensorHandler.h"
+#include "UActuatorHandler.h"
+*/
+DigitalOut led(LED_RED);
+DigitalOut ledg(LED_GREEN);
 
-void queue_isr() {
-    queue.put((uint32_t*)2);
-    myled = !myled;
+
+
+void controllerThread(void const *args)
+{
+	UController uController;
+	uController.start();
 }
 
-void queue_isr2() {
-    queue.put((uint32_t*)2);
-    myled2 = !myled2;
+void comDriverThread(void const *args)
+{
+	UComDriver uComDriver;
+	uComDriver.start();
 }
 
-void queue_thread(void const *args) {
-    while (true) {
-        queue.put((uint32_t*)1);
-        Thread::wait(1000);
-    }
+void taskHandlerThread(void const *args)
+{
+	UTaskHandler uTaskHandler;
+	uTaskHandler.start();
+}
+/*
+void sensorHandlerThread(void const *args) {
+	USensorHandler uSensorHandler;
+	uSensorHandler.start();
 }
 
-int main (void) {
-    Thread thread(queue_thread);
+void actuatorHandlerThread(void const *args) {
+	UActuatorHandler uActuatorHandler;
+	uActuatorHandler.start();
+}
 
-    Ticker ticker;
-    //Ticker ticker2;
-    ticker.attach(queue_isr, 1.0);
-    //ticker2.attach(queue_isr2, 3.0);
+void messageHandlerThread(void const *args) {
+	UMessageHandler uMessageHandler;
+	uMessageHandler.start();
+}
+*/
 
-    while (true) {
-        osEvent evt = queue.get();
-        if (evt.status != osEventMessage) {
-            printf("queue->get() returned %02x status\n\r", evt.status);
-        } else {
-            printf("queue->get() returned %d\n\r", evt.value.v);
-        }
+int main (void)
+{
+	led = true;
+	ledg = true;
+    Thread ctrlThread(controllerThread,NULL,CONTROLLER_PRIORITY,CONTROLLER_STACK_SIZE);
+    //Thread comThread(comDriverThread,NULL,COM_DRIVER_PRIORITY,COM_DRIVER_STACK_SIZE);
+
+    Thread taskThread(taskHandlerThread,NULL,TASK_HANDLER_PRIORITY,TASK_HANDLER_STACK_SIZE);
+
+    /*
+    Thread sensorThread(sensorHandlerThread,NULL,SENSOR_HANDLER_PRIORITY,SENSOR_HANDLER_STACK_SIZE);
+    Thread actuatorThread(actuatorHandlerThread,NULL,ACTUATOR_HANDLER_PRIORITY,ACTUATOR_HANDLER_STACK_SIZE);
+    Thread messageThread(messageHandlerThread,NULL,MESSAGE_HANDLER_PRIORITY,MESSAGE_HANDLER_STACK_SIZE);
+    */
+    //    osEvent evt;
+    //Thread::wait(5000);
+    int i = 0;
+    Thread::wait(1000);
+    for(;;)
+    {
+    	led = false;
+    	Thread::wait(500);
+    	led = true;
+
+    	//for testing purpose
+		#ifdef DEBUG_PRINT
+    		semMailUTaskHandler.wait();
+    		UTaskRequest *mail = mailUTaskHandler.alloc();
+			if(mail != NULL)
+			{
+				i++;
+				printf("%d",i);
+				mail->taskCfg.taskCfgType = UACTION;
+				mail->taskCfg.actionCfg.actuatorId = 123;
+				printf("Send actuatorId:%lu\n\r", mail->taskCfg.actionCfg.actuatorId);
+				mailUTaskHandler.put(mail);
+				printf("Sent");
+			}
+			else
+			{
+				//error, should never happen with semaphore
+				ledg = false;
+				Thread::wait(500);
+				ledg = true;
+			}
+		#endif
+		printf("wait");
+		Thread::wait(2000);
     }
 }
