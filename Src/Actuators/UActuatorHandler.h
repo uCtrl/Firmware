@@ -2,9 +2,11 @@
 #define ACTUATORS_UACTUATORHANDLER_H_
 
 class FakeActuator;
+class FakeMessageHandler;
 
 #include "FakeActuator.h" // Todo : replace with real actuators
 #include "UActuatorType.h"
+#include "FakeMessageHandler.h"
 #include "string.h"
 #include "defines.h"
 
@@ -15,15 +17,11 @@ class UActuatorHandler
 private:
     int m_ActuatorCount;
     FakeActuator* m_Actuators[ACTUATORS_LIST_LENGTH];
-
-    static bool instanceFlag;
-    static UActuatorHandler *instance;
-
-    UActuatorHandler(); // Private Constructor
+    FakeMessageHandler* m_messageHandler;
 
 public:
 
-    static UActuatorHandler* GetInstance();
+    UActuatorHandler(FakeMessageHandler*); // Public Constructor
 
     bool AddNewActuator(UActuatorType a_type, char* a_actuatorName, int a_pinUsed);
     bool DeleteActuator(char* a_actuatorName);

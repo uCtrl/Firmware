@@ -1,6 +1,9 @@
 #ifndef COMMUNICATION_FAKEMESSAGEHANDLER_H_
 #define COMMUNICATION_FAKEMESSAGEHANDLER_H_
 
+class UActuatorHandler;
+class USensorHandler;
+
 #include "mbed.h"
 #include "defines.h"
 #include "USensorType.h"
@@ -10,19 +13,21 @@
 class FakeMessageHandler
 {
 private:
-    static bool instanceFlag;
-    static FakeMessageHandler *instance;
+
     Serial serial;
+    USensorHandler* m_sensorHandler;
+    UActuatorHandler* m_actuatorHandler;
     
     char m_RxBuffer[BUFFER_SIZE];
     int m_RxCount;
-    
-    FakeMessageHandler(); // Private Constructor
+
+    void ReadChar();
  
 public:
     
-    static FakeMessageHandler* GetInstance();
+    FakeMessageHandler(); // Public Constructor
     
+    void initialize(USensorHandler*, UActuatorHandler*);
     void start();
     void resetBuffer();
     void ReadValueFromSensor(char* sensorName, int value);

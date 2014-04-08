@@ -1,28 +1,9 @@
 #include "UActuatorHandler.h"
 
-bool UActuatorHandler::instanceFlag = false;
-UActuatorHandler* UActuatorHandler::instance = NULL;
-
-// Private Constructor
-UActuatorHandler::UActuatorHandler()
+UActuatorHandler::UActuatorHandler(FakeMessageHandler* messageHandler)
 {
+	m_messageHandler = messageHandler;
 	m_ActuatorCount = 0;
-}
-
-
-// Get the singleton instance
-UActuatorHandler* UActuatorHandler::GetInstance()
-{
-    if(! instanceFlag)
-    {
-        instance = new UActuatorHandler();
-        instanceFlag = true;
-        return instance;
-    }
-    else
-    {
-        return instance;
-    }
 }
 
 bool UActuatorHandler::AddNewActuator(UActuatorType a_type, char* a_actuatorName, int a_pinUsed)
@@ -54,7 +35,7 @@ bool UActuatorHandler::DeleteActuator(char* a_actuatorName)
             strcat(buf, "Deleted actuator: ");
             strcat(buf, a_actuatorName);
 
-            FakeMessageHandler::GetInstance()->SendMessage(buf);
+            m_messageHandler->SendMessage(buf);
 
             // We now need to shift the sensors in the array by 1 position
             for(int j = i; j < m_ActuatorCount; j++) {
@@ -76,12 +57,19 @@ bool UActuatorHandler::DeleteActuator(char* a_actuatorName)
 
 bool UActuatorHandler::SetActuatorValue(char* a_actuatorName, int a_value)
 {
+	/*m_messageHandler->SendMessage("test");
+
+    char tmp[10];
+    sprintf(tmp,"%d",m_ActuatorCount);
+	m_messageHandler->SendMessage(tmp);
+
+	/*
     for(int i = 0; i < m_ActuatorCount; i++) {
         if(strcmp(a_actuatorName, m_Actuators[i]->GetName()) == 0) {
-            m_Actuators[i]->SetValue(a_value);
+            //m_Actuators[i]->SetValue(a_value);
             return true;
         }
-    }
+    }*/
     return false;
 }
 

@@ -209,6 +209,7 @@
 		<configuration configurationName="Release">
 			<resource resourceType="PROJECT" workspacePath="/uCtrl_Firmware"/>
 		</configuration>
+		<configuration configurationName="DebugPrint"/>
 		<configuration configurationName="Debug"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>

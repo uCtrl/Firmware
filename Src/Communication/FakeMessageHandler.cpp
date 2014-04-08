@@ -1,89 +1,38 @@
 #include "FakeMessageHandler.h"
 
-bool FakeMessageHandler::instanceFlag = false;
-FakeMessageHandler* FakeMessageHandler::instance = NULL;
-
-void FakeMessageHandler::OnMessageRecieved(char* message)
-{
-    // Sensors
-    if(strcmp(message, "CreateSensor1") == 0)
-    {
-        serial.printf("Creating MyNewFakeSensor1\n\r");
-        USensorHandler::GetInstance()->AddNewSensor(Fake, "MyNewFakeSensor1", 0);
-    }
-    if(strcmp(message, "CreateSensor2") == 0)
-    {
-        serial.printf("Creating MyNewFakeSensor2\n\r");
-        USensorHandler::GetInstance()->AddNewSensor(Fake, "MyNewFakeSensor2", 1);
-    }
-    if(strcmp(message, "DeleteSensor1") == 0)
-    {
-        serial.printf("Trying to delete MyNewFakeSensor1\n\r");
-        USensorHandler::GetInstance()->DeleteSensor("MyNewFakeSensor1");
-    }
-    if(strcmp(message, "DeleteSensor2") == 0)
-    {
-        serial.printf("Trying to delete MyNewFakeSensor2\n\r");
-        USensorHandler::GetInstance()->DeleteSensor("MyNewFakeSensor2");
-    }
-    
-    // Actuators
-    if(strcmp(message, "CreateActuator1") == 0)
-    {
-        serial.printf("Creating MyNewFakeActuator1\n\r");
-        UActuatorHandler::GetInstance()->AddNewActuator(Actuator_Fake, "MyNewFakeActuator1", 0);
-    }
-    if(strcmp(message, "CreateActuator2") == 0)
-    {
-        serial.printf("Creating MyNewFakeActuator2\n\r");
-        UActuatorHandler::GetInstance()->AddNewActuator(Actuator_Fake, "MyNewFakeActuator2", 1);
-    }
-    if(strcmp(message, "DeleteActuator1") == 0)
-    {
-        serial.printf("Trying to delete MyNewFakeSensor1\n\r");
-        UActuatorHandler::GetInstance()->DeleteActuator("MyNewFakeActuator1");
-    }
-    if(strcmp(message, "DeleteActuator2") == 0)
-    {
-        serial.printf("Trying to delete MyNewFakeActuator2\n\r");
-        UActuatorHandler::GetInstance()->DeleteActuator("MyNewFakeActuator2");
-    }
-}
-
-// Private Constructor
 FakeMessageHandler::FakeMessageHandler() : serial(USBTX, USBRX)
-{    
+{
     for(int i = 0; i < BUFFER_SIZE; i++)
     {
-        m_RxBuffer[i] = 0;        
+        m_RxBuffer[i] = 0;
     }
     
     m_RxCount = 0;
+    m_actuatorHandler = NULL;
+    m_sensorHandler = NULL;
+}
+
+void FakeMessageHandler::initialize(USensorHandler* sensorHandler, UActuatorHandler* actuatorHandler) {
+    m_sensorHandler = sensorHandler;
+    m_actuatorHandler = actuatorHandler;
 }
 
 void FakeMessageHandler::start()
 {
     serial.printf("FakeMessageHandler ready.\r\n");
+
+    //serial.attach(this, &FakeMessageHandler::ReadChar, Serial::RxIrq);
+
     while(1)
     {
-	    char c = serial.getc();
-	    CharReceived(c);
+	    ReadChar();
 	}
 }
 
-// Get the singleton instance
-FakeMessageHandler* FakeMessageHandler::GetInstance()
+void FakeMessageHandler::ReadChar()
 {
-    if(!instanceFlag)
-    {
-        instance = new FakeMessageHandler();
-        instanceFlag = true;
-        return instance;
-    }
-    else
-    {
-        return instanceFlag;
-    }
+    char c = serial.getc();
+    CharReceived(c);
 }
 
 void FakeMessageHandler::resetBuffer()
@@ -119,18 +68,18 @@ void FakeMessageHandler::ReadValueFromSensor(char* sensorName, int value)
     if(strcmp(sensorName, "MyNewFakeSensor1") == 0)
     {
         if(value > 55000) {
-            UActuatorHandler::GetInstance()->SetActuatorValue("MyNewFakeActuator1", 1);
+        	m_actuatorHandler->SetActuatorValue("MyNewFakeActuator1", 1);
         } else {
-            UActuatorHandler::GetInstance()->SetActuatorValue("MyNewFakeActuator1", 0);
+        	m_actuatorHandler->SetActuatorValue("MyNewFakeActuator1", 0);
         }
     }
     
     if(strcmp(sensorName, "MyNewFakeSensor2") == 0)
     {
         if(value > 55000) {
-            UActuatorHandler::GetInstance()->SetActuatorValue("MyNewFakeActuator2", 1);
+        	m_actuatorHandler->SetActuatorValue("MyNewFakeActuator2", 1);
         } else {
-            UActuatorHandler::GetInstance()->SetActuatorValue("MyNewFakeActuator2", 0);
+        	m_actuatorHandler->SetActuatorValue("MyNewFakeActuator2", 0);
         }
     }
 }
@@ -157,5 +106,52 @@ void FakeMessageHandler::CharReceived(char c)
         m_RxCount++;            
         if(m_RxCount == BUFFER_SIZE)
             m_RxCount = 0;         
+    }
+}
+
+void FakeMessageHandler::OnMessageRecieved(char* message)
+{
+    // Sensors
+    if(strcmp(message, "CreateSensor1") == 0)
+    {
+        serial.printf("Creating MyNewFakeSensor1\n\r");
+        m_sensorHandler->AddNewSensor(Fake, "MyNewFakeSensor1", 0);
+    }
+    if(strcmp(message, "CreateSensor2") == 0)
+    {
+        serial.printf("Creating MyNewFakeSensor2\n\r");
+        m_sensorHandler->AddNewSensor(Fake, "MyNewFakeSensor2", 1);
+    }
+    if(strcmp(message, "DeleteSensor1") == 0)
+    {
+        serial.printf("Trying to delete MyNewFakeSensor1\n\r");
+        m_sensorHandler->DeleteSensor("MyNewFakeSensor1");
+    }
+    if(strcmp(message, "DeleteSensor2") == 0)
+    {
+        serial.printf("Trying to delete MyNewFakeSensor2\n\r");
+        m_sensorHandler->DeleteSensor("MyNewFakeSensor2");
+    }
+
+    // Actuators
+    if(strcmp(message, "CreateActuator1") == 0)
+    {
+        serial.printf("Creating MyNewFakeActuator1\n\r");
+        m_actuatorHandler->AddNewActuator(Actuator_Fake, "MyNewFakeActuator1", 0);
+    }
+    if(strcmp(message, "CreateActuator2") == 0)
+    {
+        serial.printf("Creating MyNewFakeActuator2\n\r");
+        m_actuatorHandler->AddNewActuator(Actuator_Fake, "MyNewFakeActuator2", 1);
+    }
+    if(strcmp(message, "DeleteActuator1") == 0)
+    {
+        serial.printf("Trying to delete MyNewFakeSensor1\n\r");
+        m_actuatorHandler->DeleteActuator("MyNewFakeActuator1");
+    }
+    if(strcmp(message, "DeleteActuator2") == 0)
+    {
+        serial.printf("Trying to delete MyNewFakeActuator2\n\r");
+        m_actuatorHandler->DeleteActuator("MyNewFakeActuator2");
     }
 }

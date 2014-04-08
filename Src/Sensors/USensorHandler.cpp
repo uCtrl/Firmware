@@ -1,28 +1,9 @@
-#include "USensorHandler.h"
+#include "USensorHandler.h"m_SensorCount
 
-bool USensorHandler::instanceFlag = false;
-USensorHandler* USensorHandler::instance = 0;
-
-// Private Constructor
-USensorHandler::USensorHandler()
+USensorHandler::USensorHandler(FakeMessageHandler* messageHandler)
 {
-    //m_Sensors = new FakeSensor[SENSOR_LIST_LENGTH];
-}
-
-
-// Get the singleton instance
-USensorHandler* USensorHandler::GetInstance()
-{
-    if(! instanceFlag)
-    {
-        instance = new USensorHandler();
-        instanceFlag = true;
-        return instance;
-    }
-    else
-    {
-        return instance;
-    }
+	m_messageHandler = messageHandler;
+	m_SensorCount = 0;
 }
 
 bool USensorHandler::AddNewSensor(USensorType type, char* sensorName, int pinUsed)
@@ -41,7 +22,7 @@ bool USensorHandler::AddNewSensor(USensorType type, char* sensorName, int pinUse
         case Current:
             break;
         case Fake:
-            m_Sensors[m_SensorCount] = new FakeSensor(sensorName, pinUsed);
+            m_Sensors[m_SensorCount] = new FakeSensor(m_messageHandler, sensorName, pinUsed, 5000);
             break;
     }
 
@@ -60,7 +41,7 @@ bool USensorHandler::DeleteSensor(char* sensorName) {
             strcat(buf,"Deleted sensor: ");
             strcat(buf,sensorName);
 
-            FakeMessageHandler::GetInstance()->SendMessage(buf);
+            m_messageHandler->SendMessage(buf);
 
             // We now need to shift the sensors in the array by 1 position
             for(int j = i; j < m_SensorCount; j++) {
