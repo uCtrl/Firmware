@@ -35,7 +35,7 @@
 							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.addtools.createlisting.2095006665" name="Create Extended Listing" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.addtools.createlisting"/>
 							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.addtools.printsize.657677579" name="Print Size" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.addtools.printsize"/>
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.GNU_ELF" id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.platform.base.901370816" isAbstract="false" name="Linux Platform" osList="linux" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.platform.base"/>
-							<builder id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.builder.base.1588756071" incrementalBuildTarget="all UCTRL_BUILD_TYPE=Debug" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="ARM Linux GNU Make builder (Sourcery Lite Bare)" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.builder.base">
+							<builder cleanBuildTarget="clean UCTRL_BUILD_TYPE=Debug" id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.builder.base.1588756071" incrementalBuildTarget="all UCTRL_BUILD_TYPE=Debug" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="ARM Linux GNU Make builder (Sourcery Lite Bare)" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.builder.base">
 								<outputEntries>
 									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name=""/>
 								</outputEntries>
@@ -58,12 +58,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Src/Utils|Src/Actuators|Src/Sensors|Src/Communication|Src/UController|Controller|Src/Controller|Src/ucontroller|Communication" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Actuators"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Communication"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Controller"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Sensors"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Utils"/>
+						<entry excluding="Dependancies/Controller|Src/TaskHandler|Src/Actuators|Src/Sensors|Src/ucontroller|Dependancies/Sensors|Utils|Controller|Src/Communication|Src/Utils|Src/UController|Dependancies/Utils|Src/Controller|Dependancies/Communication|Communication" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -101,7 +96,7 @@
 							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.addtools.createlisting.459419861" name="Create Extended Listing" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.addtools.createlisting"/>
 							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.addtools.printsize.448785599" name="Print Size" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.addtools.printsize"/>
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.GNU_ELF" id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.platform.base.411011845" isAbstract="false" name="Linux Platform" osList="linux" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.platform.base"/>
-							<builder autoBuildTarget="all" buildPath="${workspace_loc:/uCtrl_Firmware}/" cleanBuildTarget="clean" enableAutoBuild="false" enableCleanBuild="true" enabledIncrementalBuild="true" id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.builder.base.1900610674" incrementalBuildTarget="all UCTRL_BUILD_TYPE=Release" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="ARM Linux GNU Make builder (Sourcery Lite Bare)" parallelBuildOn="false" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.builder.base"/>
+							<builder autoBuildTarget="all" buildPath="${workspace_loc:/uCtrl_Firmware}/" cleanBuildTarget="clean UCTRL_BUILD_TYPE=Release" enableAutoBuild="false" enableCleanBuild="true" enabledIncrementalBuild="true" id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.builder.base.1900610674" incrementalBuildTarget="all UCTRL_BUILD_TYPE=Release" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="ARM Linux GNU Make builder (Sourcery Lite Bare)" parallelBuildOn="false" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.builder.base"/>
 							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.assembler.base.2129078731" name="ARM Linux GCC Assembler (Sourcery Lite Bare)" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.assembler.base">
 								<inputType id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.assembler.base.input.939965039" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.assembler.base.input"/>
 							</tool>
@@ -120,11 +115,12 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Src/Utils|Src/Actuators|Src/Sensors|Src/Communication|Communication|Src/Controller|Controller|Src/ucontroller|Src/UController" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="Dependancies/Utils|Dependancies/Sensors|Dependancies/Controller|Dependancies/Communication|Src/TaskHandler|Src/Utils|Src/Actuators|Src/Sensors|Src/Communication|Communication|Src/Controller|Controller|Src/ucontroller|Src/UController" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Actuators"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Communication"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Controller"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Sensors"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/TaskHandler"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Utils"/>
 					</sourceEntries>
 				</configuration>
@@ -163,7 +159,7 @@
 							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.addtools.createlisting.631019684" name="Create Extended Listing" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.addtools.createlisting"/>
 							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.addtools.printsize.116771681" name="Print Size" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.addtools.printsize"/>
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.GNU_ELF" id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.platform.base.1337605473" isAbstract="false" name="Linux Platform" osList="linux" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.platform.base"/>
-							<builder id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.builder.base.1505734294" incrementalBuildTarget="all UCTRL_BUILD_TYPE=DebugPrint" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="ARM Linux GNU Make builder (Sourcery Lite Bare)" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.builder.base">
+							<builder cleanBuildTarget="clean UCTRL_BUILD_TYPE=DebugPrint" id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.builder.base.1505734294" incrementalBuildTarget="all UCTRL_BUILD_TYPE=DebugPrint" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="ARM Linux GNU Make builder (Sourcery Lite Bare)" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.builder.base">
 								<outputEntries>
 									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name=""/>
 								</outputEntries>
@@ -186,11 +182,12 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Src/Utils|Src/Actuators|Src/Sensors|Src/Communication|Src/UController|Controller|Src/Controller|Src/ucontroller|Communication" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="Dependancies/Utils|Dependancies/Sensors|Dependancies/Controller|Dependancies/Communication|Src/TaskHandler|Src/Utils|Src/Actuators|Src/Sensors|Src/Communication|Src/UController|Controller|Src/Controller|Src/ucontroller|Communication" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Actuators"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Communication"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Controller"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Sensors"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/TaskHandler"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Utils"/>
 					</sourceEntries>
 				</configuration>

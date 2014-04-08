@@ -14,17 +14,18 @@ typedef enum {
     ADD_SENSOR = 0x1,
     DELETE_SENSOR = 0x2,
 } messageType;
+
+/** @Deprecated: UTaskCfg class is used s a thread manager*/
 class UController
 {
 private:
-	DigitalOut m_activityLed;
 	Serial m_pcSerial;
-
-	void printf(char* str, uint16_t len);
+	DigitalOut m_activityLed;
 public:
 	UController();
 	~UController();
 
+	/** start the content of thread */
 	void start();
 };
 
