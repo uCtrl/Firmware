@@ -14,9 +14,10 @@
 #include "UConditionCfg.h"
 #include "UActionCfg.h"
 #include "UTaskCfgType.h"
+#include "UTaskRequest.h"
 #define MAIL_LEN_UTASKHANDLER 8
 extern Semaphore semMailUTaskHandler;
-extern Mail<UTaskCfg, MAIL_LEN_UTASKHANDLER>mailUTaskHandler;
+extern Mail<UTaskRequest, MAIL_LEN_UTASKHANDLER>mailUTaskHandler;
 
 /** UTaskCfg class contains all user defined Scenery, Tasks, Conditions and
  *  Actions*/
@@ -25,6 +26,11 @@ class UTaskHandler
 public:
 	/** start the content of thread */
 	void start();
+private:
+	/** handle UTaskRequest of UTaskRequestType EVENT */
+	void handleTaskEvent(const UTaskEvent taskEvent);
+	/** handle UTaskRequest of UTaskRequestType CONFIG */
+	void handleTaskCfg(const UTaskCfg taskCfg);
 };
 
 #endif /* UTASKHANDLER_H_ */

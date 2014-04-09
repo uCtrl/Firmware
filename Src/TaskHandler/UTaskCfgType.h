@@ -10,7 +10,8 @@
 
 /** UTaskCfgType enum is used to distinct type of configuration
  *  in the task system*/
-typedef enum {
+typedef enum
+{
 	TASK_CFG_TYPE_NONE = 0,
 	USCENERY = 1,
 	UTASK = 2,

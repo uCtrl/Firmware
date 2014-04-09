@@ -11,7 +11,7 @@
 
 #ifdef DEBUG_PRINT
 extern Semaphore semMailUTaskHandler;
-extern Mail<UTaskCfg, MAIL_LEN_UTASKHANDLER>mailUTaskHandler;
+extern Mail<UTaskRequest, MAIL_LEN_UTASKHANDLER>mailUTaskHandler;
 #endif
 
 /*
@@ -28,7 +28,6 @@ USensorHandler sensorHandler = USensorHandler(&messageHandler);
 void fakeMessageHandlerThread(void const *args) {
 
 	messageHandler.initialize(&sensorHandler, &actuatorHandler);
-
 	messageHandler.start();
 }
 
@@ -36,7 +35,8 @@ void sensorPoolingThread(void const *args) {
 	sensorHandler.StartPoolingSensors();
 }
 
-void taskHandlerThread(void const *args) {
+void taskHandlerThread(void const *args)
+{
 	UTaskHandler uTaskHandler;
 	uTaskHandler.start();
 }
@@ -68,7 +68,11 @@ int main (void) {
     	Thread::wait(700);
         led = !led;
     }
+}
     /*
+=======
+int main (void)
+{
 	led = true;
 	ledg = true;
     Thread ctrlThread(controllerThread,NULL,CONTROLLER_PRIORITY,CONTROLLER_STACK_SIZE);
@@ -95,14 +99,14 @@ int main (void) {
     	//for testing purpose
 		#ifdef DEBUG_PRINT
     		semMailUTaskHandler.wait();
-    		UTaskCfg *mail = mailUTaskHandler.alloc();
+    		UTaskRequest *mail = mailUTaskHandler.alloc();
 			if(mail != NULL)
 			{
 				i++;
 				printf("%d",i);
-				mail->taskCfgType = UACTION;
-				mail->actionCfg.actuatorId = 123;
-				printf("Send actuatorId:%lu\n\r", mail->actionCfg.actuatorId);
+				mail->taskCfg.taskCfgType = UACTION;
+				mail->taskCfg.actionCfg.actuatorId = 123;
+				printf("Send actuatorId:%lu\n\r", mail->taskCfg.actionCfg.actuatorId);
 				mailUTaskHandler.put(mail);
 				printf("Sent");
 			}
@@ -116,6 +120,6 @@ int main (void) {
 		#endif
 		printf("wait");
 		Thread::wait(2000);
->>>>>>> fd99b4a90510ccf8d6bc99964d18b1d1a29ef698
-	*/
+    {
 }
+	*/

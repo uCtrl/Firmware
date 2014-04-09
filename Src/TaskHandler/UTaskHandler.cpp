@@ -8,7 +8,7 @@
 #include <TaskHandler/UTaskHandler.h>
 
 Semaphore semMailUTaskHandler(MAIL_LEN_UTASKHANDLER);
-Mail<UTaskCfg, MAIL_LEN_UTASKHANDLER>mailUTaskHandler;
+Mail<UTaskRequest, MAIL_LEN_UTASKHANDLER>mailUTaskHandler;
 
 
 void UTaskHandler::start()
@@ -18,40 +18,57 @@ void UTaskHandler::start()
 		osEvent evt = mailUTaskHandler.get();
 		if (evt.status == osEventMail)
 		{
-			UTaskCfg *mail = (UTaskCfg*)evt.value.p;
-			switch(mail->taskCfgType)
+			UTaskRequest *mail = (UTaskRequest*)evt.value.p;
+			if(mail->uTaskRequestType == EVENT)
 			{
-				case TASK_CFG_TYPE_NONE:
-				{
-					//TODO maybe an error
-					break;
-				}
-				case USCENERY:
-				{
-					//TODO make something
-					break;
-				}
-				case UTASK:
-				{
-					//TODO make something
-					break;
-				}
-				case UCONDITION:
-				{
-					//TODO make something
-					//use mail->conditionCfg.sensorId for example
-					break;
-				}
-				case UACTION:
-				{
-					#ifdef DEBUG_PRINT
-						printf("Receive actuatorId:%lu\n\r",mail->actionCfg.actuatorId);
-					#endif
-					break;
-				}
+				this->handleTaskEvent(mail->event);
+			}
+			else if(mail->uTaskRequestType == CONFIG)
+			{
+				this->handleTaskCfg(mail->taskCfg);
 			}
 			mailUTaskHandler.free(mail);
 			semMailUTaskHandler.release();
+		}
+	}
+}
+
+void UTaskHandler::handleTaskEvent(const UTaskEvent taskEvent)
+{
+	//TODO: TO IMPLEMENT
+}
+
+void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
+{
+	switch(taskCfg.taskCfgType)
+	{
+		case TASK_CFG_TYPE_NONE:
+		{
+			//TODO maybe an error
+			break;
+		}
+		case USCENERY:
+		{
+			//TODO make something
+			break;
+		}
+		case UTASK:
+		{
+			//TODO make something
+			break;
+		}
+		case UCONDITION:
+		{
+			//TODO make something
+			//use cfg->conditionCfg.sensorId for example
+			break;
+		}
+		case UACTION:
+		{
+			#ifdef DEBUG_PRINT
+				printf("Receive actuatorId:%lu\n\r",taskCfg.actionCfg.actuatorId);
+			#endif
+			break;
 		}
 	}
 }
