@@ -21,27 +21,26 @@ extern Mail<UTaskCfg, MAIL_LEN_UTASKHANDLER>mailUTaskHandler;
 DigitalOut led(LED_RED);
 DigitalOut ledg(LED_GREEN);
 
+FakeMessageHandler messageHandler = FakeMessageHandler();
+UActuatorHandler actuatorHandler = UActuatorHandler(&messageHandler);
+USensorHandler sensorHandler = USensorHandler(&messageHandler);
+
 void fakeMessageHandlerThread(void const *args) {
 
-	FakeMessageHandler messageHandler = FakeMessageHandler();
-	UActuatorHandler actuatorHandler = UActuatorHandler(&messageHandler);
-	USensorHandler sensorHandler = USensorHandler(&messageHandler);
 	messageHandler.initialize(&sensorHandler, &actuatorHandler);
 
-	/*
-    char tmp[10];
-    sprintf(tmp,"%d",actuatorHandler.GetActuatorCount());
-    messageHandler.SendMessage("Actuator count: ");
-    messageHandler.SendMessage(tmp);
-    messageHandler.SendMessage("\n\r");*/
-
 	messageHandler.start();
+}
+
+void sensorPoolingThread(void const *args) {
+	sensorHandler.StartPoolingSensors();
 }
 
 void taskHandlerThread(void const *args) {
 	UTaskHandler uTaskHandler;
 	uTaskHandler.start();
 }
+
 /*
 void sensorHandlerThread(void const *args) {
 	USensorHandler uSensorHandler;
@@ -62,7 +61,7 @@ void messageHandlerThread(void const *args) {
 int main (void) {
 
     Thread fakeMsgThread(fakeMessageHandlerThread);
-
+    Thread sensorThread(sensorPoolingThread);
 
     while (true)
     {

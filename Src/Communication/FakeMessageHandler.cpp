@@ -115,12 +115,12 @@ void FakeMessageHandler::OnMessageRecieved(char* message)
     if(strcmp(message, "CreateSensor1") == 0)
     {
         serial.printf("Creating MyNewFakeSensor1\n\r");
-        m_sensorHandler->AddNewSensor(Fake, "MyNewFakeSensor1", 0);
+        m_sensorHandler->AddNewSensor(Fake, "MyNewFakeSensor1", 0, 5000);
     }
     if(strcmp(message, "CreateSensor2") == 0)
     {
         serial.printf("Creating MyNewFakeSensor2\n\r");
-        m_sensorHandler->AddNewSensor(Fake, "MyNewFakeSensor2", 1);
+        m_sensorHandler->AddNewSensor(Fake, "MyNewFakeSensor2", 1, 2500);
     }
     if(strcmp(message, "DeleteSensor1") == 0)
     {

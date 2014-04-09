@@ -13,8 +13,8 @@ protected:
     char* m_sensorName;
     int m_timeBetweenReads;
     //static int s_threadId;
+	//RtosTimer m_timer;
 
-	RtosTimer m_timer;
     AnalogIn analogIn;
 
     FakeMessageHandler* m_messageHandler;
@@ -30,15 +30,14 @@ public:
     */
     FakeSensor(FakeMessageHandler* messageHandler, char* a_name, int a_pin, int timeBetweenReads);
 
-    // Forcefully reads a new value from the sensor, saves it in m_LastValueRead
-    // and raises the m_NewValueAvailableFlag.
-    void ForceNewValueRead();
-
     void Read();
     int ReadValue();
 
     // Save the current state of the sensor.
     void SaveState();
+
+    void SetTimeBetweenReads(int timeBetweenReads) { m_timeBetweenReads = timeBetweenReads; }
+    int GetTimeBetweenReads() { return m_timeBetweenReads; }
 
     char* GetName() { return m_sensorName; }
 

@@ -36,6 +36,7 @@ OBJECTS += ./Src/Sensors/FakeSensor.o
 OBJECTS += ./Src/Sensors/USensorHandler.o
 OBJECTS += ./Src/TaskHandler/UTaskHandler.o
 OBJECTS += ./Src/Utils/UPinUtils.o
+OBJECTS += ./Src/Utils/UMathUtils.o
 #really hacky way to add object files (not functionnal)
 #CPP_OBJECTS = "find ./Src -name *.cpp"
 #OBJECTS += $(CPP_OBJECTS//.cpp/.o)

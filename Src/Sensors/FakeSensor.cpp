@@ -45,11 +45,11 @@ void FakeSensor::SaveState()
 
 void FakeSensor::Read()
 {
-	//printf("test\n\r");
+	//m_messageHandler->SendMessage("Reading Sensor : ");
+	//m_messageHandler->SendMessage(m_sensorName);
 
 	int val = ReadValue();
 
-	/*
     // Convert int to str
     char tmp[10];
     sprintf(tmp,"%d", val);
@@ -61,5 +61,5 @@ void FakeSensor::Read()
     strcat(buf,tmp);
 	m_messageHandler->SendMessage(buf);//*/
 
-	//m_messageHandler->ReadValueFromSensor(m_sensorName, val);
+	m_messageHandler->ReadValueFromSensor(m_sensorName, val);
 }

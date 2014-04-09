@@ -9,6 +9,7 @@ class FakeMessageHandler;
 #include "FakeMessageHandler.h"
 #include "string.h"
 #include "defines.h"
+#include "UMathUtils.h"
 
 // Create a real time clock sensor
 // Abstract class RTC, with implementations, Day Sensor, Week Sensor, Month, Year, Hour, Minute, Seconds
@@ -19,15 +20,21 @@ class USensorHandler
 {
 private:
     int m_SensorCount;
+    int m_delayBetweenSensorPooling;
+    uint32_t m_timeElapsed;
+    int m_timeForNextSleep;
     FakeSensor* m_Sensors[SENSOR_LIST_LENGTH];
     FakeMessageHandler* m_messageHandler;
+
+    void UpdateDelayBetweenReads();
 
 public:
 
     USensorHandler(FakeMessageHandler*);
 
-    bool AddNewSensor(USensorType type, char* sensorName, int pinUsed);
+    bool AddNewSensor(USensorType type, char* sensorName, int pinUsed, int timeBetweenReads);
     bool DeleteSensor(char* sensorName);
+    void StartPoolingSensors();
 
     // Get all the names of the sensors
     char** GetSensorNames();
