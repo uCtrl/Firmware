@@ -7,7 +7,7 @@
 
 #include "UController.h"
 
-UController::UController():m_activityLed(LED_BLUE),m_pcSerial(USBTX,USBRX)
+UController::UController():m_activityLed(LED_BLUE)
 {
 }
 
@@ -17,6 +17,7 @@ UController::~UController()
 
 void UController::start()
 {
+<<<<<<< HEAD
 	//char c = '!';
 	while(true)
 	{
@@ -26,5 +27,11 @@ void UController::start()
 		m_activityLed = true;
 		//c = m_pcSerial.getc();
 		//m_pcSerial.putc(c);
+=======
+	for(;;)
+	{
+		Thread::wait(5000);
+		m_activityLed = !m_activityLed;
+>>>>>>> f162662eaa6326c9bab8e4250162f27e6d4cd9fc
 	}
 }
