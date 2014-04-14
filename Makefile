@@ -21,11 +21,14 @@ include ./Libraries/mbed-rtos/Makefile
 INCLUDE_PATHS += -I./Src
 INCLUDE_PATHS += -I./Src/Controller
 INCLUDE_PATHS += -I./Src/Communication
+INCLUDE_PATHS += -I./Src/Communication/frozen
 OBJECTS += ./Src/main.o
 OBJECTS += ./Src/Controller/UController.o
 OBJECTS += ./Src/Communication/FakeMessageHandler.o
-OBJECTS += ./Src/Communication/UComDriver.o
-OBJECTS += ./Src/Communication/UMessageHandler.o
+OBJECTS += ./Src/Communication/UComDriverIn.o
+OBJECTS += ./Src/Communication/UComDriverOut.o
+OBJECTS += ./Src/Communication/UMsgHandler.o
+OBJECTS += ./Src/Communication/frozen/frozen.o
 #really hacky way to add object files (not functionnal)
 #CPP_OBJECTS = "find ./Src -name *.cpp"
 #OBJECTS += $(CPP_OBJECTS//.cpp/.o)

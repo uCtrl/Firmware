@@ -1,42 +1,49 @@
+/*
+* main.cpp
+*
+* Created on: Mar 23, 2014
+* Author: µCtrl
+*/
+
 #include "mbed.h"
 #include "rtos.h"
 #include "UController.h"
-#include "UComDriver.h"
+#include "UComDriverIn.h"
+#include "UComDriverOut.h"
+#include "UMsgHandler.h"
 
 DigitalOut led(LED_RED);
-//Mail<struc,3> mail_box;
 
-void controllerThread(void const *args) {
+void startControllerThread(void const *args) {
 	UController uController;
 	uController.start();
 }
 
-void comDriverThread(void const *args) {
-	UComDriver uComDriver;
-	uComDriver.start();
+void startComDriverInThread(void const *args) {
+	UComDriverIn comDriverIn;
+	comDriverIn.start();
+}
+
+void startComDriverOutThread(void const *args) {
+	UComDriverOut comDriverOut;
+	comDriverOut.start();
+}
+
+void startMsgHandlerThread(void const *args) {
+	UMsgHandler msgHandler;
+	msgHandler.start();
 }
 
 int main (void) {
-    Thread ctrlThread(controllerThread);
-    Thread comThread(comDriverThread);
-    //    osEvent evt;
+	Thread controllerThread(startControllerThread);
+    Thread comDriverInThread(startComDriverInThread);
+    Thread comDriverOutThread(startComDriverOutThread);
+    Thread msgHandlerThread(startMsgHandlerThread);
+
+    led = true;
     while (true)
     {
-    	/*evt = mail_box.get();
-		if (evt.status == osEventMail) {
-			UController *mail = (UController*)evt.value.p;
-			//mail->start();
-
-			mail_box.free(mail);
-		}*/
-    	Thread::wait(700);
     	//led = !led;
-        Thread::wait(200);
-        led = !led;
-        Thread::wait(200);
-        led = !led;
-        Thread::wait(200);
-        //led = !led;
-        Thread::wait(700);
+        Thread::wait(5000);
     }
 }
