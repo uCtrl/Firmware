@@ -16,7 +16,7 @@ osPriority COM_DRIVER_PRIORITY = osPriorityHigh;
 uint32_t COM_DRIVER_STACK_SIZE = 512;
 
 osPriority TASK_HANDLER_PRIORITY = osPriorityBelowNormal;
-uint32_t TASK_HANDLER_STACK_SIZE = 512;
+uint32_t TASK_HANDLER_STACK_SIZE = 1024;
 
 osPriority SENSOR_HANDLER_PRIORITY = osPriorityAboveNormal;
 uint32_t SENSOR_HANDLER_STACK_SIZE = 256;

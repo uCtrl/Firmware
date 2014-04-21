@@ -10,7 +10,6 @@
 
 #include "UTaskCfgType.h"
 #include "UConditionCfg.h"
-#include "UActionCfg.h"
 #include "UTaskCfgMod.h"
 
 /** UTaskCfg struct contains all data for the creation of sceneries, tasks,
@@ -28,8 +27,10 @@ typedef struct
 	union
 	{
 		UConditionCfg conditionCfg;
-		UActionCfg actionCfg;
+		uint32_t ActionValue;
 	};
+
+
 } UTaskCfg;
 
 
