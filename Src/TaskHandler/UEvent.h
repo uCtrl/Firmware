@@ -8,12 +8,13 @@
 #ifndef UEVENT_H_
 #define UEVENT_H_
 
+#include <stdint.h>
+#include "TaskHandlerConfigFile.h"
+
 typedef struct
 {
 	uint32_t sensorId;
 	uint32_t value;
 } UTaskEvent;
-
-
 
 #endif /* UEVENT_H_ */

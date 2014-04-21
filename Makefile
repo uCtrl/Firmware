@@ -37,8 +37,13 @@ OBJECTS += ./Src/Sensors/USensorLight.o
 OBJECTS += ./Src/Sensors/USensorTemperature.o
 OBJECTS += ./Src/Sensors/USensorHandler.o
 OBJECTS += ./Src/TaskHandler/UTaskHandler.o
+OBJECTS += ./Src/TaskHandler/UScenery.o
+OBJECTS += ./Src/TaskHandler/UTask.o
+OBJECTS += ./Src/TaskHandler/UCondition.o
+OBJECTS += ./Src/TaskHandler/UDevice.o
 OBJECTS += ./Src/Utils/UPinUtils.o
 OBJECTS += ./Src/Utils/UMathUtils.o
+
 #really hacky way to add object files (not functionnal)
 #CPP_OBJECTS = "find ./Src -name *.cpp"
 #OBJECTS += $(CPP_OBJECTS//.cpp/.o)
