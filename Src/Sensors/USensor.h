@@ -1,5 +1,5 @@
-#ifndef SENSORS_FAKESENSOR_H_
-#define SENSORS_FAKESENSOR_H_
+#ifndef SENSORS_USENSOR_H_
+#define SENSORS_USENSOR_H_
 
 #include "FakeMessageHandler.h"
 #include "defines.h"
@@ -12,8 +12,6 @@ class USensor
 protected:
     int m_sensorId;
     int m_timeBetweenReads;
-    //static int s_threadId;
-	//RtosTimer m_timer;
 
     AnalogIn analogIn;
 
@@ -45,4 +43,4 @@ public:
 
 };
 
-#endif  // SENSORS_FAKESENSOR_H_
+#endif  // SENSORS_USENSOR_H_

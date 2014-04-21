@@ -173,21 +173,21 @@ void FakeMessageHandler::OnMessageRecieved(char* message)
     if(strcmp(message, "CreateActuator1") == 0)
     {
         serial.printf("Creating MyNewFakeActuator1\n\r");
-        m_actuatorHandler->AddNewActuator(Actuator_Fake, "MyNewFakeActuator1", 0);
+        m_actuatorHandler->AddNewActuator(Actuator_Fake, 1, 0);
     }
     if(strcmp(message, "CreateActuator2") == 0)
     {
         serial.printf("Creating MyNewFakeActuator2\n\r");
-        m_actuatorHandler->AddNewActuator(Actuator_Fake, "MyNewFakeActuator2", 1);
+        m_actuatorHandler->AddNewActuator(Actuator_Fake, 2, 1);
     }
     if(strcmp(message, "DeleteActuator1") == 0)
     {
         serial.printf("Trying to delete MyNewFakeSensor1\n\r");
-        m_actuatorHandler->DeleteActuator("MyNewFakeActuator1");
+        m_actuatorHandler->DeleteActuator(1);
     }
     if(strcmp(message, "DeleteActuator2") == 0)
     {
         serial.printf("Trying to delete MyNewFakeActuator2\n\r");
-        m_actuatorHandler->DeleteActuator("MyNewFakeActuator2");
+        m_actuatorHandler->DeleteActuator(2);
     }
 }

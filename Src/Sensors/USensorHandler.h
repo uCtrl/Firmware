@@ -1,9 +1,9 @@
 #ifndef SENSORS_USENSORHANDLER_H_
 #define SENSORS_USENSORHANDLER_H_
 
-class USensor;
-class USensorLight;
-class USensorTemperature;
+//class USensor;
+//class USensorLight;
+//class USensorTemperature;
 class FakeMessageHandler;
 
 #include "USensor.h"

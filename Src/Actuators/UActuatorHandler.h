@@ -23,8 +23,8 @@ public:
 
     UActuatorHandler(FakeMessageHandler*); // Public Constructor
 
-    bool AddNewActuator(UActuatorType a_type, char* a_actuatorName, int a_pinUsed);
-    bool DeleteActuator(char* a_actuatorName);
+    bool AddNewActuator(UActuatorType a_type, int a_actuatorId, int a_pinUsed);
+    bool DeleteActuator(int a_actuatorId);
     bool SetActuatorValue(char* a_actuatorName, int a_value);
 
     // Get all the names of the sensors

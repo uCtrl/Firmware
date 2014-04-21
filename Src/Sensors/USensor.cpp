@@ -26,8 +26,6 @@ USensor::USensor(FakeMessageHandler* messageHandler, int a_id, int a_pin, int ti
     m_timeBetweenReads = timeBetweenReads;
     m_sensorId = a_id;
     m_messageHandler = messageHandler;
-    //ticker.attach(this, &FakeSensor::Read, 5.0);
-    //m_timer.start(timeBetweenReads);
 }
 
 // Forcefully reads a new value from the sensor, saves it in m_LastValueRead
