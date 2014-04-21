@@ -70,7 +70,6 @@ int main (void)
     */
     //    osEvent evt;
     //Thread::wait(5000);
-    int i = 0;
     Thread::wait(1000);
     for(;;)
     {
@@ -80,15 +79,16 @@ int main (void)
 
     	//for testing purpose
 		#ifdef DEBUG_PRINT
+    		uint32_t i = 0;
+
     		semMailUTaskHandler.wait();
     		UTaskRequest *mail = mailUTaskHandler.alloc();
 			if(mail != NULL)
 			{
 				i++;
-				printf("%d",i);
-				mail->taskCfg.taskCfgType = UACTION;
-				mail->taskCfg.actionCfg.actuatorId = 123;
-				printf("Send actuatorId:%lu\n\r", mail->taskCfg.actionCfg.actuatorId);
+				mail->taskCfg.taskCfgType = USCENERY;
+				mail->taskCfg.id = i;
+				printf("Send actuatorId:%lu\n\r", mail->taskCfg.id);
 				mailUTaskHandler.put(mail);
 				printf("Sent");
 			}

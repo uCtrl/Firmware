@@ -17,7 +17,8 @@ typedef enum
 	GREATER_EQUAL = 2,
 	GREATER = 3,
 	LESSER = 4,
-	LESSER_EQUAL = 5
+	LESSER_EQUAL = 5,
+	NOT_EQUAL = 6
 } UOperatorType;
 
 #endif /* UOPERATORTYPE_H_ */
