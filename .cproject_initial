@@ -35,7 +35,7 @@
 							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.addtools.createlisting.2095006665" name="Create Extended Listing" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.addtools.createlisting"/>
 							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.addtools.printsize.657677579" name="Print Size" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.addtools.printsize"/>
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.GNU_ELF" id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.platform.base.901370816" isAbstract="false" name="Linux Platform" osList="linux" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.platform.base"/>
-							<builder id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.builder.base.1588756071" incrementalBuildTarget="all UCTRL_BUILD_TYPE=Debug" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="ARM Linux GNU Make builder (Sourcery Lite Bare)" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.builder.base">
+							<builder cleanBuildTarget="clean UCTRL_BUILD_TYPE=Debug" id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.builder.base.1588756071" incrementalBuildTarget="all UCTRL_BUILD_TYPE=Debug" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="ARM Linux GNU Make builder (Sourcery Lite Bare)" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.builder.base">
 								<outputEntries>
 									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name=""/>
 								</outputEntries>
@@ -58,7 +58,14 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Dependancies/Controller|Src/Actuators|Src/Sensors|Src/ucontroller|Dependancies/Sensors|Controller|Src/Communication|Dependancies/Actuators|Src/Utils|Src/UController|Dependancies/Utils|Src/Controller|Dependancies/Communication|Communication" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+<<<<<<< HEAD
+						<entry excluding="Dependancies/Controller|Src/TaskHandler|Src/Actuators|Src/Sensors|Src/ucontroller|Dependancies/Sensors|Utils|Controller|Src/Communication|Src/Utils|Src/UController|Dependancies/Utils|Src/Controller|Dependancies/Communication|Communication" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+=======
+						<entry excluding="Src/TaskHandler|Src/Communication|Controller|Src/Controller|Communication" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Communication"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Controller"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/TaskHandler"/>
+>>>>>>> f162662eaa6326c9bab8e4250162f27e6d4cd9fc
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -96,7 +103,7 @@
 							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.addtools.createlisting.459419861" name="Create Extended Listing" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.addtools.createlisting"/>
 							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.addtools.printsize.448785599" name="Print Size" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.addtools.printsize"/>
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.GNU_ELF" id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.platform.base.411011845" isAbstract="false" name="Linux Platform" osList="linux" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.platform.base"/>
-							<builder autoBuildTarget="all" buildPath="${workspace_loc:/uCtrl_Firmware}/" cleanBuildTarget="clean" enableAutoBuild="false" enableCleanBuild="true" enabledIncrementalBuild="true" id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.builder.base.1900610674" incrementalBuildTarget="all UCTRL_BUILD_TYPE=Release" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="ARM Linux GNU Make builder (Sourcery Lite Bare)" parallelBuildOn="false" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.builder.base"/>
+							<builder autoBuildTarget="all" buildPath="${workspace_loc:/uCtrl_Firmware}/" cleanBuildTarget="clean UCTRL_BUILD_TYPE=Release" enableAutoBuild="false" enableCleanBuild="true" enabledIncrementalBuild="true" id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.builder.base.1900610674" incrementalBuildTarget="all UCTRL_BUILD_TYPE=Release" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="ARM Linux GNU Make builder (Sourcery Lite Bare)" parallelBuildOn="false" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.builder.base"/>
 							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.assembler.base.2129078731" name="ARM Linux GCC Assembler (Sourcery Lite Bare)" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.assembler.base">
 								<inputType id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.assembler.base.input.939965039" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.assembler.base.input"/>
 							</tool>
@@ -115,11 +122,16 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Dependancies/Utils|Dependancies/Sensors|Dependancies/Controller|Dependancies/Communication|Dependancies/Actuators|Src/Utils|Src/Actuators|Src/Sensors|Src/Communication|Communication|Src/Controller|Controller|Src/ucontroller|Src/UController" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+<<<<<<< HEAD
+						<entry excluding="Dependancies/Utils|Dependancies/Sensors|Dependancies/Controller|Dependancies/Communication|Src/TaskHandler|Src/Utils|Src/Actuators|Src/Sensors|Src/Communication|Communication|Src/Controller|Controller|Src/ucontroller|Src/UController" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Actuators"/>
+=======
+						<entry excluding="Src/TaskHandler|Src/Communication|Communication|Src/Controller|Controller" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+>>>>>>> f162662eaa6326c9bab8e4250162f27e6d4cd9fc
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Communication"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Controller"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Sensors"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/TaskHandler"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Utils"/>
 					</sourceEntries>
 				</configuration>
@@ -138,7 +150,7 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration buildProperties="" description="Debug mode with DEBUG_PRINT #define activated" id="org.eclipse.cdt.cross.arm.gnu.linux.toolchain.base.1967332641.214672044" name="DebugPrint" parent="org.eclipse.cdt.build.core.emptycfg">
+				<configuration artifactName="uCtrl_Firmware" buildProperties="" description="Debug mode with DEBUG_PRINT #define activated" id="org.eclipse.cdt.cross.arm.gnu.linux.toolchain.base.1967332641.214672044" name="DebugPrint" parent="org.eclipse.cdt.build.core.emptycfg">
 					<folderInfo id="org.eclipse.cdt.cross.arm.gnu.linux.toolchain.base.1967332641.214672044." name="/" resourcePath="">
 						<toolChain id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.toolchain.base.1299683017" name="ARM Linux GCC (Sourcery Lite Bare)" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.toolchain.base">
 							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.target.processor.1216976411" name="Processor" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.target.processor"/>
@@ -158,7 +170,7 @@
 							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.addtools.createlisting.631019684" name="Create Extended Listing" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.addtools.createlisting"/>
 							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.addtools.printsize.116771681" name="Print Size" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.addtools.printsize"/>
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.GNU_ELF" id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.platform.base.1337605473" isAbstract="false" name="Linux Platform" osList="linux" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.platform.base"/>
-							<builder id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.builder.base.1505734294" incrementalBuildTarget="all UCTRL_BUILD_TYPE=DebugPrint" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="ARM Linux GNU Make builder (Sourcery Lite Bare)" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.builder.base">
+							<builder cleanBuildTarget="clean UCTRL_BUILD_TYPE=DebugPrint" id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.builder.base.1505734294" incrementalBuildTarget="all UCTRL_BUILD_TYPE=DebugPrint" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="ARM Linux GNU Make builder (Sourcery Lite Bare)" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.builder.base">
 								<outputEntries>
 									<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name=""/>
 								</outputEntries>
@@ -181,11 +193,16 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Dependancies/Utils|Dependancies/Sensors|Dependancies/Controller|Dependancies/Communication|Dependancies/Actuators|Src/Utils|Src/Actuators|Src/Sensors|Src/Communication|Src/UController|Controller|Src/Controller|Src/ucontroller|Communication" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+<<<<<<< HEAD
+						<entry excluding="Dependancies/Utils|Dependancies/Sensors|Dependancies/Controller|Dependancies/Communication|Src/TaskHandler|Src/Utils|Src/Actuators|Src/Sensors|Src/Communication|Src/UController|Controller|Src/Controller|Src/ucontroller|Communication" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Actuators"/>
+=======
+						<entry excluding="Src/TaskHandler|Src/Communication|Controller|Src/Controller|Communication" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+>>>>>>> f162662eaa6326c9bab8e4250162f27e6d4cd9fc
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Communication"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Controller"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Sensors"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/TaskHandler"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Utils"/>
 					</sourceEntries>
 				</configuration>
@@ -204,16 +221,30 @@
 		<configuration configurationName="Release">
 			<resource resourceType="PROJECT" workspacePath="/uCtrl_Firmware"/>
 		</configuration>
-		<configuration configurationName="Debug"/>
+		<configuration configurationName="DebugPrint">
+			<resource resourceType="PROJECT" workspacePath="/uCtrl_Firmware"/>
+		</configuration>
+		<configuration configurationName="Debug">
+			<resource resourceType="PROJECT" workspacePath="/uCtrl_Firmware"/>
+		</configuration>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="scannerConfiguration">
 		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arm.gnu.linux.toolchain.base.1967332641;org.eclipse.cdt.cross.arm.gnu.linux.toolchain.base.1967332641.1167785272;org.eclipse.cdt.cross.arm.gnu.sourcery.linux.cpp.compiler.base.82013214;org.eclipse.cdt.cross.arm.gnu.sourcery.linux.cpp.compiler.base.input.929629892">
+		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arm.gnu.linux.toolchain.base.1967332641.214672044;org.eclipse.cdt.cross.arm.gnu.linux.toolchain.base.1967332641.214672044.;org.eclipse.cdt.cross.arm.gnu.sourcery.linux.assembler.base.348241285;org.eclipse.cdt.cross.arm.gnu.sourcery.linux.assembler.base.input.887915486">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.cross.arm.gnu.ARM_CS_GCCManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arm.gnu.linux.toolchain.base.1967332641.214672044;org.eclipse.cdt.cross.arm.gnu.linux.toolchain.base.1967332641.214672044.;org.eclipse.cdt.cross.arm.gnu.sourcery.linux.cpp.compiler.base.2081010543;org.eclipse.cdt.cross.arm.gnu.sourcery.linux.cpp.compiler.base.input.847157446">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.cross.arm.gnu.ARM_CS_GCCManagedMakePerProjectProfileCPP"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arm.gnu.linux.toolchain.base.1967332641.214672044;org.eclipse.cdt.cross.arm.gnu.linux.toolchain.base.1967332641.214672044.;org.eclipse.cdt.cross.arm.gnu.sourcery.linux.c.compiler.base.1126919611;org.eclipse.cdt.cross.arm.gnu.sourcery.linux.c.compiler.base.input.1453882851">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.cross.arm.gnu.ARM_CS_GCCManagedMakePerProjectProfileC"/>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arm.gnu.linux.toolchain.base.1967332641;org.eclipse.cdt.cross.arm.gnu.linux.toolchain.base.1967332641.1167785272;org.eclipse.cdt.cross.arm.gnu.sourcery.linux.c.compiler.base.885971593;org.eclipse.cdt.cross.arm.gnu.sourcery.linux.c.compiler.base.input.834393989">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.cross.arm.gnu.ARM_CS_GCCManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arm.gnu.linux.toolchain.base.1967332641;org.eclipse.cdt.cross.arm.gnu.linux.toolchain.base.1967332641.1167785272;org.eclipse.cdt.cross.arm.gnu.sourcery.linux.cpp.compiler.base.82013214;org.eclipse.cdt.cross.arm.gnu.sourcery.linux.cpp.compiler.base.input.929629892">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.cross.arm.gnu.ARM_CS_GCCManagedMakePerProjectProfileCPP"/>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arm.gnu.linux.toolchain.base.1967332641;org.eclipse.cdt.cross.arm.gnu.linux.toolchain.base.1967332641.1167785272;org.eclipse.cdt.cross.arm.gnu.sourcery.linux.assembler.base.1237548874;org.eclipse.cdt.cross.arm.gnu.sourcery.linux.assembler.base.input.71057329">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.cross.arm.gnu.ARM_CS_GCCManagedMakePerProjectProfileC"/>

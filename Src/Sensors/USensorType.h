@@ -3,6 +3,6 @@
 
 // Contains the list of all the sensors, and do the necessary operations
 // to add, remove, or modify a sensor
-enum USensorType { Temperature, Motion, Current, Fake };
+enum USensorType { Temperature, Light, Motion, Current, Fake };
 
 #endif  // SENSORS_USENSORTYPE_H_

@@ -49,13 +49,16 @@ bool USensorHandler::AddNewSensor(USensorType type, char* sensorName, int pinUse
     switch(type)
     {
         case Temperature:
+            m_Sensors[m_SensorCount] = new USensorTemperature(m_messageHandler, sensorName, pinUsed, timeBetweenReads);
             break;
+        case Light:
+            m_Sensors[m_SensorCount] = new USensorLight(m_messageHandler, sensorName, pinUsed, timeBetweenReads);
         case Motion:
             break;
         case Current:
             break;
-        case Fake:
-            m_Sensors[m_SensorCount] = new FakeSensor(m_messageHandler, sensorName, pinUsed, timeBetweenReads);
+        default:
+            m_Sensors[m_SensorCount] = new USensor(m_messageHandler, sensorName, pinUsed, timeBetweenReads);
             break;
     }
     m_SensorCount++;

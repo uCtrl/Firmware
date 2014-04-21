@@ -82,6 +82,30 @@ void FakeMessageHandler::ReadValueFromSensor(char* sensorName, int value)
         	m_actuatorHandler->SetActuatorValue("MyNewFakeActuator2", 0);
         }
     }
+    if(strcmp(sensorName, "MyNewFakeSensor3") == 0)
+    {
+        char tmp[10];
+        sprintf(tmp,"%d", value);
+
+        char buf[BUFFER_SIZE] = {0};
+        strcat(buf,"Light from ");
+        strcat(buf,sensorName);
+        strcat(buf,", value : ");
+        strcat(buf,tmp);
+        SendMessage(buf);
+    }
+    if(strcmp(sensorName, "MyNewFakeSensor4") == 0)
+    {
+        char tmp[10];
+        sprintf(tmp,"%f",value);
+
+        char buf[BUFFER_SIZE] = {0};
+        strcat(buf,"Temperature from ");
+        strcat(buf,sensorName);
+        strcat(buf,", value : ");
+        strcat(buf,tmp);
+        SendMessage(buf);
+    }
 }
 
 // Stores the characters received in a rx buffer. If a enter is received, sends the message
@@ -122,6 +146,16 @@ void FakeMessageHandler::OnMessageRecieved(char* message)
         serial.printf("Creating MyNewFakeSensor2\n\r");
         m_sensorHandler->AddNewSensor(Fake, "MyNewFakeSensor2", 1, 2500);
     }
+    if(strcmp(message, "CreateSensor3") == 0)
+    {
+        serial.printf("Creating MyNewFakeSensor3\n\r");
+        m_sensorHandler->AddNewSensor(Fake, "MyNewFakeSensor3", 2, 1000);
+    }
+    if(strcmp(message, "CreateSensor4") == 0)
+    {
+        serial.printf("Creating MyNewFakeSensor4\n\r");
+        m_sensorHandler->AddNewSensor(Fake, "MyNewFakeSensor4", 3, 3000);
+    }
     if(strcmp(message, "DeleteSensor1") == 0)
     {
         serial.printf("Trying to delete MyNewFakeSensor1\n\r");
@@ -131,6 +165,16 @@ void FakeMessageHandler::OnMessageRecieved(char* message)
     {
         serial.printf("Trying to delete MyNewFakeSensor2\n\r");
         m_sensorHandler->DeleteSensor("MyNewFakeSensor2");
+    }
+    if(strcmp(message, "DeleteSensor3") == 0)
+    {
+        serial.printf("Trying to delete MyNewFakeSensor3\n\r");
+        m_sensorHandler->DeleteSensor("MyNewFakeSensor3");
+    }
+    if(strcmp(message, "DeleteSensor4") == 0)
+    {
+        serial.printf("Trying to delete MyNewFakeSensor4\n\r");
+        m_sensorHandler->DeleteSensor("MyNewFakeSensor4");
     }
 
     // Actuators

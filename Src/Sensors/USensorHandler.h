@@ -4,7 +4,9 @@
 class FakeSensor;
 class FakeMessageHandler;
 
-#include "FakeSensor.h" // Todo : replace with real sensors
+#include "USensor.h"
+#include "USensorTemperature.h"
+#include "USensorLight.h"
 #include "USensorType.h"
 #include "FakeMessageHandler.h"
 #include "string.h"
@@ -23,7 +25,7 @@ private:
     int m_delayBetweenSensorPooling;
     uint32_t m_timeElapsed;
     int m_timeForNextSleep;
-    FakeSensor* m_Sensors[SENSOR_LIST_LENGTH];
+    USensor* m_Sensors[SENSOR_LIST_LENGTH];
     FakeMessageHandler* m_messageHandler;
 
     void UpdateDelayBetweenReads();
