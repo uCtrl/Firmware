@@ -2,29 +2,27 @@
 #define UTASK_H_
 
 #include "UCondition.h"
-#include "UAction.h"
 #include <stdint.h>
+#include <stdio.h>
 #include "TaskHandlerConfigFile.h"
 
 class UTask
 {
 public:
 	UTask();
-	UTask(uint32_t mTaskID, uint8_t mTaskName[TASK_NAME_LENGHT]);
+	UTask(uint32_t mTaskID, uint8_t mTaskName[TASK_NAME_LENGHT], uint32_t mActionValue, uint32_t mDeviceID);
 	~UTask();
-	uint32_t AddCondition(UCondition *mCondition);
+	uint8_t AddCondition(UCondition *mCondition);
 	void DelCondition(uint32_t mCondtionID);
-	uint32_t AddAction(UAction *mAction);
-	void DelAction(uint32_t mActionID);
 	uint32_t CheckCondition();
-	uint32_t DoAction();
+	void SetValue();
 
 	uint32_t TaskID;
+	uint32_t DeviceID;
 	uint8_t TaskName[10];
 	UCondition *ConditionList[MAX_CONDITION_NUMBER];
 	uint32_t ConditionListIndex;
-	UAction *ActionList[MAX_ACTION_NUMBER];
-	uint32_t ActionListIndex;
+	uint32_t ActionValue;
 };
 
 #endif // UTASK_H_

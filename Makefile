@@ -30,8 +30,8 @@ OBJECTS += ./Src/Communication/UMessageHandler.o
 OBJECTS += ./Src/TaskHandler/UTaskHandler.o
 OBJECTS += ./Src/TaskHandler/UScenery.o
 OBJECTS += ./Src/TaskHandler/UTask.o
-OBJECTS += ./Src/TaskHandler/UAction.o
 OBJECTS += ./Src/TaskHandler/UCondition.o
+OBJECTS += ./Src/TaskHandler/UDevice.o
 #really hacky way to add object files (not functionnal)
 #CPP_OBJECTS = "find ./Src -name *.cpp"
 #OBJECTS += $(CPP_OBJECTS//.cpp/.o)

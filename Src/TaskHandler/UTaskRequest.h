@@ -11,18 +11,16 @@
 #include "UTaskCfg.h"
 #include "UTaskRequestType.h"
 #include "UEvent.h"
-#include "UTaskRequest.h"
 
 typedef struct
 {
-	UTaskRequestType uTaskRequestType;
+	UTaskRequestType taskRequestType;
 	union
 	{
 		UTaskCfg taskCfg;
 		UTaskEvent event;
 	};
 } UTaskRequest;
-
 
 
 #endif /* UTASKREQUEST_H_ */

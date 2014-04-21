@@ -13,7 +13,7 @@ UCondition::UCondition()
 	ConditionOperator = OPERATOR_TYPE_NONE;
 }
 
-UCondition::UCondition(uint32_t mConditionID, uint32_t mSensorID, uint32_t mValue, UOperatorType mConditionOperator, uint8_t mConditionName[CONDITION_NAME_LENGHT])//, char mConditionName[10]
+UCondition::UCondition(uint32_t mConditionID, uint32_t mSensorID, uint32_t mValue, UOperatorType mConditionOperator, uint8_t mConditionName[CONDITION_NAME_LENGHT])
 {
 	ConditionID = mConditionID;
 	SensorID = mSensorID;
@@ -84,7 +84,13 @@ uint32_t UCondition::GetSensorValue(uint32_t mSensorID)
 {
 	uint32_t value = 0;
 
-	//TODO Find sensor in the event pool
+	for(uint32_t i = 0; i < EventPoolIndex; i++)
+	{
+		if(EventPool[i].sensorId == mSensorID)
+		{
+			value = EventPool[i].value;
+		}
+	}
 
 	return value;
 }

@@ -13,10 +13,10 @@
 typedef enum
 {
 	TASK_CFG_TYPE_NONE = 0,
-	USCENERY = 1,
-	UTASK = 2,
-	UCONDITION = 3,
-	UACTION = 4
+	UDEVICE,
+	USCENERY,
+	UTASK,
+	UCONDITION
 } UTaskCfgType;
 
 #endif /* UTASKCFGTYPETYPE_H_ */

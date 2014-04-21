@@ -2,8 +2,12 @@
 #define UCONDITION_H_
 
 #include "UOperatorType.h"
-#include <stdint.h>
 #include "TaskHandlerConfigFile.h"
+#include <stdint.h>
+#include "UEvent.h"
+
+extern UTaskEvent EventPool[];
+extern uint32_t EventPoolIndex;
 
 class UCondition
 {

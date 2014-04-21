@@ -16,5 +16,4 @@ typedef enum
 } UTaskRequestType;
 
 
-
 #endif /* UTASKREQUESTTYPE_H_ */

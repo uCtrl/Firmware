@@ -7,7 +7,7 @@ UScenery::UScenery()
 	{
 		SceneryName[i] = 0;
 	}
-	ListIndex = 0;
+	TaskListIndex = 0;
 }
 
 UScenery::UScenery(uint32_t mSceneryID, uint8_t mSceneryName[10])
@@ -19,7 +19,7 @@ UScenery::UScenery(uint32_t mSceneryID, uint8_t mSceneryName[10])
 		SceneryName[i] = mSceneryName[i];
 	}
 
-	ListIndex = 0;
+	TaskListIndex = 0;
 }
 
 
@@ -28,13 +28,16 @@ UScenery::~UScenery()
 }
 
 
-uint32_t UScenery::AddTask(UTask *mTask)
+uint8_t UScenery::AddTask(UTask *mTask)
 {
-	if (ListIndex < MAX_TASK_NUMBER)
+	uint8_t retVal = 0;
+
+	if (TaskListIndex < MAX_TASK_NUMBER)
 	{
-		TaskList[ListIndex++] = mTask;
+		TaskList[TaskListIndex++] = mTask;
+		retVal = 1;
 	}
-	return 0;
+	return retVal;
 }
 
 
@@ -60,8 +63,9 @@ void UScenery::DelTask(uint32_t mTaskID)
 					break;
 				}
 			}
+			delete TaskList[MAX_TASK_NUMBER - 1];
 			TaskList[MAX_TASK_NUMBER - 1] = new UTask;
-			ListIndex--;
+			TaskListIndex--;
 
 			break;
 		}
@@ -73,14 +77,11 @@ uint32_t UScenery::DoTask()
 {
 	uint32_t i = 0;
 
-	for (; i < ListIndex; i++)
-	{		
-		if (TaskList[i]->TaskID != 0)
+	for (; i < TaskListIndex; i++)
+	{
+		if (TaskList[i]->CheckCondition())
 		{
-			if (TaskList[i]->CheckCondition())
-			{
-				TaskList[i]->DoAction();
-			}
+			TaskList[i]->SetValue();
 		}
 	}
 

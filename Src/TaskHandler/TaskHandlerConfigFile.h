@@ -4,8 +4,16 @@
 //Mail definition
 #define MAIL_LEN_UTASKHANDLER 8
 
+//Event definition
+#define EVENT_POOL_SIZE 8
+
+//Device definition
+#define DEVICE_NAME_LENGHT 8
+#define MAX_DEVICE_NUMBER 8
+
 //Scenery definition
 #define SCENERY_NAME_LENGHT 8
+#define MAX_SCENERY_NUMBER 8
 
 //Task definition
 #define TASK_NAME_LENGHT 8
@@ -14,9 +22,5 @@
 //Condition definition
 #define CONDITION_NAME_LENGHT 8
 #define MAX_CONDITION_NUMBER 8
-
-//Action definition
-#define ACTION_NAME_LENGHT 8
-#define MAX_ACTION_NUMBER 8
 
 #endif

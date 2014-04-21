@@ -10,9 +10,20 @@
 Semaphore semMailUTaskHandler(MAIL_LEN_UTASKHANDLER);
 Mail<UTaskRequest, MAIL_LEN_UTASKHANDLER>mailUTaskHandler;
 
+UTaskEvent EventPool[EVENT_POOL_SIZE];
+uint32_t EventPoolIndex;
+
 //TODO remove next line
 uint8_t testName[] = {'a','l','l','o'};
 
+UTaskHandler::UTaskHandler()
+{
+	DeviceListIndex = 0;
+}
+
+UTaskHandler::~UTaskHandler()
+{
+}
 
 void UTaskHandler::start()
 {
@@ -22,98 +33,269 @@ void UTaskHandler::start()
 		if (evt.status == osEventMail)
 		{
 			UTaskRequest *mail = (UTaskRequest*)evt.value.p;
-			if(mail->uTaskRequestType == EVENT)
+			if(mail->taskRequestType == EVENT)
 			{
 				this->handleTaskEvent(mail->event);
 			}
-			else if(mail->uTaskRequestType == CONFIG)
+			else if(mail->taskRequestType == CONFIG)
 			{
 				this->handleTaskCfg(mail->taskCfg);
-
-
+			}
+			else
+			{
+#ifdef DEBUG_PRINT
+				printf("Error Mail Type\n\r");
+#endif
 			}
 			mailUTaskHandler.free(mail);
 			semMailUTaskHandler.release();
 		}
+
 	}
 }
 
 void UTaskHandler::handleTaskEvent(const UTaskEvent taskEvent)
 {
-	//TODO: TO IMPLEMENT
+	AddEvent(taskEvent);
+	CheckDevice();
 }
 
 void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 {
+	uint8_t parentFound = 0;
 	switch(taskCfg.taskCfgType)
 	{
 		case TASK_CFG_TYPE_NONE:
 		{
-			//TODO maybe an error
+		#ifdef DEBUG_PRINT
+			printf("Error Config Mail Type\n\r");
+		#endif
+			break;
+		}
+		case UDEVICE:
+		{
+			UDevice* newDevice = new UDevice(taskCfg.id,
+												testName);
+			if(!AddDevice(newDevice))
+			{
+			#ifdef DEBUG_PRINT
+				printf("Error Adding deviceId:%lu\n\r", newDevice->DeviceID);
+			#endif
+			}
+
 			break;
 		}
 		case USCENERY:
 		{
-			//mainScenery = new UScenery();
-			MainScenery = new UScenery(taskCfg.id,
-										testName);
+
+			for(uint32_t i = 0; i < DeviceListIndex; i++)
+			{
+				if(DeviceList[i]->DeviceID == taskCfg.parentId)
+				{
+					UScenery *newScenery = new UScenery(taskCfg.id,
+														testName);
+
+					if(!DeviceList[i]->AddScenery(newScenery))
+					{
+					#ifdef DEBUG_PRINT
+						printf("Error Adding sceneryId:%lu\n\r", newScenery->SceneryID);
+					#endif
+					}
+					parentFound = 1;
+					break;
+				}
+			}
+
+			if(!parentFound)
+			{
 			#ifdef DEBUG_PRINT
-				printf("Send sceneryId:%lu\n\r", MainScenery->SceneryID);
+				printf("Error Device ID not found\n\r");
 			#endif
+			}
 			break;
 		}
 		case UTASK:
 		{
-			UTask *newTask = new UTask(taskCfg.id,
-										testName);
-			MainScenery->AddTask(newTask);
+
+			for(uint32_t i = 0; i < DeviceListIndex; i++)
+			{
+				for(uint32_t j = 0; j < DeviceList[i]->SceneryListIndex; j++)
+				{
+					if(DeviceList[i]->SceneryList[j]->SceneryID == taskCfg.parentId)
+					{
+						UTask *newTask = new UTask(taskCfg.id,
+													testName,
+													taskCfg.ActionValue,
+													DeviceList[i]->DeviceID);
+						if(!DeviceList[i]->SceneryList[j]->AddTask(newTask))
+						{
+						#ifdef DEBUG_PRINT
+							printf("Error Adding TaskId:%lu\n\r", newTask->TaskID);
+						#endif
+						}
+
+						parentFound = 1;
+						break;
+					}
+				}
+				if(parentFound)
+				{
+					break;
+				}
+			}
+
+			if(!parentFound)
+			{
 			#ifdef DEBUG_PRINT
-				printf("Send TaskId:%lu\n\r", MainScenery->TaskList[MainScenery->ListIndex-1]->TaskID);
+				printf("Error Scenery ID not found\n\r");
 			#endif
+			}
+
+
 			break;
 		}
 		case UCONDITION:
 		{
-			uint32_t i = 0;
-
-			while(MainScenery->TaskList[i]->TaskID != taskCfg.parentId)
+			for(uint32_t i = 0; i < DeviceListIndex; i++)
 			{
-				i++;
-				if (i == MAX_CONDITION_NUMBER)
+				for(uint32_t j = 0; j < DeviceList[i]->SceneryListIndex; j++)
+				{
+					for(uint32_t k = 0; k < DeviceList[i]->SceneryList[j]->TaskListIndex; k++)
+					{
+						if(DeviceList[i]->SceneryList[j]->TaskList[k]->TaskID == taskCfg.parentId)
+						{
+							UCondition *newCondition = new UCondition(taskCfg.id,
+																		taskCfg.conditionCfg.sensorId,
+																		taskCfg.conditionCfg.value,
+																		taskCfg.conditionCfg.operatorType,
+																		testName);
+							if(!DeviceList[i]->SceneryList[j]->TaskList[k]->AddCondition(newCondition))
+							{
+							#ifdef DEBUG_PRINT
+								printf("Error Adding ConditionId:%lu\n\r", newCondition->ConditionID);
+							#endif
+							}
+							parentFound = 1;
+							break;
+						}
+					}
+
+					if(parentFound)
+					{
+						break;
+					}
+				}
+
+				if(parentFound)
 				{
 					break;
 				}
 			}
-			UCondition *newCondition = new UCondition(taskCfg.id,
-													taskCfg.conditionCfg.sensorId,
-													taskCfg.conditionCfg.value,
-													taskCfg.conditionCfg.operatorType,
-													testName);
-			MainScenery->TaskList[i]->AddCondition(newCondition);
-			break;
-		}
-		case UACTION:
-		{
+
+			if(!parentFound)
+			{
 			#ifdef DEBUG_PRINT
-				printf("Receive actuatorId:%lu\n\r",taskCfg.actionCfg.actuatorId);
+				printf("Error Task ID not found\n\r");
 			#endif
-
-			uint32_t i = 0;
-
-			while(MainScenery->TaskList[i]->TaskID != taskCfg.parentId)
-			{
-				i++;
-				if (i == MAX_ACTION_NUMBER)
-				{
-					break;
-				}
 			}
-			UAction *newAction = new UAction(taskCfg.id,
-													taskCfg.actionCfg.actuatorId,
-													taskCfg.actionCfg.value,
-													testName);
-			MainScenery->TaskList[i]->AddAction(newAction);
 			break;
 		}
 	}
+}
+
+uint8_t UTaskHandler::AddDevice(UDevice *mDevice)
+{
+	uint8_t retVal = 0;
+
+	if (DeviceListIndex < MAX_DEVICE_NUMBER)
+	{
+
+		DeviceList[DeviceListIndex++] = mDevice;
+		retVal = 1;
+	}
+	return retVal;
+}
+
+
+void UTaskHandler::DelDevice(uint32_t mDeviceID)
+{
+	uint32_t i = 0;
+
+	for (; i < MAX_DEVICE_NUMBER; i++)
+	{
+		if (DeviceList[i]->DeviceID == mDeviceID)
+		{
+			uint32_t j = i;
+
+			delete DeviceList[i];
+			for (; j < MAX_DEVICE_NUMBER - 1; j++)
+			{
+				if (DeviceList[j + 1] != 0)
+				{
+					DeviceList[j] = DeviceList[j + 1];
+				}
+				else
+				{
+					break;
+				}
+			}
+			delete DeviceList[MAX_DEVICE_NUMBER - 1];
+			DeviceList[MAX_DEVICE_NUMBER - 1] = new UDevice;
+			DeviceListIndex--;
+
+			break;
+		}
+	}
+}
+
+uint8_t UTaskHandler::AddEvent(UTaskEvent mEvent)
+{
+	uint8_t retVal = 0;
+
+	if (EventPoolIndex < EVENT_POOL_SIZE)
+	{
+		EventPool[EventPoolIndex].sensorId = mEvent.sensorId;
+		EventPool[EventPoolIndex++].value = mEvent.value;
+		retVal = 1;
+	}
+	return retVal;
+}
+
+
+void UTaskHandler::DelEvent(uint32_t mSensorID)
+{
+	for (uint32_t i = 0; i < EVENT_POOL_SIZE; i++)
+	{
+		if (EventPool[i].sensorId == mSensorID)
+		{
+			for (uint32_t j = i; j < EVENT_POOL_SIZE - 1; j++)
+			{
+				if (EventPool[j + 1].sensorId != 0)
+				{
+					EventPool[j].sensorId = EventPool[j + 1].sensorId;
+					EventPool[j].value = EventPool[j + 1].value;
+				}
+				else
+				{
+					break;
+				}
+			}
+
+			EventPool[EVENT_POOL_SIZE - 1].sensorId = 0;
+			EventPool[EVENT_POOL_SIZE - 1].value = 0;
+			EventPoolIndex--;
+
+			break;
+		}
+	}
+}
+
+uint32_t UTaskHandler::CheckDevice()
+{
+	for (uint32_t i = 0; i < DeviceListIndex; i++)
+	{
+		DeviceList[i]->DoScenery();
+	}
+
+	return 0;
 }
