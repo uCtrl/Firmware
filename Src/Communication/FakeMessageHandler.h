@@ -30,7 +30,7 @@ public:
     void initialize(USensorHandler*, UActuatorHandler*);
     void start();
     void resetBuffer();
-    void ReadValueFromSensor(char* sensorName, int value);
+    void ReadValueFromSensor(int a_sensorId, int a_value);
     void SendMessage(char* message); 
     void CharReceived(char c);
     void OnMessageRecieved(char* message);

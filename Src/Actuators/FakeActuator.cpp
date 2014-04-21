@@ -5,9 +5,9 @@ FakeActuator::FakeActuator() : digitalOut(UPinUtils::digitalInOut[0])
 {
 }
 
-FakeActuator::FakeActuator(char* a_name, int a_pin) : digitalOut(UPinUtils::digitalInOut[a_pin])
+FakeActuator::FakeActuator(int a_id, int a_pin) : digitalOut(UPinUtils::digitalInOut[a_pin])
 {
-    m_actuatorName = a_name;
+    m_actuatorId = a_id;
 }
 
 // Save the current state of the sensor.

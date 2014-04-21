@@ -1,12 +1,14 @@
 #ifndef SENSORS_USENSORHANDLER_H_
 #define SENSORS_USENSORHANDLER_H_
 
-class FakeSensor;
+class USensor;
+class USensorLight;
+class USensorTemperature;
 class FakeMessageHandler;
 
 #include "USensor.h"
-#include "USensorTemperature.h"
 #include "USensorLight.h"
+#include "USensorTemperature.h"
 #include "USensorType.h"
 #include "FakeMessageHandler.h"
 #include "string.h"
@@ -34,8 +36,8 @@ public:
 
     USensorHandler(FakeMessageHandler*);
 
-    bool AddNewSensor(USensorType type, char* sensorName, int pinUsed, int timeBetweenReads);
-    bool DeleteSensor(char* sensorName);
+    bool AddNewSensor(USensorType type, int sensorId, int pinUsed, int timeBetweenReads);
+    bool DeleteSensor(int sensorId);
     void StartPoolingSensors();
 
     // Get all the names of the sensors

@@ -1,9 +1,15 @@
 #include "USensorLight.h"
 
-USensorLight::USensorLight(FakeMessageHandler* messageHandler, char* a_name, int a_pin, int timeBetweenReads)
-	: USensor(messageHandler, a_name, timeBetweenReads)
+USensorLight::USensorLight(FakeMessageHandler* a_messageHandler, int a_id, int a_pin, int a_timeBetweenReads)
+	: USensor(a_messageHandler, a_id, a_pin, a_timeBetweenReads)
 {
 	m_lightSensorCount = 0;
+}
+
+USensorLight::~USensorLight()
+	: ~USensor()
+{
+	//Empty destructor
 }
 
 void USensorLight::Read() {
@@ -22,5 +28,5 @@ void USensorLight::Read() {
 	if(m_lightSensorCount >= 10)
 		m_lightSensorCount = 0;
 
-	m_messageHandler->ReadValueFromSensor(m_sensorName, val);
+	m_messageHandler->ReadValueFromSensor(m_sensorId, val);
 }

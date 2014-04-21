@@ -27,19 +27,10 @@ void USensorHandler::StartPoolingSensors()
 	    	Thread::wait(m_delayBetweenSensorPooling);
 			m_timeElapsed += m_delayBetweenSensorPooling;
 	    }
-
-	    /*
-	    char tmp[10];
-	    sprintf(tmp,"%d", m_timeElapsed);
-	    m_messageHandler->SendMessage(tmp);
-
-	    char tmp2[10];
-	    sprintf(tmp2,"%d", m_delayBetweenSensorPooling);
-	    m_messageHandler->SendMessage(tmp2);*/
 	}
 }
 
-bool USensorHandler::AddNewSensor(USensorType type, char* sensorName, int pinUsed, int timeBetweenReads)
+bool USensorHandler::AddNewSensor(USensorType type, int sensorId, int pinUsed, int timeBetweenReads)
 {
     if(m_SensorCount >= SENSOR_LIST_LENGTH)
     {
@@ -49,16 +40,17 @@ bool USensorHandler::AddNewSensor(USensorType type, char* sensorName, int pinUse
     switch(type)
     {
         case Temperature:
-            m_Sensors[m_SensorCount] = new USensorTemperature(m_messageHandler, sensorName, pinUsed, timeBetweenReads);
+            m_Sensors[m_SensorCount] = new USensorTemperature(m_messageHandler, sensorId, pinUsed, timeBetweenReads);
             break;
         case Light:
-            m_Sensors[m_SensorCount] = new USensorLight(m_messageHandler, sensorName, pinUsed, timeBetweenReads);
+            m_Sensors[m_SensorCount] = new USensorLight(m_messageHandler, sensorId, pinUsed, timeBetweenReads);
+            break;
         case Motion:
             break;
         case Current:
             break;
         default:
-            m_Sensors[m_SensorCount] = new USensor(m_messageHandler, sensorName, pinUsed, timeBetweenReads);
+            m_Sensors[m_SensorCount] = new USensor(m_messageHandler, sensorId, pinUsed, timeBetweenReads);
             break;
     }
     m_SensorCount++;
@@ -67,16 +59,19 @@ bool USensorHandler::AddNewSensor(USensorType type, char* sensorName, int pinUse
     return true;
 }
 
-bool USensorHandler::DeleteSensor(char* sensorName) {
+bool USensorHandler::DeleteSensor(int sensorId) {
 
     for(int i = 0; i < m_SensorCount; i++) {
 
-        if(strcmp(sensorName, m_Sensors[i]->GetName()) == 0) {
+        if(sensorId == m_Sensors[i]->GetId()) {
             delete m_Sensors[i];
 
+            char tmp_id[10];
+            sprintf(tmp_id,"%d", sensorId);
+
             char buf[BUFFER_SIZE] = {0};
-            strcat(buf,"Deleted sensor: ");
-            strcat(buf,sensorName);
+            strcat(buf, "Deleted sensor: ");
+            strcat(buf, tmp_id);
 
             m_messageHandler->SendMessage(buf);
 
@@ -109,10 +104,6 @@ void USensorHandler::UpdateDelayBetweenReads()
     for(int i = 0; i < m_SensorCount; i++)
     {
     	values[i] = m_Sensors[i]->GetTimeBetweenReads();
-    	/*
-        char tmp[10];
-        sprintf(tmp,"%d", m_Sensors[i]->GetTimeBetweenReads());
-        m_messageHandler->SendMessage(tmp);*/
     }
 
     m_delayBetweenSensorPooling = UMathUtils::gcdOfMultipleNumbers(values, m_SensorCount);
@@ -122,13 +113,6 @@ void USensorHandler::UpdateDelayBetweenReads()
     {
     	m_delayBetweenSensorPooling = 1000;
     }
-
-    /*
-    char tmp[10];
-    sprintf(tmp,"%d", m_delayBetweenSensorPooling);
-
-    m_messageHandler->SendMessage("Updated delay between reads:");
-    m_messageHandler->SendMessage(tmp);*/
 
     m_timeForNextSleep = m_delayBetweenSensorPooling - (m_timeElapsed % m_delayBetweenSensorPooling);
 }

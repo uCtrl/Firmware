@@ -16,7 +16,8 @@ protected:
 
 public:
 
-    USensorLight(FakeMessageHandler* messageHandler, char* a_name, int a_pin, int timeBetweenReads);
+    USensorLight(FakeMessageHandler* messageHandler, int a_id, int a_pin, int timeBetweenReads);
+    virtual ~USensorLight();
     virtual void Read();
 
 };

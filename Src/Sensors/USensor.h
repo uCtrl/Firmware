@@ -10,7 +10,7 @@
 class USensor
 {
 protected:
-    char* m_sensorName;
+    int m_sensorId;
     int m_timeBetweenReads;
     //static int s_threadId;
 	//RtosTimer m_timer;
@@ -24,11 +24,13 @@ public:
     */
     USensor();
 
+    virtual ~USensor();
+
     /*  Constructor with parameters
         @param a_name The sensor name
         @param a_pin The pin used to read the sensor
     */
-    USensor(FakeMessageHandler* messageHandler, char* a_name, int a_pin, int timeBetweenReads);
+    USensor(FakeMessageHandler* messageHandler, int a_id, int a_pin, int timeBetweenReads);
 
     virtual void Read();
     int ReadValue();
@@ -39,7 +41,7 @@ public:
     void SetTimeBetweenReads(int timeBetweenReads) { m_timeBetweenReads = timeBetweenReads; }
     int GetTimeBetweenReads() { return m_timeBetweenReads; }
 
-    char* GetName() { return m_sensorName; }
+    int GetId() { return m_sensorId; }
 
 };
 

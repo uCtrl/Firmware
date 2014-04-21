@@ -11,7 +11,7 @@ class FakeActuator
 {
 protected:
     DigitalOut digitalOut;
-    char* m_actuatorName;
+    int m_actuatorId;
 
 public:
     /*  Default constructor
@@ -22,11 +22,11 @@ public:
         @param a_name The sensor name
         @param a_pin The pin used to read the sensor
     */
-    FakeActuator(char* a_name, int a_pin);
+    FakeActuator(int a_id, int a_pin);
 
     void SetValue(int a_value);
 
-    char* GetName() { return m_actuatorName; }
+    int GetId() { return m_actuatorId; }
 
 };
 
