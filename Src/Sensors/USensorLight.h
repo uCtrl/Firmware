@@ -1,24 +1,27 @@
 #ifndef SENSORS_USENSORLIGHT_H_
 #define SENSORS_USENSORLIGHT_H_
 
-#include "FakeMessageHandler.h"
 #include "defines.h"
 #include "mbed.h"
 #include "UPinUtils.h"
 #include "rtos.h"
 #include "USensor.h"
+#include "UTaskRequest.h"
+#include "UTaskHandler.h"
+
+const int LIGHT_SENSOR_BUFFER_SIZE = 10;
 
 class USensorLight : public USensor
 {
-protected:
-    int m_lightSensorBuffer[10] = {0};
-    int m_lightSensorCount;
 
 public:
-
-    USensorLight(FakeMessageHandler* messageHandler, int a_id, int a_pin, int timeBetweenReads);
+    USensorLight(int a_id, int a_pin, int timeBetweenReads);
     virtual ~USensorLight();
     virtual void Read();
+
+protected:
+    int m_lightSensorBuffer[LIGHT_SENSOR_BUFFER_SIZE];
+    int m_lightSensorCount;
 
 };
 

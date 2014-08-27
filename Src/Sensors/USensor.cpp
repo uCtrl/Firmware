@@ -16,16 +16,14 @@ extern "C"
 USensor::USensor() : analogIn(UPinUtils::analogIn[0])//, m_timer(callback_wrapper, osTimerPeriodic, (void *)s_threadId++)
 {
     m_sensorId = 0;
-    m_messageHandler = NULL;
     m_timeBetweenReads = 1000;
 }
 
-USensor::USensor(FakeMessageHandler* messageHandler, int a_id, int a_pin, int timeBetweenReads)
+USensor::USensor(int a_id, int a_pin, int timeBetweenReads)
 : analogIn(UPinUtils::analogIn[a_pin])//, m_timer(callback_wrapper, osTimerPeriodic, (void *)s_threadId++)
 {
     m_timeBetweenReads = timeBetweenReads;
     m_sensorId = a_id;
-    m_messageHandler = messageHandler;
 }
 
 // Forcefully reads a new value from the sensor, saves it in m_LastValueRead
@@ -59,7 +57,4 @@ void USensor::Read()
     strcat(buf, tmp_value);
     strcat(buf, ", value : ");
     strcat(buf, tmp_value);
-	m_messageHandler->SendMessage(buf);//*/
-
-	m_messageHandler->ReadValueFromSensor(m_sensorId, val);
 }

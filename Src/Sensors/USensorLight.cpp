@@ -1,13 +1,13 @@
 #include "USensorLight.h"
 
-USensorLight::USensorLight(FakeMessageHandler* a_messageHandler, int a_id, int a_pin, int a_timeBetweenReads)
-	: USensor(a_messageHandler, a_id, a_pin, a_timeBetweenReads)
+USensorLight::USensorLight(int a_id, int a_pin, int a_timeBetweenReads)
+	: USensor(a_id, a_pin, a_timeBetweenReads),
+	  m_lightSensorBuffer{0}
 {
 	m_lightSensorCount = 0;
 }
 
 USensorLight::~USensorLight()
-	: ~USensor()
 {
 	//Empty destructor
 }
@@ -28,5 +28,15 @@ void USensorLight::Read() {
 	if(m_lightSensorCount >= 10)
 		m_lightSensorCount = 0;
 
-	m_messageHandler->ReadValueFromSensor(m_sensorId, val);
+
+	semMailUTaskHandler.wait();
+	UTaskRequest *mail = mailUTaskHandler.alloc();
+	if(mail != NULL) {
+		mail->taskRequestType = EVENT;
+		mail->event.sensorId = m_sensorId;
+		mail->event.value = val;
+		mailUTaskHandler.put(mail);
+		printf("Sent event from sensor %lu\n\r", mail->event.sensorId);
+		//m_messageHandler->ReadValueFromSensor(m_sensorId, val);
+	}
 }

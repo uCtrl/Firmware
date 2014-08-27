@@ -10,7 +10,6 @@ class FakeMessageHandler;
 #include "USensorLight.h"
 #include "USensorTemperature.h"
 #include "USensorType.h"
-#include "FakeMessageHandler.h"
 #include "string.h"
 #include "defines.h"
 #include "UMathUtils.h"
@@ -28,13 +27,12 @@ private:
     uint32_t m_timeElapsed;
     int m_timeForNextSleep;
     USensor* m_Sensors[SENSOR_LIST_LENGTH];
-    FakeMessageHandler* m_messageHandler;
 
     void UpdateDelayBetweenReads();
 
 public:
 
-    USensorHandler(FakeMessageHandler*);
+    USensorHandler();
 
     bool AddNewSensor(USensorType type, int sensorId, int pinUsed, int timeBetweenReads);
     bool DeleteSensor(int sensorId);

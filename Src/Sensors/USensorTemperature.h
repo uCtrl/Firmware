@@ -14,7 +14,7 @@ protected:
 
 public:
 
-	USensorTemperature(FakeMessageHandler* messageHandler, int a_id, int a_pin, int timeBetweenReads);
+	USensorTemperature(int a_id, int a_pin, int timeBetweenReads);
     virtual ~USensorTemperature();
     virtual void Read();
 

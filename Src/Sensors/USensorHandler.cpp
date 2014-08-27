@@ -1,8 +1,7 @@
 #include "USensorHandler.h"
 
-USensorHandler::USensorHandler(FakeMessageHandler* messageHandler)
+USensorHandler::USensorHandler()
 {
-	m_messageHandler = messageHandler;
 	m_SensorCount = 0;
 	m_delayBetweenSensorPooling = 1000;
 	m_timeElapsed = 0;
@@ -40,17 +39,17 @@ bool USensorHandler::AddNewSensor(USensorType type, int sensorId, int pinUsed, i
     switch(type)
     {
         case Temperature:
-            m_Sensors[m_SensorCount] = new USensorTemperature(m_messageHandler, sensorId, pinUsed, timeBetweenReads);
+            m_Sensors[m_SensorCount] = new USensorTemperature(sensorId, pinUsed, timeBetweenReads);
             break;
         case Light:
-            m_Sensors[m_SensorCount] = new USensorLight(m_messageHandler, sensorId, pinUsed, timeBetweenReads);
+            m_Sensors[m_SensorCount] = new USensorLight(sensorId, pinUsed, timeBetweenReads);
             break;
         case Motion:
             break;
         case Current:
             break;
         default:
-            m_Sensors[m_SensorCount] = new USensor(m_messageHandler, sensorId, pinUsed, timeBetweenReads);
+            m_Sensors[m_SensorCount] = new USensor(sensorId, pinUsed, timeBetweenReads);
             break;
     }
     m_SensorCount++;
@@ -65,7 +64,7 @@ bool USensorHandler::DeleteSensor(int sensorId) {
 
         if(sensorId == m_Sensors[i]->GetId()) {
             delete m_Sensors[i];
-
+            /*
             char tmp_id[10];
             sprintf(tmp_id,"%d", sensorId);
 
@@ -74,6 +73,7 @@ bool USensorHandler::DeleteSensor(int sensorId) {
             strcat(buf, tmp_id);
 
             m_messageHandler->SendMessage(buf);
+			*/
 
             // We now need to shift the sensors in the array by 1 position
             for(int j = i; j < m_SensorCount; j++) {

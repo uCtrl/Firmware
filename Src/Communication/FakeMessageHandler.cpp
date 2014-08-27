@@ -1,3 +1,4 @@
+/*
 #include "FakeMessageHandler.h"
 
 FakeMessageHandler::FakeMessageHandler() : serial(USBTX, USBRX)
@@ -191,3 +192,4 @@ void FakeMessageHandler::OnMessageRecieved(char* message)
         m_actuatorHandler->DeleteActuator(2);
     }
 }
+*/

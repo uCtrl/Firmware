@@ -90,148 +90,145 @@ int main (void)
     *//*
     //    osEvent evt;
     //Thread::wait(5000);
+	*/
 
     uint32_t i = 0;
-	*/
     for(;;)
     {
     	/*ledr = false;
     	Thread::wait(100);
     	ledr = true;*/
     	//for testing purpose
-		#ifdef DEBUG_PRINT
-    		semMailUTaskHandler.wait();
-    		UTaskRequest *mail = mailUTaskHandler.alloc();
-			if(mail != NULL)
+		semMailUTaskHandler.wait();
+		UTaskRequest *mail = mailUTaskHandler.alloc();
+		if(mail != NULL)
+		{
+			if(i == 0)
+			{
+				mail->taskRequestType = CONFIG;
+				mail->taskCfg.taskCfgType = UDEVICE;
+				mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
+				mail->taskCfg.id = 12;
+				mail->taskCfg.parentId = 0;
+				mailUTaskHandler.put(mail);
+				printf("Sent Device %lu config\n\r", mail->taskCfg.id);
+			}
+			if(i == 1)
 			{
 
-				if(i == 0)
-				{
-					mail->taskRequestType = CONFIG;
-					mail->taskCfg.taskCfgType = UDEVICE;
-					mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
-					mail->taskCfg.id = 12;
-					mail->taskCfg.parentId = 0;
-					mailUTaskHandler.put(mail);
-					printf("Sent Device %lu config\n\r", mail->taskCfg.id);
-				}
-				if(i == 1)
-				{
-
-					mail->taskRequestType = CONFIG;
-					mail->taskCfg.taskCfgType = USCENERY;
-					mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
-					mail->taskCfg.id = 7;
-					mail->taskCfg.parentId = 12;
-					mailUTaskHandler.put(mail);
-					printf("Sent Scenery %lu config\n\r", mail->taskCfg.id);
-				}
-				if(i == 2)
-				{
-					mail->taskRequestType = CONFIG;
-					mail->taskCfg.taskCfgType = UTASK;
-					mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
-					mail->taskCfg.id = 10;
-					mail->taskCfg.parentId = 7;
-					mail->taskCfg.ActionValue = 124;
-					mailUTaskHandler.put(mail);
-					printf("Sent Task %lu config\n\r", mail->taskCfg.id);
-				}
-				if(i == 3)
-				{
-					mail->taskRequestType = CONFIG;
-					mail->taskCfg.taskCfgType = UCONDITION;
-					mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
-					mail->taskCfg.id = 34;
-					mail->taskCfg.parentId = 10;
-					mail->taskCfg.conditionCfg.sensorId = 1245;
-					mail->taskCfg.conditionCfg.value = 934;
-					mail->taskCfg.conditionCfg.operatorType = EQUAL;
-					mailUTaskHandler.put(mail);
-					printf("Sent Condition %lu config\n\r", mail->taskCfg.id);
-				}
-				if(i == 4)
-				{
-					mail->taskRequestType = CONFIG;
-					mail->taskCfg.taskCfgType = UDEVICE;
-					mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
-					mail->taskCfg.id = 7645;
-					mail->taskCfg.parentId = 0;
-					mailUTaskHandler.put(mail);
-					printf("Sent Device %lu config\n\r", mail->taskCfg.id);
-				}
-				if(i == 5)
-				{
-
-					mail->taskRequestType = CONFIG;
-					mail->taskCfg.taskCfgType = USCENERY;
-					mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
-					mail->taskCfg.id = 93;
-					mail->taskCfg.parentId = 7645;
-					mailUTaskHandler.put(mail);
-					printf("Sent Scenery %lu config\n\r", mail->taskCfg.id);
-				}
-				if(i == 6)
-				{
-					mail->taskRequestType = CONFIG;
-					mail->taskCfg.taskCfgType = UTASK;
-					mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
-					mail->taskCfg.id = 14;
-					mail->taskCfg.parentId = 93;
-					mail->taskCfg.ActionValue = 4933;
-					mailUTaskHandler.put(mail);
-					printf("Sent Task %lu config\n\r", mail->taskCfg.id);
-				}
-				if(i == 7)
-				{
-					mail->taskRequestType = CONFIG;
-					mail->taskCfg.taskCfgType = UTASK;
-					mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
-					mail->taskCfg.id = 73;
-					mail->taskCfg.parentId = 7;
-					mail->taskCfg.ActionValue = 1397592;
-					mailUTaskHandler.put(mail);
-					printf("Sent Task %lu config\n\r", mail->taskCfg.id);
-				}
-				if(i == 8)
-				{
-					mail->taskRequestType = EVENT;
-					mail->event.sensorId = 1245;
-					mail->event.value = 934;
-					mailUTaskHandler.put(mail);
-					printf("Sent event from sensor %lu\n\r", mail->event.sensorId);
-				}
-				if(i == 9)
-				{
-					mail->taskRequestType = CONFIG;
-					mail->taskCfg.taskCfgType = UCONDITION;
-					mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
-					mail->taskCfg.id = 3489;
-					mail->taskCfg.parentId = 14;
-					mail->taskCfg.conditionCfg.sensorId = 234;
-					mail->taskCfg.conditionCfg.value = 2351;
-					mail->taskCfg.conditionCfg.operatorType = EQUAL;
-					mailUTaskHandler.put(mail);
-					printf("Sent Condition %lu config\n\r", mail->taskCfg.id);
-				}
-				if(i == 10)
-				{
-					mail->taskRequestType = EVENT;
-					mail->event.sensorId = 234;
-					mail->event.value = 2351;
-					mailUTaskHandler.put(mail);
-					printf("Sent event from sensor %lu\n\r", mail->event.sensorId);
-				}
-				i++;
+				mail->taskRequestType = CONFIG;
+				mail->taskCfg.taskCfgType = USCENERY;
+				mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
+				mail->taskCfg.id = 7;
+				mail->taskCfg.parentId = 12;
+				mailUTaskHandler.put(mail);
+				printf("Sent Scenery %lu config\n\r", mail->taskCfg.id);
 			}
-			else
+			if(i == 2)
 			{
-				//error, should never happen with semaphore
-				/*ledg = false;
-				Thread::wait(500);
-				ledg = true;*/
+				mail->taskRequestType = CONFIG;
+				mail->taskCfg.taskCfgType = UTASK;
+				mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
+				mail->taskCfg.id = 10;
+				mail->taskCfg.parentId = 7;
+				mail->taskCfg.ActionValue = 124;
+				mailUTaskHandler.put(mail);
+				printf("Sent Task %lu config\n\r", mail->taskCfg.id);
 			}
-		#endif
+			if(i == 3)
+			{
+				mail->taskRequestType = CONFIG;
+				mail->taskCfg.taskCfgType = UCONDITION;
+				mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
+				mail->taskCfg.id = 34;
+				mail->taskCfg.parentId = 10;
+				mail->taskCfg.conditionCfg.sensorId = 1245;
+				mail->taskCfg.conditionCfg.value = 934;
+				mail->taskCfg.conditionCfg.operatorType = EQUAL;
+				mailUTaskHandler.put(mail);
+				printf("Sent Condition %lu config\n\r", mail->taskCfg.id);
+			}
+			if(i == 4)
+			{
+				mail->taskRequestType = CONFIG;
+				mail->taskCfg.taskCfgType = UDEVICE;
+				mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
+				mail->taskCfg.id = 7645;
+				mail->taskCfg.parentId = 0;
+				mailUTaskHandler.put(mail);
+				printf("Sent Device %lu config\n\r", mail->taskCfg.id);
+			}
+			if(i == 5)
+			{
+
+				mail->taskRequestType = CONFIG;
+				mail->taskCfg.taskCfgType = USCENERY;
+				mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
+				mail->taskCfg.id = 93;
+				mail->taskCfg.parentId = 7645;
+				mailUTaskHandler.put(mail);
+				printf("Sent Scenery %lu config\n\r", mail->taskCfg.id);
+			}
+			if(i == 6)
+			{
+				mail->taskRequestType = CONFIG;
+				mail->taskCfg.taskCfgType = UTASK;
+				mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
+				mail->taskCfg.id = 14;
+				mail->taskCfg.parentId = 93;
+				mail->taskCfg.ActionValue = 4933;
+				mailUTaskHandler.put(mail);
+				printf("Sent Task %lu config\n\r", mail->taskCfg.id);
+			}
+			if(i == 7)
+			{
+				mail->taskRequestType = CONFIG;
+				mail->taskCfg.taskCfgType = UTASK;
+				mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
+				mail->taskCfg.id = 73;
+				mail->taskCfg.parentId = 7;
+				mail->taskCfg.ActionValue = 1397592;
+				mailUTaskHandler.put(mail);
+				printf("Sent Task %lu config\n\r", mail->taskCfg.id);
+			}
+			if(i == 8)
+			{
+				mail->taskRequestType = EVENT;
+				mail->event.sensorId = 1245;
+				mail->event.value = 934;
+				mailUTaskHandler.put(mail);
+				printf("Sent event from sensor %lu\n\r", mail->event.sensorId);
+			}
+			if(i == 9)
+			{
+				mail->taskRequestType = CONFIG;
+				mail->taskCfg.taskCfgType = UCONDITION;
+				mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
+				mail->taskCfg.id = 3489;
+				mail->taskCfg.parentId = 14;
+				mail->taskCfg.conditionCfg.sensorId = 234;
+				mail->taskCfg.conditionCfg.value = 2351;
+				mail->taskCfg.conditionCfg.operatorType = EQUAL;
+				mailUTaskHandler.put(mail);
+				printf("Sent Condition %lu config\n\r", mail->taskCfg.id);
+			}
+			if(i == 10)
+			{
+				mail->taskRequestType = EVENT;
+				mail->event.sensorId = 234;
+				mail->event.value = 2351;
+				mailUTaskHandler.put(mail);
+				printf("Sent event from sensor %lu\n\r", mail->event.sensorId);
+			}
+			i++;
+		}
+		else
+		{
+			//error, should never happen with semaphore
+			/*ledg = false;
+			Thread::wait(500);
+			ledg = true;*/
+		}
 		Thread::wait(200);
     }
 }
