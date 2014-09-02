@@ -4,7 +4,7 @@
 //class USensor;
 //class USensorLight;
 //class USensorTemperature;
-class FakeMessageHandler;
+//class FakeMessageHandler;
 
 #include "USensor.h"
 #include "USensorLight.h"
@@ -22,10 +22,10 @@ class FakeMessageHandler;
 class USensorHandler
 {
 private:
-    int m_SensorCount;
-    int m_delayBetweenSensorPooling;
+    uint32_t m_SensorCount;
+    uint32_t m_delayBetweenSensorPooling;
     uint32_t m_timeElapsed;
-    int m_timeForNextSleep;
+    uint32_t m_timeForNextSleep;
     USensor* m_Sensors[SENSOR_LIST_LENGTH];
 
     void UpdateDelayBetweenReads();
@@ -34,15 +34,15 @@ public:
 
     USensorHandler();
 
-    bool AddNewSensor(USensorType type, int sensorId, int pinUsed, int timeBetweenReads);
-    bool DeleteSensor(int sensorId);
+    bool AddNewSensor(USensorType type, uint32_t a_sensorId, uint32_t a_pinUsed, uint32_t a_timeBetweenReads, char* a_sensorName);
+    bool DeleteSensor(uint32_t a_sensorId);
     void StartPoolingSensors();
 
     // Get all the names of the sensors
     char** GetSensorNames();
 
     // Get the number of sensors
-    int GetSensorCount() { return m_SensorCount; }
+    uint32_t GetSensorCount() { return m_SensorCount; }
 
 };
 

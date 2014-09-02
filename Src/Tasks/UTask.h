@@ -10,7 +10,7 @@ class UTask
 {
 public:
 	UTask();
-	UTask(uint32_t mTaskID, uint8_t mTaskName[TASK_NAME_LENGHT], uint32_t mActionValue, uint32_t mDeviceID);
+	UTask(uint32_t mTaskID, char mTaskName[TASK_NAME_LENGHT], uint32_t mActionValue, uint32_t mDeviceID);
 	~UTask();
 	uint8_t AddCondition(UCondition *mCondition);
 	void DelCondition(uint32_t mCondtionID);
@@ -19,7 +19,7 @@ public:
 
 	uint32_t TaskID;
 	uint32_t DeviceID;
-	uint8_t TaskName[10];
+	char TaskName[TASK_NAME_LENGHT];
 	UCondition *ConditionList[MAX_CONDITION_NUMBER];
 	uint32_t ConditionListIndex;
 	uint32_t ActionValue;

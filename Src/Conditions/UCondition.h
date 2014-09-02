@@ -14,7 +14,7 @@ class UCondition
 public:
 
 	UCondition();
-	UCondition(uint32_t mConditionID, uint32_t mSensorID, uint32_t mValue, UOperatorType mConditionOperator, uint8_t mConditionName[CONDITION_NAME_LENGHT]);
+	UCondition(uint32_t mConditionID, uint32_t mSensorID, uint32_t mValue, UOperatorType mConditionOperator, char mConditionName[CONDITION_NAME_LENGHT]);
 	virtual ~UCondition();
 	virtual uint32_t CheckCondition();
 	uint32_t GetSensorValue(uint32_t mSensorID);
@@ -23,7 +23,7 @@ public:
 	uint32_t SensorID;
 	uint32_t Value;
 	UOperatorType ConditionOperator;
-	uint8_t ConditionName[CONDITION_NAME_LENGHT];
+	char ConditionName[CONDITION_NAME_LENGHT];
 
 };
 

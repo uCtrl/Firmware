@@ -1,12 +1,11 @@
 #include "UActuatorHandler.h"
 
-UActuatorHandler::UActuatorHandler(FakeMessageHandler* messageHandler)
+UActuatorHandler::UActuatorHandler()
 {
-	m_messageHandler = messageHandler;
 	m_ActuatorCount = 0;
 }
 
-bool UActuatorHandler::AddNewActuator(UActuatorType a_type, int a_actuatorId, int a_pinUsed)
+bool UActuatorHandler::AddNewActuator(UActuatorType a_type, uint8_t a_actuatorId, uint8_t a_pinUsed, char* a_actuatorName)
 {
     if(m_ActuatorCount >= ACTUATORS_LIST_LENGTH)
     {
@@ -16,7 +15,7 @@ bool UActuatorHandler::AddNewActuator(UActuatorType a_type, int a_actuatorId, in
     switch(a_type)
     {
         case Actuator_Fake:
-            m_Actuators[m_ActuatorCount] = new FakeActuator(a_actuatorId, a_pinUsed);
+            m_Actuators[m_ActuatorCount] = new FakeActuator(a_actuatorId, a_pinUsed, a_actuatorName);
             break;
     }
 
@@ -24,9 +23,9 @@ bool UActuatorHandler::AddNewActuator(UActuatorType a_type, int a_actuatorId, in
     return true;
 }
 
-bool UActuatorHandler::DeleteActuator(int a_actuatorId)
+bool UActuatorHandler::DeleteActuator(uint8_t a_actuatorId)
 {
-    for(int i = 0; i < m_ActuatorCount; i++) {
+    for(uint8_t i = 0; i < m_ActuatorCount; i++) {
 
         if(a_actuatorId == m_Actuators[i]->GetId()) {
             delete m_Actuators[i];
@@ -38,10 +37,10 @@ bool UActuatorHandler::DeleteActuator(int a_actuatorId)
             strcat(buf, "Deleted actuator: ");
             strcat(buf, tmp_id);
 
-            m_messageHandler->SendMessage(buf);
+            //m_messageHandler->SendMessage(buf);
 
             // We now need to shift the sensors in the array by 1 position
-            for(int j = i; j < m_ActuatorCount; j++) {
+            for(uint8_t j = i; j < m_ActuatorCount; j++) {
                 if(j+1 < ACTUATORS_LIST_LENGTH) {
                     m_Actuators[j] = m_Actuators[j+1];
 
@@ -58,7 +57,7 @@ bool UActuatorHandler::DeleteActuator(int a_actuatorId)
     return false;
 }
 
-bool UActuatorHandler::SetActuatorValue(char* a_actuatorName, int a_value)
+bool UActuatorHandler::SetActuatorValue(char* a_actuatorName, uint8_t a_value)
 {
 	/*m_messageHandler->SendMessage("test");
 
@@ -67,7 +66,7 @@ bool UActuatorHandler::SetActuatorValue(char* a_actuatorName, int a_value)
 	m_messageHandler->SendMessage(tmp);
 
 	/*
-    for(int i = 0; i < m_ActuatorCount; i++) {
+    for(uint8_t i = 0; i < m_ActuatorCount; i++) {
         if(strcmp(a_actuatorName, m_Actuators[i]->GetName()) == 0) {
             //m_Actuators[i]->SetValue(a_value);
             return true;

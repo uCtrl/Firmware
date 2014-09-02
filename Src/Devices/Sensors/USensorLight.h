@@ -9,19 +9,19 @@
 #include "UTaskRequest.h"
 #include "UTaskHandler.h"
 
-const int LIGHT_SENSOR_BUFFER_SIZE = 10;
+const uint32_t LIGHT_SENSOR_BUFFER_SIZE = 10;
 
 class USensorLight : public USensor
 {
 
 public:
-    USensorLight(int a_id, int a_pin, int timeBetweenReads);
+    USensorLight(uint32_t a_id, uint32_t a_pin, uint32_t a_timeBetweenReads, char* a_sensorName);
     virtual ~USensorLight();
     virtual void Read();
 
 protected:
-    int m_lightSensorBuffer[LIGHT_SENSOR_BUFFER_SIZE];
-    int m_lightSensorCount;
+    uint32_t m_lightSensorBuffer[LIGHT_SENSOR_BUFFER_SIZE];
+    uint32_t m_lightSensorCount;
 
 };
 

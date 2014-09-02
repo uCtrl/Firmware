@@ -9,14 +9,14 @@ class UDevice
 {
 public:
 	UDevice();
-	UDevice(uint32_t mDeviceID, uint8_t mDeviceName[DEVICE_NAME_LENGHT]);
+	UDevice(uint32_t mDeviceID, char mDeviceName[DEVICE_NAME_LENGHT]);
 	~UDevice();
 	uint8_t AddScenery(UScenery *mScenery);
 	void DelScenery(uint32_t mSceneryID);
 	uint32_t DoScenery();
 
 	uint32_t DeviceID;
-	uint8_t DeviceName[SCENERY_NAME_LENGHT];
+	char DeviceName[SCENERY_NAME_LENGHT];
 	UScenery *SceneryList[MAX_SCENERY_NUMBER];
 	uint32_t SceneryListIndex;
 };

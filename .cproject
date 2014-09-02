@@ -115,11 +115,11 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Dependancies/Utils|Dependancies/Sensors|Dependancies/Controller|Dependancies/Communication|Dependancies/Actuators|Src/Utils|Src/Actuators|Src/Sensors|Src/Communication|Communication|Src/Controller|Controller|Src/ucontroller|Src/UController" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Actuators"/>
+						<entry excluding="Src/Devices/Sensors|Src/Devices/Actuators|Dependancies/Controller|Src/Actuators|Src/Sensors|Src/ucontroller|Dependancies/Sensors|Controller|Src/Communication|Dependancies/Actuators|Src/Utils|Src/UController|Dependancies/Utils|Src/Controller|Dependancies/Communication|Communication" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Communication"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Controller"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Sensors"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Devices/Actuators"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Devices/Sensors"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Utils"/>
 					</sourceEntries>
 				</configuration>
@@ -181,11 +181,11 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Dependancies/Utils|Dependancies/Sensors|Dependancies/Controller|Dependancies/Communication|Dependancies/Actuators|Src/Utils|Src/Actuators|Src/Sensors|Src/Communication|Src/UController|Controller|Src/Controller|Src/ucontroller|Communication" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Actuators"/>
+						<entry excluding="Src/Devices/Sensors|Src/Devices/Actuators|Dependancies/Controller|Src/Actuators|Src/Sensors|Src/ucontroller|Dependancies/Sensors|Controller|Src/Communication|Dependancies/Actuators|Src/Utils|Src/UController|Dependancies/Utils|Src/Controller|Dependancies/Communication|Communication" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Communication"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Controller"/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Sensors"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Devices/Actuators"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Devices/Sensors"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Utils"/>
 					</sourceEntries>
 				</configuration>

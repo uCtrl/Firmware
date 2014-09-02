@@ -5,17 +5,15 @@
 #include "mbed.h"
 #include "UPinUtils.h"
 #include "rtos.h"
-#include "UTaskHandler.h"
-#include "UTaskCfg.h"
+#include "UDevice.h"
 
-extern Semaphore semMailUTaskHandler;
-extern Mail<UTaskRequest, MAIL_LEN_UTASKHANDLER>mailUTaskHandler;
+class UDevice;
 
-class USensor
+class USensor : public UDevice
 {
 protected:
-    int m_sensorId;
-    int m_timeBetweenReads;
+	uint32_t m_sensorId;
+    uint32_t m_timeBetweenReads;
 
     AnalogIn analogIn;
 
@@ -30,18 +28,18 @@ public:
         @param a_name The sensor name
         @param a_pin The pin used to read the sensor
     */
-    USensor(int a_id, int a_pin, int timeBetweenReads);
+    USensor(uint32_t a_id, uint32_t a_pin, uint32_t a_timeBetweenReads, char* a_deviceName);
 
     virtual void Read();
-    int ReadValue();
+    uint32_t ReadValue();
 
     // Save the current state of the sensor.
     void SaveState();
 
-    void SetTimeBetweenReads(int timeBetweenReads) { m_timeBetweenReads = timeBetweenReads; }
-    int GetTimeBetweenReads() { return m_timeBetweenReads; }
+    void SetTimeBetweenReads(uint32_t timeBetweenReads) { m_timeBetweenReads = timeBetweenReads; }
+    uint32_t GetTimeBetweenReads() { return m_timeBetweenReads; }
 
-    int GetId() { return m_sensorId; }
+    uint32_t GetId() { return m_sensorId; }
 
 };
 

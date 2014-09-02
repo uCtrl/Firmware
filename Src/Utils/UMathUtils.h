@@ -10,8 +10,8 @@ private:
 
 public:
 
-	static int gcd(int a, int b);
-	static int gcdOfMultipleNumbers(int* values, int length);
+	static uint32_t gcd(uint32_t a, uint32_t b);
+	static uint32_t gcdOfMultipleNumbers(uint32_t* values, uint32_t length);
 
 };
 

@@ -13,12 +13,16 @@ Mail<UTaskRequest, MAIL_LEN_UTASKHANDLER>mailUTaskHandler;
 UTaskEvent EventPool[EVENT_POOL_SIZE];
 uint32_t EventPoolIndex;
 
-//TODO remove next line
-uint8_t testName[] = {'a','l','l','o'};
 
 UTaskHandler::UTaskHandler()
 {
 	DeviceListIndex = 0;
+}
+
+UTaskHandler::UTaskHandler(USensorHandler* sensorHandler, UActuatorHandler* actuatorHandler) {
+	DeviceListIndex = 0;
+    m_sensorHandler = sensorHandler;
+    m_actuatorHandler = actuatorHandler;
 }
 
 UTaskHandler::~UTaskHandler()
@@ -62,6 +66,9 @@ void UTaskHandler::handleTaskEvent(const UTaskEvent taskEvent)
 
 void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 {
+	//TODO remove next line
+	char testName[] = "testName";
+
 	uint8_t parentFound = 0;
 	switch(taskCfg.taskCfgType)
 	{
@@ -74,8 +81,8 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 		}
 		case UDEVICE:
 		{
-			UDevice* newDevice = new UDevice(taskCfg.id,
-												testName);
+			UDevice* newDevice = new UDevice(taskCfg.id, testName);
+
 			if(!AddDevice(newDevice))
 			{
 			#ifdef DEBUG_PRINT

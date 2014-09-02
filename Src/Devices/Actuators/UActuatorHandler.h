@@ -1,9 +1,6 @@
 #ifndef ACTUATORS_UACTUATORHANDLER_H_
 #define ACTUATORS_UACTUATORHANDLER_H_
 
-class FakeActuator;
-class FakeMessageHandler;
-
 #include "FakeActuator.h" // Todo : replace with real actuators
 #include "UActuatorType.h"
 #include "FakeMessageHandler.h"
@@ -15,23 +12,22 @@ class FakeMessageHandler;
 class UActuatorHandler
 {
 private:
-    int m_ActuatorCount;
+    uint8_t m_ActuatorCount;
     FakeActuator* m_Actuators[ACTUATORS_LIST_LENGTH];
-    FakeMessageHandler* m_messageHandler;
 
 public:
 
-    UActuatorHandler(FakeMessageHandler*); // Public Constructor
+    UActuatorHandler(); // Public Constructor
 
-    bool AddNewActuator(UActuatorType a_type, int a_actuatorId, int a_pinUsed);
-    bool DeleteActuator(int a_actuatorId);
-    bool SetActuatorValue(char* a_actuatorName, int a_value);
+    bool AddNewActuator(UActuatorType a_type, uint8_t a_actuatorId, uint8_t a_pinUsed, char* a_actuatorName);
+    bool DeleteActuator(uint8_t a_actuatorId);
+    bool SetActuatorValue(char* a_actuatorName, uint8_t a_value);
 
     // Get all the names of the sensors
     char** GetActuatorNames();
 
     // Get the number of sensors
-    int GetActuatorCount() { return m_ActuatorCount; }
+    uint8_t GetActuatorCount() { return m_ActuatorCount; }
 
 };
 
