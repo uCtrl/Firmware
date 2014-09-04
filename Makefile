@@ -31,7 +31,14 @@ OBJECTS += ./Src/Communication/UComDriverOut.o
 OBJECTS += ./Src/Communication/UMsgHandler.o
 OBJECTS += ./Src/Communication/frozen/frozen.o
 OBJECTS += ./Src/TaskHandler/UTaskHandler.o
+<<<<<<< HEAD
 
+=======
+OBJECTS += ./Src/TaskHandler/UScenery.o
+OBJECTS += ./Src/TaskHandler/UTask.o
+OBJECTS += ./Src/TaskHandler/UCondition.o
+OBJECTS += ./Src/TaskHandler/UDevice.o
+>>>>>>> d62a46a7a802649d11e4ef59a988c82eb4851849
 #really hacky way to add object files (not functionnal)
 #CPP_OBJECTS = "find ./Src -name *.cpp"
 #OBJECTS += $(CPP_OBJECTS//.cpp/.o)

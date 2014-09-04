@@ -18,7 +18,6 @@ typedef struct
 	UOperatorType operatorType;
 	uint32_t value;
 	uint32_t sensorId;
-	uint32_t actionId;
 } UConditionCfg;
 
 #endif /* UCONDITIONCFG_H_ */

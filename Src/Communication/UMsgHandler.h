@@ -22,23 +22,25 @@ extern Mail<UComDriverOutMailType, 2> comDriverOutMail;
  */
 enum
 {
-	//REQUESTS MESSAGES
+	//REQUESTS GET MESSAGES
 	REQ_GETPLATFORM = 1,
 	REQ_GETDEVICES = 3,
 	REQ_GETSCENARIOS = 5,
 	REQ_GETTASKS = 7,
 	REQ_GETCONDITIONS = 9,
+	//REQUESTS SAVE MESSAGES
 	REQ_SAVEPLATFORM = 11,
 	REQ_SAVEDEVICES  = 13,
 	REQ_SAVESCENARIOS  = 15,
 	REQ_SAVETASKS = 17,
 	REQ_SAVECONDITIONS = 19,
-	//RESPONSE MESSAGES
+	//RESPONSE GET MESSAGES
 	RES_GETPLATFORM = 2,
 	RES_GETDEVICES = 4,
 	RES_GETSCENARIOS = 6,
 	RES_GETTASKS = 8,
 	RES_GETCONDITIONS = 10,
+	//RESPONSE SAVE MESSAGES
 	RES_SAVEPLATFORM = 12,
 	RES_SAVEDEVICES  = 14,
 	RES_SAVESCENARIOS  = 16,
@@ -54,6 +56,7 @@ class UMsgHandler
         UMsgHandler();
         void start();
         void parse(const char* aInput);
+        void create(const char* aInput);
         ~UMsgHandler();
 };
 

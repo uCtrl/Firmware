@@ -56,9 +56,10 @@ void UMsgHandler::parse(const char* aInput)
 //TODO
 		UComDriverOutMailType *mailOut = comDriverOutMail.alloc();
 //.
+		//System > Platform > Device > Scenario > Task > Condition
 		switch(messageType)
 		{
-			//REQUESTS MESSAGES
+			//REQUESTS GET MESSAGES
 			case REQ_GETPLATFORM:
 				//TODO
 				break;
@@ -66,14 +67,18 @@ void UMsgHandler::parse(const char* aInput)
 				//TODO
 				break;
 			case REQ_GETSCENARIOS:
-				//TODO
+				tok = find_json_token(tokens, "deviceId");
+				strcpy(mailOut->msg, tok->ptr);
 				break;
 			case REQ_GETTASKS:
-				//TODO
+				tok = find_json_token(tokens, "scenarioId");
+				strcpy(mailOut->msg, tok->ptr);
 				break;
 			case REQ_GETCONDITIONS:
-				//TODO
+				tok = find_json_token(tokens, "taskId");
+				strcpy(mailOut->msg, tok->ptr);
 				break;
+			//REQUESTS SAVE MESSAGES
 			case REQ_SAVEPLATFORM:
 				tok = find_json_token(tokens, "platform");
 				strcpy(mailOut->msg, tok->ptr);
