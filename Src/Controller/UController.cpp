@@ -6,6 +6,9 @@
 */
 
 #include "UController.h"
+#ifdef TARGET_LPC1768
+#define LED_BLUE LED3
+#endif
 
 UController::UController():m_activityLed(LED_BLUE),m_pcSerial(USBTX,USBRX)
 {
