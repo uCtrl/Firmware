@@ -22,38 +22,22 @@ INCLUDE_PATHS += -I./Src
 INCLUDE_PATHS += -I./Src/Conditions
 INCLUDE_PATHS += -I./Src/Controller
 INCLUDE_PATHS += -I./Src/Communication
-<<<<<<< HEAD
 INCLUDE_PATHS += -I./Src/Communication/frozen
 INCLUDE_PATHS += -I./Src/TaskHandler
-=======
 INCLUDE_PATHS += -I./Src/Devices
 INCLUDE_PATHS += -I./Src/Devices/Actuators
 INCLUDE_PATHS += -I./Src/Devices/Sensors
 INCLUDE_PATHS += -I./Src/Events
 INCLUDE_PATHS += -I./Src/Tasks
 INCLUDE_PATHS += -I./Src/Utils
->>>>>>> c75ecf48f273bd77a2bb1eaa8c7ad1c0feb7119f
 OBJECTS += ./Src/main.o
 OBJECTS += ./Src/Conditions/UCondition.o
 OBJECTS += ./Src/Controller/UController.o
-<<<<<<< HEAD
 OBJECTS += ./Src/Communication/FakeMessageHandler.o
 OBJECTS += ./Src/Communication/UComDriverIn.o
 OBJECTS += ./Src/Communication/UComDriverOut.o
 OBJECTS += ./Src/Communication/UMsgHandler.o
 OBJECTS += ./Src/Communication/frozen/frozen.o
-OBJECTS += ./Src/TaskHandler/UTaskHandler.o
-<<<<<<< HEAD
-
-=======
-OBJECTS += ./Src/TaskHandler/UScenery.o
-OBJECTS += ./Src/TaskHandler/UTask.o
-OBJECTS += ./Src/TaskHandler/UCondition.o
-OBJECTS += ./Src/TaskHandler/UDevice.o
->>>>>>> d62a46a7a802649d11e4ef59a988c82eb4851849
-=======
-OBJECTS += ./Src/Communication/UComDriver.o
-OBJECTS += ./Src/Communication/UMessageHandler.o
 OBJECTS += ./Src/Devices/UDevice.o
 OBJECTS += ./Src/Devices/Actuators/FakeActuator.o
 OBJECTS += ./Src/Devices/Actuators/UActuatorHandler.o
@@ -61,13 +45,11 @@ OBJECTS += ./Src/Devices/Sensors/USensor.o
 OBJECTS += ./Src/Devices/Sensors/USensorLight.o
 OBJECTS += ./Src/Devices/Sensors/USensorTemperature.o
 OBJECTS += ./Src/Devices/Sensors/USensorHandler.o
-OBJECTS += ./Src/Tasks/UTaskHandler.o
 OBJECTS += ./Src/Tasks/UScenery.o
 OBJECTS += ./Src/Tasks/UTask.o
 OBJECTS += ./Src/Utils/UPinUtils.o
 OBJECTS += ./Src/Utils/UMathUtils.o
 
->>>>>>> c75ecf48f273bd77a2bb1eaa8c7ad1c0feb7119f
 #really hacky way to add object files (not functionnal)
 #CPP_OBJECTS = "find ./Src -name *.cpp"
 #OBJECTS += $(CPP_OBJECTS//.cpp/.o)
