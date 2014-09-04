@@ -11,7 +11,7 @@ UTask::UTask()
 	ConditionListIndex = 0;
 }
 
-UTask::UTask(uint32_t mTaskID, uint8_t mTaskName[TASK_NAME_LENGHT], uint32_t mActionValue, uint32_t mDeviceID)
+UTask::UTask(uint32_t mTaskID, char mTaskName[TASK_NAME_LENGHT], uint32_t mActionValue, uint32_t mDeviceID)
 {
 	TaskID = mTaskID;
 	DeviceID = mDeviceID;

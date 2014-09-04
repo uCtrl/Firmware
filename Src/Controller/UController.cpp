@@ -7,7 +7,7 @@
 
 #include "UController.h"
 
-UController::UController():m_activityLed(LED_BLUE)
+UController::UController():m_activityLed(LED_BLUE),m_pcSerial(USBTX,USBRX)
 {
 }
 

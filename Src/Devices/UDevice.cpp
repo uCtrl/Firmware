@@ -10,13 +10,13 @@ UDevice::UDevice()
 	SceneryListIndex = 0;
 }
 
-UDevice::UDevice(uint32_t mSceneryID, uint8_t mSceneryName[10])
+UDevice::UDevice(uint32_t mDeviceID, char mDeviceName[DEVICE_NAME_LENGHT])
 {
-	DeviceID = mSceneryID;
+	DeviceID = mDeviceID;
 
 	for(uint8_t i = 0; i < SCENERY_NAME_LENGHT; i++)
 	{
-		DeviceName[i] = mSceneryName[i];
+		DeviceName[i] = mDeviceName[i];
 	}
 
 	SceneryListIndex = 0;

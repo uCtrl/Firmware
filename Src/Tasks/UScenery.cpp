@@ -10,7 +10,7 @@ UScenery::UScenery()
 	TaskListIndex = 0;
 }
 
-UScenery::UScenery(uint32_t mSceneryID, uint8_t mSceneryName[10])
+UScenery::UScenery(uint32_t mSceneryID, char mSceneryName[SCENERY_NAME_LENGHT])
 {
 	SceneryID = mSceneryID;
 
