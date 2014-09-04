@@ -7,21 +7,21 @@
 #include "UEvent.h"
 
 extern UTaskEvent EventPool[];
-extern uint32_t EventPoolIndex;
+extern int EventPoolIndex;
 
 class UCondition
 {
 public:
 
 	UCondition();
-	UCondition(uint32_t mConditionID, uint32_t mSensorID, uint32_t mValue, UOperatorType mConditionOperator, char mConditionName[CONDITION_NAME_LENGHT]);
+	UCondition(int mConditionID, int mSensorID, int mValue, UOperatorType mConditionOperator, char mConditionName[CONDITION_NAME_LENGHT]);
 	virtual ~UCondition();
-	virtual uint32_t CheckCondition();
-	uint32_t GetSensorValue(uint32_t mSensorID);
+	virtual int CheckCondition();
+	int GetSensorValue(int mSensorID);
 
-	uint32_t ConditionID;
-	uint32_t SensorID;
-	uint32_t Value;
+	int ConditionID;
+	int SensorID;
+	int Value;
 	UOperatorType ConditionOperator;
 	char ConditionName[CONDITION_NAME_LENGHT];
 

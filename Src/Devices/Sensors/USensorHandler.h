@@ -22,10 +22,10 @@
 class USensorHandler
 {
 private:
-    uint32_t m_SensorCount;
-    uint32_t m_delayBetweenSensorPooling;
-    uint32_t m_timeElapsed;
-    uint32_t m_timeForNextSleep;
+    int m_SensorCount;
+    int m_delayBetweenSensorPooling;
+    int m_timeElapsed;
+    int m_timeForNextSleep;
     USensor* m_Sensors[SENSOR_LIST_LENGTH];
 
     void UpdateDelayBetweenReads();
@@ -34,15 +34,15 @@ public:
 
     USensorHandler();
 
-    bool AddNewSensor(USensorType type, uint32_t a_sensorId, uint32_t a_pinUsed, uint32_t a_timeBetweenReads, char* a_sensorName);
-    bool DeleteSensor(uint32_t a_sensorId);
+    bool AddNewSensor(USensorType type, int a_sensorId, int a_pinUsed, int a_timeBetweenReads, char* a_sensorName);
+    bool DeleteSensor(int a_sensorId);
     void StartPoolingSensors();
 
     // Get all the names of the sensors
     char** GetSensorNames();
 
     // Get the number of sensors
-    uint32_t GetSensorCount() { return m_SensorCount; }
+    int GetSensorCount() { return m_SensorCount; }
 
 };
 

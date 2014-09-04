@@ -13,8 +13,8 @@
 
 typedef struct
 {
-	uint32_t sensorId;
-	uint32_t value;
+	int sensorId;
+	int value;
 } UTaskEvent;
 
 #endif /* UEVENT_H_ */
