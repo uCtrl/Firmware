@@ -12,7 +12,7 @@ class FakeActuator
 
 protected:
     DigitalOut digitalOut;
-    uint8_t m_actuatorId;
+    int m_actuatorId;
     char* m_actuatorName;
 
 public:
@@ -24,9 +24,9 @@ public:
         @param a_name The sensor name
         @param a_pin The pin used to read the sensor
     */
-    FakeActuator(uint8_t a_id, uint8_t a_pin, char* a_actuatorName);
+    FakeActuator(int a_id, int a_pin, char* a_actuatorName);
 
-    void SetValue(uint8_t a_value);
+    void SetValue(int a_value);
 
     int GetId() { return m_actuatorId; }
 

@@ -12,22 +12,22 @@
 class UActuatorHandler
 {
 private:
-    uint8_t m_ActuatorCount;
+    int m_ActuatorCount;
     FakeActuator* m_Actuators[ACTUATORS_LIST_LENGTH];
 
 public:
 
     UActuatorHandler(); // Public Constructor
 
-    bool AddNewActuator(UActuatorType a_type, uint8_t a_actuatorId, uint8_t a_pinUsed, char* a_actuatorName);
-    bool DeleteActuator(uint8_t a_actuatorId);
-    bool SetActuatorValue(char* a_actuatorName, uint8_t a_value);
+    bool AddNewActuator(UActuatorType a_type, int a_actuatorId, int a_pinUsed, char* a_actuatorName);
+    bool DeleteActuator(int a_actuatorId);
+    bool SetActuatorValue(char* a_actuatorName, int a_value);
 
     // Get all the names of the sensors
     char** GetActuatorNames();
 
     // Get the number of sensors
-    uint8_t GetActuatorCount() { return m_ActuatorCount; }
+    int GetActuatorCount() { return m_ActuatorCount; }
 
 };
 

@@ -12,12 +12,7 @@ void USensorHandler::StartPoolingSensors()
 {
 	while(1) {
 
-	    for(uint32_t i = 0; i < m_SensorCount; i++) {
-	    	if((m_timeElapsed % m_Sensors[i]->GetTimeBetweenReads()) == 0) {
-	    		m_Sensors[i]->Read();
-	    	}
-	    }
-
+		// Wait
 	    if(m_timeForNextSleep != 0) {
 	    	Thread::wait(m_timeForNextSleep);
 			m_timeElapsed += m_timeForNextSleep;
@@ -26,15 +21,24 @@ void USensorHandler::StartPoolingSensors()
 	    	Thread::wait(m_delayBetweenSensorPooling);
 			m_timeElapsed += m_delayBetweenSensorPooling;
 	    }
+
+	    // Execute read on all sensors
+	    for(int i = 0; i < m_SensorCount; i++) {
+	    	if((m_timeElapsed % m_Sensors[i]->GetTimeBetweenReads()) == 0) {
+	    		m_Sensors[i]->Read();
+	    	}
+	    }
 	}
 }
 
-bool USensorHandler::AddNewSensor(USensorType type, uint32_t a_sensorId, uint32_t a_pinUsed, uint32_t a_timeBetweenReads, char* a_sensorName)
+bool USensorHandler::AddNewSensor(USensorType type, int a_sensorId, int a_pinUsed, int a_timeBetweenReads, char* a_sensorName)
 {
     if(m_SensorCount >= SENSOR_LIST_LENGTH)
     {
         return false;
     }
+
+	printf("Created sensor!\r\n");
 
     switch(type)
     {
@@ -58,9 +62,9 @@ bool USensorHandler::AddNewSensor(USensorType type, uint32_t a_sensorId, uint32_
     return true;
 }
 
-bool USensorHandler::DeleteSensor(uint32_t sensorId) {
+bool USensorHandler::DeleteSensor(int sensorId) {
 
-    for(uint32_t i = 0; i < m_SensorCount; i++) {
+    for(int i = 0; i < m_SensorCount; i++) {
 
         if(sensorId == m_Sensors[i]->GetId()) {
             delete m_Sensors[i];
@@ -76,7 +80,7 @@ bool USensorHandler::DeleteSensor(uint32_t sensorId) {
 			*/
 
             // We now need to shift the sensors in the array by 1 position
-            for(uint32_t j = i; j < m_SensorCount; j++) {
+            for(int j = i; j < m_SensorCount; j++) {
                 if(j+1 < SENSOR_LIST_LENGTH) {
                     m_Sensors[j] = m_Sensors[j+1];
 
@@ -99,9 +103,9 @@ bool USensorHandler::DeleteSensor(uint32_t sensorId) {
 
 void USensorHandler::UpdateDelayBetweenReads()
 {
-	uint32_t values[SENSOR_LIST_LENGTH] = {0};
+	int values[SENSOR_LIST_LENGTH] = {0};
 
-    for(uint32_t i = 0; i < m_SensorCount; i++)
+    for(int i = 0; i < m_SensorCount; i++)
     {
     	values[i] = m_Sensors[i]->GetTimeBetweenReads();
     }

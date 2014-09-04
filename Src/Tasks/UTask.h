@@ -10,19 +10,19 @@ class UTask
 {
 public:
 	UTask();
-	UTask(uint32_t mTaskID, char mTaskName[TASK_NAME_LENGHT], uint32_t mActionValue, uint32_t mDeviceID);
+	UTask(int mTaskID, char mTaskName[TASK_NAME_LENGHT], int mActionValue, int mDeviceID);
 	~UTask();
-	uint8_t AddCondition(UCondition *mCondition);
-	void DelCondition(uint32_t mCondtionID);
-	uint32_t CheckCondition();
+	int AddCondition(UCondition *mCondition);
+	void DelCondition(int mCondtionID);
+	int CheckCondition();
 	void SetValue();
 
-	uint32_t TaskID;
-	uint32_t DeviceID;
+	int TaskID;
+	int DeviceID;
 	char TaskName[TASK_NAME_LENGHT];
 	UCondition *ConditionList[MAX_CONDITION_NUMBER];
-	uint32_t ConditionListIndex;
-	uint32_t ActionValue;
+	int ConditionListIndex;
+	int ActionValue;
 };
 
 #endif // UTASK_H_

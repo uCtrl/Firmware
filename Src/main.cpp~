@@ -34,6 +34,7 @@ DigitalOut ledr(LED_RED);
 DigitalOut ledg(LED_GREEN);
 DigitalOut ledb(LED_BLUE);
 
+<<<<<<< HEAD
 
 void startControllerThread(void const *args) {
 {
@@ -87,7 +88,7 @@ int main (void) {
     ledr = true;
     for(;;)
     {
-    	//ledr = !ledr;
+    	ledr = !ledr;
         Thread::wait(5000);
 
     }

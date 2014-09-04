@@ -3,18 +3,18 @@
 UDevice::UDevice()
 {
 	DeviceID = 0;
-	for(uint8_t i = 0; i < SCENERY_NAME_LENGHT; i++)
+	for(int i = 0; i < SCENERY_NAME_LENGHT; i++)
 	{
 		DeviceName[i] = 0;
 	}
 	SceneryListIndex = 0;
 }
 
-UDevice::UDevice(uint32_t mDeviceID, char mDeviceName[DEVICE_NAME_LENGHT])
+UDevice::UDevice(int mDeviceID, char mDeviceName[DEVICE_NAME_LENGHT])
 {
 	DeviceID = mDeviceID;
 
-	for(uint8_t i = 0; i < SCENERY_NAME_LENGHT; i++)
+	for(int i = 0; i < SCENERY_NAME_LENGHT; i++)
 	{
 		DeviceName[i] = mDeviceName[i];
 	}
@@ -28,27 +28,26 @@ UDevice::~UDevice()
 }
 
 
-uint8_t UDevice::AddScenery(UScenery *mScenery)
+bool UDevice::AddScenery(UScenery *mScenery)
 {
-	uint8_t retVal = 0;
 	if (SceneryListIndex < MAX_TASK_NUMBER)
 	{
 		SceneryList[SceneryListIndex++] = mScenery;
-		retVal = 1;
+		return true;
 	}
-	return retVal;
+	return false;
 }
 
 
-void UDevice::DelScenery(uint32_t mSceneryID)
+void UDevice::DelScenery(int mSceneryID)
 {
-	uint32_t i = 0;
+	int i = 0;
 
 	for (; i < MAX_TASK_NUMBER; i++)
 	{
 		if (SceneryList[i]->SceneryID == mSceneryID)
 		{
-			uint32_t j = i;
+			int j = i;
 
 			delete SceneryList[i];
 			for (; j < MAX_TASK_NUMBER - 1; j++)
@@ -71,15 +70,15 @@ void UDevice::DelScenery(uint32_t mSceneryID)
 	}
 }
 
-
-uint32_t UDevice::DoScenery()
+// Returns how many scenarios were accomplished
+int UDevice::DoScenery()
 {
-	uint32_t i = 0;
+	int i = 0;
 
 	for (; i < SceneryListIndex; i++)
 	{
 		SceneryList[i]->DoTask();
 	}
 
-	return 0;
+	return i;
 }

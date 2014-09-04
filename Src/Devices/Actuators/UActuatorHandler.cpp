@@ -5,7 +5,7 @@ UActuatorHandler::UActuatorHandler()
 	m_ActuatorCount = 0;
 }
 
-bool UActuatorHandler::AddNewActuator(UActuatorType a_type, uint8_t a_actuatorId, uint8_t a_pinUsed, char* a_actuatorName)
+bool UActuatorHandler::AddNewActuator(UActuatorType a_type, int a_actuatorId, int a_pinUsed, char* a_actuatorName)
 {
     if(m_ActuatorCount >= ACTUATORS_LIST_LENGTH)
     {
@@ -23,9 +23,9 @@ bool UActuatorHandler::AddNewActuator(UActuatorType a_type, uint8_t a_actuatorId
     return true;
 }
 
-bool UActuatorHandler::DeleteActuator(uint8_t a_actuatorId)
+bool UActuatorHandler::DeleteActuator(int a_actuatorId)
 {
-    for(uint8_t i = 0; i < m_ActuatorCount; i++) {
+    for(int i = 0; i < m_ActuatorCount; i++) {
 
         if(a_actuatorId == m_Actuators[i]->GetId()) {
             delete m_Actuators[i];
@@ -40,7 +40,7 @@ bool UActuatorHandler::DeleteActuator(uint8_t a_actuatorId)
             //m_messageHandler->SendMessage(buf);
 
             // We now need to shift the sensors in the array by 1 position
-            for(uint8_t j = i; j < m_ActuatorCount; j++) {
+            for(int j = i; j < m_ActuatorCount; j++) {
                 if(j+1 < ACTUATORS_LIST_LENGTH) {
                     m_Actuators[j] = m_Actuators[j+1];
 
@@ -57,7 +57,7 @@ bool UActuatorHandler::DeleteActuator(uint8_t a_actuatorId)
     return false;
 }
 
-bool UActuatorHandler::SetActuatorValue(char* a_actuatorName, uint8_t a_value)
+bool UActuatorHandler::SetActuatorValue(char* a_actuatorName, int a_value)
 {
 	/*m_messageHandler->SendMessage("test");
 
@@ -66,7 +66,7 @@ bool UActuatorHandler::SetActuatorValue(char* a_actuatorName, uint8_t a_value)
 	m_messageHandler->SendMessage(tmp);
 
 	/*
-    for(uint8_t i = 0; i < m_ActuatorCount; i++) {
+    for(int i = 0; i < m_ActuatorCount; i++) {
         if(strcmp(a_actuatorName, m_Actuators[i]->GetName()) == 0) {
             //m_Actuators[i]->SetValue(a_value);
             return true;

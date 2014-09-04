@@ -3,18 +3,18 @@
 UScenery::UScenery()
 {
 	SceneryID = 0;
-	for(uint8_t i = 0; i < SCENERY_NAME_LENGHT; i++)
+	for(int i = 0; i < SCENERY_NAME_LENGHT; i++)
 	{
 		SceneryName[i] = 0;
 	}
 	TaskListIndex = 0;
 }
 
-UScenery::UScenery(uint32_t mSceneryID, char mSceneryName[SCENERY_NAME_LENGHT])
+UScenery::UScenery(int mSceneryID, char mSceneryName[SCENERY_NAME_LENGHT])
 {
 	SceneryID = mSceneryID;
 
-	for(uint8_t i = 0; i < SCENERY_NAME_LENGHT; i++)
+	for(int i = 0; i < SCENERY_NAME_LENGHT; i++)
 	{
 		SceneryName[i] = mSceneryName[i];
 	}
@@ -28,9 +28,9 @@ UScenery::~UScenery()
 }
 
 
-uint8_t UScenery::AddTask(UTask *mTask)
+int UScenery::AddTask(UTask *mTask)
 {
-	uint8_t retVal = 0;
+	int retVal = 0;
 
 	if (TaskListIndex < MAX_TASK_NUMBER)
 	{
@@ -41,15 +41,15 @@ uint8_t UScenery::AddTask(UTask *mTask)
 }
 
 
-void UScenery::DelTask(uint32_t mTaskID)
+void UScenery::DelTask(int mTaskID)
 {
-	uint32_t i = 0;
+	int i = 0;
 	
 	for (; i < MAX_TASK_NUMBER; i++)
 	{
 		if (TaskList[i]->TaskID == mTaskID)
 		{
-			uint32_t j = i;
+			int j = i;
 
 			delete TaskList[i];
 			for (; j < MAX_TASK_NUMBER - 1; j++)
@@ -73,9 +73,9 @@ void UScenery::DelTask(uint32_t mTaskID)
 }
 
 
-uint32_t UScenery::DoTask()
+int UScenery::DoTask()
 {
-	uint32_t i = 0;
+	int i = 0;
 
 	for (; i < TaskListIndex; i++)
 	{

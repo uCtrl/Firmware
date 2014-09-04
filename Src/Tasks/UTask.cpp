@@ -4,18 +4,18 @@
 UTask::UTask()
 {
 	TaskID = 0;
-	for(uint8_t i = 0; i < TASK_NAME_LENGHT; i++)
+	for(int i = 0; i < TASK_NAME_LENGHT; i++)
 	{
 		TaskName[i] = 0;
 	}
 	ConditionListIndex = 0;
 }
 
-UTask::UTask(uint32_t mTaskID, char mTaskName[TASK_NAME_LENGHT], uint32_t mActionValue, uint32_t mDeviceID)
+UTask::UTask(int mTaskID, char mTaskName[TASK_NAME_LENGHT], int mActionValue, int mDeviceID)
 {
 	TaskID = mTaskID;
 	DeviceID = mDeviceID;
-	for(uint8_t i = 0; i < TASK_NAME_LENGHT; i++)
+	for(int i = 0; i < TASK_NAME_LENGHT; i++)
 	{
 		TaskName[i] = mTaskName[i];
 	}
@@ -29,9 +29,9 @@ UTask::~UTask()
 }
 
 
-uint8_t UTask::AddCondition(UCondition *mCondition)
+int UTask::AddCondition(UCondition *mCondition)
 {
-	uint8_t retVal = 0;
+	int retVal = 0;
 	if (mCondition)
 	{
 		if (ConditionListIndex < MAX_CONDITION_NUMBER)
@@ -45,15 +45,15 @@ uint8_t UTask::AddCondition(UCondition *mCondition)
 }
 
 
-void UTask::DelCondition(uint32_t mCondtionID)
+void UTask::DelCondition(int mCondtionID)
 {
-	uint32_t i = 0;
+	int i = 0;
 
 	for (; i < MAX_CONDITION_NUMBER; i++)
 	{
 		if (ConditionList[i]->ConditionID == mCondtionID)
 		{
-			uint32_t j = i;
+			int j = i;
 
 			delete ConditionList[i];
 			for (; j < MAX_CONDITION_NUMBER - 1; j++)
@@ -76,11 +76,11 @@ void UTask::DelCondition(uint32_t mCondtionID)
 }
 
 
-uint32_t UTask::CheckCondition()
+int UTask::CheckCondition()
 {
-	uint32_t RetVal = 1;
+	int RetVal = 1;
 
-	for (uint32_t i = 0; i < ConditionListIndex; i++)
+	for (int i = 0; i < ConditionListIndex; i++)
 	{
 		RetVal &= ConditionList[i]->CheckCondition();
 	}
