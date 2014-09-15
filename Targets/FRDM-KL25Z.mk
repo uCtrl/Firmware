@@ -10,7 +10,6 @@ FRDM_KLXX_HAL_PATH = $(MBED_PATH)targets/hal/TARGET_Freescale/TARGET_KLXX/
 FRDM_KL25Z_HAL_PATH = $(MBED_PATH)targets/hal/$(FRDM_KL25Z_PATH)
 CMSIS_PATH = $(MBED_PATH)targets/cmsis
 FRDM_KL25Z_CMSIS_PATH = $(MBED_PATH)targets/cmsis/$(FRDM_KL25Z_PATH)
-FRDM_KL25Z_MBED_RTOS_RX_PATH = $(MBED_RTOS_PATH)rtx/$(FRDM_KL25Z_ARM_ARCH)/$(ARM_TOOLCHAIN)/
 ###############################################################################
 #MBED
 ###############################################################################

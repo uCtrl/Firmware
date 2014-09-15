@@ -16,9 +16,16 @@ extern Mail<UTaskRequest, MAIL_LEN_UTASKHANDLER>mailUTaskHandler;
 #include "USensorHandler.h"
 #include "UActuatorHandler.h"
 */
+#ifdef TARGET_LPC1768
+#define LED_RED LED1
+#define LED_GREEN LED2
+#define LED_BLUE LED3
+#endif
 DigitalOut ledr(LED_RED);
 DigitalOut ledg(LED_GREEN);
 DigitalOut ledb(LED_BLUE);
+
+
 
 
 void controllerThread(void const *args)

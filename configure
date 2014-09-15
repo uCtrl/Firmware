@@ -1,8 +1,12 @@
 echo Warning! A new config.mk as been generated in $(pwd)
-echo Please edit the file to match your needs.
-echo > ./config.mk
+echo \# Makefile configuration file > ./config.mk
+echo \# To generate this file, use "make configure" or "./configure" >> ./config.mk
+echo \# Please edit the file to match your needs. >> ./config.mk
 echo \# Select the target FRDM-K64F, LPC1768 or FRDM-KL25Z >> ./config.mk
 echo TARGET = FRDM-KL25Z >> ./config.mk
+echo >> ./config.mk
+echo \# gcc-arm-none-eabi bin path >> ./config.mk
+echo GCC_BIN = ./Dependancies/gcc-arm-none-eabi/bin/ >> ./config.mk
 echo >> ./config.mk
 echo \# mbed library root path >> ./config.mk
 echo MBED_PATH = ../mbed/libraries/mbed/ >> ./config.mk
