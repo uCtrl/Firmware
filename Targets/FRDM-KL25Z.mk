@@ -8,7 +8,6 @@ ARM_ARCH = TARGET_M0P
 FRDM_KL25Z_PATH = TARGET_Freescale/TARGET_KLXX/TARGET_KL25Z/
 FRDM_KLXX_HAL_PATH = $(MBED_PATH)targets/hal/TARGET_Freescale/TARGET_KLXX/
 FRDM_KL25Z_HAL_PATH = $(MBED_PATH)targets/hal/$(FRDM_KL25Z_PATH)
-CMSIS_PATH = $(MBED_PATH)targets/cmsis
 FRDM_KL25Z_CMSIS_PATH = $(MBED_PATH)targets/cmsis/$(FRDM_KL25Z_PATH)
 ###############################################################################
 #MBED
@@ -35,7 +34,7 @@ OBJECTS += $(FRDM_KLXX_HAL_PATH)us_ticker.o
 OBJECTS += $(FRDM_KL25Z_CMSIS_PATH)cmsis_nvic.o $(FRDM_KL25Z_CMSIS_PATH)system_MKL25Z4.o 
 
 #cmsis toolchain specific files
-SYS_OBJECTS += $(FRDM_KL25Z_CMSIS_PATH)$(ARM_TOOLCHAIN)/startup_MKL25Z4.o
+OBJECTS += $(FRDM_KL25Z_CMSIS_PATH)$(ARM_TOOLCHAIN)/startup_MKL25Z4.o
 
 INCLUDE_PATHS += -I$(FRDM_KL25Z_CMSIS_PATH) -I$(FRDM_KL25Z_CMSIS_PATH)$(ARM_TOOLCHAIN)
 

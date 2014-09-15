@@ -72,6 +72,9 @@ CPP     = $(GCC_BIN)arm-none-eabi-g++
 LD      = $(GCC_BIN)arm-none-eabi-gcc
 OBJCOPY = $(GCC_BIN)arm-none-eabi-objcopy
 
+#for clearing .d files
+OBJECTS_D = $(OBJECTS:.o=.d)
+
 .PHONY: clean configure
 
 all: $(PROJECT).bin
@@ -79,7 +82,8 @@ all: $(PROJECT).bin
 	 ../enableSerialPort.sh;
 
 clean:
-	rm -f $(PROJECT).bin $(PROJECT).elf $(OBJECTS)
+	
+	rm -f $(PROJECT).bin $(PROJECT).elf $(OBJECTS) $(OBJECTS_D)
 	
 configure:
 	./configure
