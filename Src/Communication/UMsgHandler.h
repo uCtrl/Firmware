@@ -10,12 +10,12 @@
 
 #include "mbed.h"
 #include "rtos.h"
+#include "cfg.h"
 #include "UMsgHandlerMailType.h"
-#include "UComDriverOutMailType.h"
 #include "frozen.h"
 
 extern Mail<UMsgHandlerMailType, 2> msgHandlerMail;
-extern Mail<UComDriverOutMailType, 2> comDriverOutMail;
+extern Mail<UMsgHandlerMailType, 2> comDriverOutMail;
 
 /**
  * ENUM Message Type
@@ -55,7 +55,7 @@ class UMsgHandler
     public:
         UMsgHandler();
         void start();
-        void parse(const char* aInput);
+        void parse(UMsgHandlerMailType *aMail);
         void create(const char* aInput);
         ~UMsgHandler();
 };

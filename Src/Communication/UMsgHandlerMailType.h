@@ -8,9 +8,12 @@
 #ifndef UMSGHANDLERMAILTYPE_H_
 #define UMSGHANDLERMAILTYPE_H_
 
+#include "cfg.h"
+#include "EthernetInterface.h"
+
 typedef struct {
-	uint16_t id3;
-	char msg[255];
+	Endpoint endPoint;
+	char msg[COM_BUFFER_SIZE];
 } UMsgHandlerMailType;
 
 #endif  // UMSGHANDLERMAILTYPE_H_

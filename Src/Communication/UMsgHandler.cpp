@@ -28,7 +28,7 @@ void UMsgHandler::start()
 		if (evt.status == osEventMail)
 		{
 			UMsgHandlerMailType *mail = (UMsgHandlerMailType*)evt.value.p;
-			UMsgHandler::parse(mail->msg);
+			parse(mail);
 			msgHandlerMail.free(mail);
 		}
 	}
@@ -37,10 +37,10 @@ void UMsgHandler::start()
 /*
  * Parse and manage JSON messages from UComDriver
  * Please refer to http://uctrl.github.io/ for JSON format.
- * @param aInput Any input JSON string.
+ * @param aMail mail handler type.
  * @return void
  * */
-void UMsgHandler::parse(const char* aInput)
+void UMsgHandler::parse(UMsgHandlerMailType *aMail)
 {
 	struct json_token tokens[50];						//No more than 50 json tokens. TODO: To verify
 	uint16_t size = sizeof(tokens) / sizeof(tokens[0]);
@@ -48,83 +48,96 @@ void UMsgHandler::parse(const char* aInput)
 	uint16_t messageType = 0;
 	uint16_t messageSize = 0;
 
+	UMsgHandlerMailType *mailOut = comDriverOutMail.alloc();
+	if(USE_LWIP)
+	{
+		mailOut->endPoint.set_address(aMail->endPoint.get_address(), aMail->endPoint.get_port());
+	}
 	//Verify JSON authenticity
-	if(parse_json(aInput, strlen(aInput), tokens, size) >= 1)
+	if(parse_json(aMail->msg, strlen(aMail->msg), tokens, size) >= 1)
 	{
 		tok = find_json_token(tokens, "messageType");
-		messageType = atoi(tok->ptr);
-//TODO
-		UComDriverOutMailType *mailOut = comDriverOutMail.alloc();
-//.
-		//System > Platform > Device > Scenario > Task > Condition
-		switch(messageType)
+		if(tok != 0)	//messageType trouvé
 		{
-			//REQUESTS GET MESSAGES
-			case REQ_GETPLATFORM:
-				//TODO
-				break;
-			case REQ_GETDEVICES:
-				//TODO
-				break;
-			case REQ_GETSCENARIOS:
-				tok = find_json_token(tokens, "deviceId");
-				strcpy(mailOut->msg, tok->ptr);
-				break;
-			case REQ_GETTASKS:
-				tok = find_json_token(tokens, "scenarioId");
-				strcpy(mailOut->msg, tok->ptr);
-				break;
-			case REQ_GETCONDITIONS:
-				tok = find_json_token(tokens, "taskId");
-				strcpy(mailOut->msg, tok->ptr);
-				break;
-			//REQUESTS SAVE MESSAGES
-			case REQ_SAVEPLATFORM:
-				tok = find_json_token(tokens, "platform");
-				strcpy(mailOut->msg, tok->ptr);
-				tok = find_json_token(tokens, "size");
-				messageSize = atoi(tok->ptr);
-				mailOut->id1 = messageSize;
-				break;
-			case REQ_SAVEDEVICES:
-				tok = find_json_token(tokens, "devices");
-				strcpy(mailOut->msg, tok->ptr);
-				tok = find_json_token(tokens, "size");
-				messageSize = atoi(tok->ptr);
-				mailOut->id1 = messageSize;
-				break;
-			case REQ_SAVESCENARIOS:
-				tok = find_json_token(tokens, "scenarios");
-				strcpy(mailOut->msg, tok->ptr);
-				tok = find_json_token(tokens, "size");
-				messageSize = atoi(tok->ptr);
-				mailOut->id1 = messageSize;
-				break;
-			case REQ_SAVETASKS:
-				tok = find_json_token(tokens, "tasks");
-				strcpy(mailOut->msg, tok->ptr);
-				tok = find_json_token(tokens, "size");
-				messageSize = atoi(tok->ptr);
-				mailOut->id1 = messageSize;
-				break;
-			case REQ_SAVECONDITIONS:
-				tok = find_json_token(tokens, "conditions");
-				strcpy(mailOut->msg, tok->ptr);
-				tok = find_json_token(tokens, "size");
-				messageSize = atoi(tok->ptr);
-				mailOut->id1 = messageSize;
-				break;
-			default:
-				//TODO : Error managing.
-				strcpy(mailOut->msg,"DEFAULT");
-				break;
+			messageType = atoi(tok->ptr);
+			
+			//System > Platform > Device > Scenario > Task > Condition
+			switch(messageType)
+			{
+				//REQUESTS GET MESSAGES
+				case REQ_GETPLATFORM:
+					//TODO
+					break;
+				case REQ_GETDEVICES:
+					//TODO
+					break;
+				case REQ_GETSCENARIOS:
+					tok = find_json_token(tokens, "deviceId");
+					strcpy(mailOut->msg, tok->ptr);
+					mailOut->msg[tok->len] = '\0';
+					break;
+				case REQ_GETTASKS:
+					tok = find_json_token(tokens, "scenarioId");
+					strcpy(mailOut->msg, tok->ptr);
+					mailOut->msg[tok->len] = '\0';
+					break;
+				case REQ_GETCONDITIONS:
+					tok = find_json_token(tokens, "taskId");
+					strcpy(mailOut->msg, tok->ptr);
+					mailOut->msg[tok->len] = '\0';
+					break;
+				//REQUESTS SAVE MESSAGES
+				case REQ_SAVEPLATFORM:
+					tok = find_json_token(tokens, "platform");
+					strcpy(mailOut->msg, tok->ptr);
+					mailOut->msg[tok->len] = '\0';
+					tok = find_json_token(tokens, "size");
+					messageSize = atoi(tok->ptr);
+					break;
+				case REQ_SAVEDEVICES:
+					tok = find_json_token(tokens, "devices");
+					strcpy(mailOut->msg, tok->ptr);
+					mailOut->msg[tok->len] = '\0';
+					tok = find_json_token(tokens, "size");
+					messageSize = atoi(tok->ptr);
+					break;
+				case REQ_SAVESCENARIOS:
+					tok = find_json_token(tokens, "scenarios");
+					strcpy(mailOut->msg, tok->ptr);
+					mailOut->msg[tok->len] = '\0';
+					tok = find_json_token(tokens, "size");
+					messageSize = atoi(tok->ptr);
+					break;
+				case REQ_SAVETASKS:
+					tok = find_json_token(tokens, "tasks");
+					strcpy(mailOut->msg, tok->ptr);
+					mailOut->msg[tok->len] = '\0';
+					tok = find_json_token(tokens, "size");
+					messageSize = atoi(tok->ptr);
+					break;
+				case REQ_SAVECONDITIONS:
+					tok = find_json_token(tokens, "conditions");
+					strcpy(mailOut->msg, tok->ptr);
+					mailOut->msg[tok->len] = '\0';
+					tok = find_json_token(tokens, "size");
+					messageSize = atoi(tok->ptr);
+					break;
+				default:
+					//TODO : Error managing.
+					strcpy(mailOut->msg, "DEFAULT\0");
+					break;
+			}
 		}
-		comDriverOutMail.put(mailOut);
+		else
+		{
+			strcpy(mailOut->msg, "Error : No uCtrl JSON string\0");	
+		}
 	}
 	else
 	{
-		//TODO : Error managing.
+		strcpy(mailOut->msg, "Error : No JSON string\0");	
 	}
+	comDriverOutMail.put(mailOut);
 }
 
 /*

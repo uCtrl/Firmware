@@ -10,15 +10,20 @@
 
 #include "mbed.h"
 #include "rtos.h"
-#include "UComDriverOutMailType.h"
+#include "cfg.h"
+#include "EthernetInterface.h"
+#include "UMsgHandlerMailType.h"
 
-extern Mail<UComDriverOutMailType, 2> comDriverOutMail;
+extern Mail<UMsgHandlerMailType, 2> comDriverOutMail;
 
 class UComDriverOut
 {
     private:
+        UDPSocket m_udpSocket;
+        //Endpoint m_udpClient;
         Serial m_uart;
-        DigitalOut led;
+        DigitalOut m_led;
+        uint16_t m_rxCount;
     public:
         UComDriverOut();
         void start();

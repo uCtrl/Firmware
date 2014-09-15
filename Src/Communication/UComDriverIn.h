@@ -10,18 +10,20 @@
 
 #include "mbed.h"
 #include "rtos.h"
+#include "cfg.h"
+#include "EthernetInterface.h"
 #include "UMsgHandlerMailType.h"
-
-#define UCOMIN_BUFFER_SIZE 255
 
 extern Mail<UMsgHandlerMailType, 2> msgHandlerMail;
 
 class UComDriverIn
 {
     private:
+        UDPSocket m_udpSocket;
+        Endpoint m_udpClient;
         Serial m_uart;
-        DigitalOut led;
-        char m_rxBuffer[UCOMIN_BUFFER_SIZE];
+        DigitalOut m_led;
+        char m_rxBuffer[COM_BUFFER_SIZE];
         uint16_t m_rxCount;
     public:
         UComDriverIn();

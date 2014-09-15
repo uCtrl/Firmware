@@ -7,14 +7,15 @@
 
 #include "UComDriverOut.h"
 
-Mail<UComDriverOutMailType, 2> comDriverOutMail;
+Mail<UMsgHandlerMailType, 2> comDriverOutMail;
 
 /*
  * Constructor
  * */
-UComDriverOut::UComDriverOut() : m_uart(USBTX, USBRX), led(LED_RED)
+UComDriverOut::UComDriverOut() : m_uart(USBTX, USBRX), m_led(LED2)
 {
-	m_uart.baud(9600);
+	m_uart.baud(SERIAL_BAUD);
+	m_rxCount = 0;
 }
 
 /*
@@ -23,15 +24,26 @@ UComDriverOut::UComDriverOut() : m_uart(USBTX, USBRX), led(LED_RED)
  * */
 void UComDriverOut::start()
 {
-	char c;
 	while(true)
 	{
 		osEvent evt = comDriverOutMail.get();
 		if (evt.status == osEventMail)
 		{
-			led = !led;
-			UComDriverOutMailType *mail = (UComDriverOutMailType*)evt.value.p;
-			m_uart.puts(mail->msg);
+			m_led = !m_led;
+			UMsgHandlerMailType *mail = (UMsgHandlerMailType*)evt.value.p;
+			if(USE_LWIP)
+			{
+			    m_udpSocket.init();
+			    //m_udpClient.set_address("192.168.15.102",8);	//TODO msghandler mail doit avoir le endpoint.
+			    //printf("UDP Socket is sending response to %s on port %d\n\r", m_udpClient.get_address(), m_udpClient.get_port());
+		        printf("UDP Socket is sending response to %s on port %d\n\r", mail->endPoint.get_address(), mail->endPoint.get_port());
+		        m_rxCount = m_udpSocket.sendTo(mail->endPoint, mail->msg, strlen(mail->msg));
+		        printf("Send succeed. %d bytes sended\n\r", m_rxCount);
+			}
+			else
+			{
+				m_uart.puts(mail->msg);
+			}
 			comDriverOutMail.free(mail);
 		}
 	}
@@ -42,4 +54,5 @@ void UComDriverOut::start()
  * */
 UComDriverOut::~UComDriverOut()
 {
+	m_udpSocket.close();
 }

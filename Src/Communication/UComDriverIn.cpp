@@ -10,10 +10,10 @@
 /*
  * Constructor
  * */
-UComDriverIn::UComDriverIn() : m_uart(USBTX, USBRX), led(LED_GREEN)
+UComDriverIn::UComDriverIn() : m_uart(USBTX, USBRX), m_led(LED1)
 {
+	m_uart.baud(SERIAL_BAUD);
 	m_rxCount = 0;
-	m_uart.baud(9600);
 }
 
 /*
@@ -31,33 +31,48 @@ void UComDriverIn::resetBuffer()
  * */
 void UComDriverIn::start()
 {
-	led = true;
-	char c;
-	while(true)
+	m_led = true;
+	if(USE_LWIP)
 	{
-		c = m_uart.getc();
-		led = !led;	//Green led flashing on character input (for debugging)
-		// EOT 0x04 (End Of Transmission) || 0x13 Enter Key (for debugging)
-		if(c == 4 || c == 13)
+	    m_udpSocket.bind(UDPSOCKET_PORT);
+	    printf("UDP Socket binded to port %d\n\r", UDPSOCKET_PORT);
+	    while(true)
 		{
-			m_rxBuffer[m_rxCount] = '\0';
-			m_rxCount++;
-			handleMsg();
-			resetBuffer();
+			printf("Waiting for packet...\n\r");
+	        m_rxCount = m_udpSocket.receiveFrom(m_udpClient, m_rxBuffer, sizeof(m_rxBuffer));
+	        m_rxBuffer[m_rxCount] = '\0';
+	        m_led = !m_led;	//led flashing on input
+	        handleMsg();
 		}
-		else
+	}
+	else
+	{
+		//SERIAL handle one char at the time
+		char c;
+		while(true)
 		{
-			m_rxBuffer[m_rxCount] = c;
-			m_rxCount++;
-
-			if(m_rxCount >= UCOMIN_BUFFER_SIZE - 1)
+			c = m_uart.getc();
+			// EOT 0x04 (End Of Transmission) || 0x13 Enter Key (for debugging)
+			if(c == 4 || c == 13)
 			{
 				m_rxBuffer[m_rxCount] = '\0';
 				m_rxCount++;
 				handleMsg();
 				resetBuffer();
 			}
-		}
+			else
+			{
+				m_rxBuffer[m_rxCount] = c;
+				m_rxCount++;
+				if(m_rxCount >= COM_BUFFER_SIZE - 1)
+				{
+					m_rxBuffer[m_rxCount] = '\0';
+					m_rxCount++;
+					handleMsg();
+					resetBuffer();
+				}
+			}  
+		} 
 	}
 }
 
@@ -69,10 +84,12 @@ void UComDriverIn::start()
 void UComDriverIn::handleMsg()
 {
 	UMsgHandlerMailType *mail = msgHandlerMail.alloc();
-	mail->id3 = 1;
-	strcpy(mail->msg, m_rxBuffer);
+	if(USE_LWIP)
+	{
+		mail->endPoint = m_udpClient;
+	}
+	strncpy(mail->msg, m_rxBuffer, sizeof(m_rxBuffer));
 	msgHandlerMail.put(mail);
-	//m_uart.puts(m_rxBuffer);
 }
 
 /*
@@ -80,4 +97,5 @@ void UComDriverIn::handleMsg()
  * */
 UComDriverIn::~UComDriverIn()
 {
+	m_udpSocket.close();
 }
