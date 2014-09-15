@@ -9,6 +9,7 @@ build*
 *.hg
 
 *.orig
+config.mk
 
 # C++ objects
 
