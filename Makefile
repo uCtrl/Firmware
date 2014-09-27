@@ -14,6 +14,9 @@ include ./config.mk
 TARGET ?= FRDM-KL25Z
 MBED_RTOS_PATH ?= ../mbed/libraries/rtos/
 MBED_PATH ?= ../mbed/libraries/mbed/
+NET_PATH ?= ../mbed/libraries/net/
+ETH_PATH = $(NET_PATH)eth/
+LWIP_PATH = $(NET_PATH)lwip/
 
 #to be usedf by targets
 ARM_TOOLCHAIN = TOOLCHAIN_GCC_ARM

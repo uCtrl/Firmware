@@ -50,9 +50,12 @@ OBJECTS += $(MBED_RTOS_PATH)rtx/$(ARM_ARCH)/$(TOOLCHAIN)/SVC_Table.o $(MBED_RTOS
 INCLUDE_PATHS += -I$(MBED_RTOS_PATH)rtx/$(ARM_ARCH) -I$(MBED_RTOS_PATH)rtx/$(ARM_ARCH)/$(TOOLCHAIN)
 
 ###############################################################################
-#lwip
+#net
 ###############################################################################
-#Nothing yet
+INCLUDE_PATHS += -I$(ETH_PATH)lwip-eth/arch/TARGET_NXP/
+
+OBJECTS += $(ETH_PATH)lwip-eth/arch/TARGET_NXP/lpc17_emac.o
+OBJECTS += $(ETH_PATH)lwip-eth/arch/TARGET_NXP/lpc_phy_dp83848.c
 
 ###############################################################################
 #Flags
