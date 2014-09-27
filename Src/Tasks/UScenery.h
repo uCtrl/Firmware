@@ -10,16 +10,16 @@ class UScenery
 {
 public:
 	UScenery();
-	UScenery(uint32_t mSceneryID, uint8_t mSceneryName[SCENERY_NAME_LENGHT]);
+	UScenery(int mSceneryID, char mSceneryName[SCENERY_NAME_LENGHT]);
 	~UScenery();
-	uint8_t AddTask(UTask *mTask);
-	void DelTask(uint32_t mTaskID);
-	uint32_t DoTask();
+	int AddTask(UTask *mTask);
+	void DelTask(int mTaskID);
+	int DoTask();
 
-	uint32_t SceneryID;
-	uint8_t SceneryName[SCENERY_NAME_LENGHT];
+	int SceneryID;
+	char SceneryName[SCENERY_NAME_LENGHT];
 	UTask *TaskList[MAX_TASK_NUMBER];
-	uint32_t TaskListIndex;
+	int TaskListIndex;
 };
 
 #endif // USCENERY_H_

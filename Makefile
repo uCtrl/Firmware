@@ -52,19 +52,33 @@ include ./Targets/Target.mk
 #uCtrl sources
 ###############################################################################
 INCLUDE_PATHS += -I./Src
+INCLUDE_PATHS += -I./Src/Conditions
 INCLUDE_PATHS += -I./Src/Controller
 INCLUDE_PATHS += -I./Src/Communication
-INCLUDE_PATHS += -I./Src/TaskHandler
+INCLUDE_PATHS += -I./Src/Devices
+INCLUDE_PATHS += -I./Src/Devices/Actuators
+INCLUDE_PATHS += -I./Src/Devices/Sensors
+INCLUDE_PATHS += -I./Src/Events
+INCLUDE_PATHS += -I./Src/Tasks
+INCLUDE_PATHS += -I./Src/Utils
 OBJECTS += ./Src/main.o
+OBJECTS += ./Src/Conditions/UCondition.o
 OBJECTS += ./Src/Controller/UController.o
 OBJECTS += ./Src/Communication/FakeMessageHandler.o
 OBJECTS += ./Src/Communication/UComDriver.o
 OBJECTS += ./Src/Communication/UMessageHandler.o
-OBJECTS += ./Src/TaskHandler/UTaskHandler.o
-OBJECTS += ./Src/TaskHandler/UScenery.o
-OBJECTS += ./Src/TaskHandler/UTask.o
-OBJECTS += ./Src/TaskHandler/UCondition.o
-OBJECTS += ./Src/TaskHandler/UDevice.o
+OBJECTS += ./Src/Devices/UDevice.o
+OBJECTS += ./Src/Devices/Actuators/FakeActuator.o
+OBJECTS += ./Src/Devices/Actuators/UActuatorHandler.o
+OBJECTS += ./Src/Devices/Sensors/USensor.o
+OBJECTS += ./Src/Devices/Sensors/USensorLight.o
+OBJECTS += ./Src/Devices/Sensors/USensorTemperature.o
+OBJECTS += ./Src/Devices/Sensors/USensorHandler.o
+OBJECTS += ./Src/Tasks/UTaskHandler.o
+OBJECTS += ./Src/Tasks/UScenery.o
+OBJECTS += ./Src/Tasks/UTask.o
+OBJECTS += ./Src/Utils/UPinUtils.o
+OBJECTS += ./Src/Utils/UMathUtils.o
 
 ###############################################################################
 #Makefile target build
@@ -83,6 +97,9 @@ OBJECTS_D = $(OBJECTS:.o=.d)
 all: $(PROJECT).bin
 	 cp $(PROJECT).bin /media/MBED;sync;
 	 ../enableSerialPort.sh;
+#ifeq ($(UCTRL_BUILD_TYPE), Debug)
+#	 ../startDBGServer.sh
+#endif
 
 clean:
 	

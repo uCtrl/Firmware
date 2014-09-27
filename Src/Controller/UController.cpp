@@ -10,7 +10,7 @@
 #define LED_BLUE LED3
 #endif
 
-UController::UController():m_activityLed(LED_BLUE)
+UController::UController():m_activityLed(LED_BLUE),m_pcSerial(USBTX,USBRX)
 {
 }
 

@@ -22,12 +22,12 @@ typedef struct
 {
 	UTaskCfgType taskCfgType;
 	UTaskCfgMod taskCfgMod;
-	uint32_t id;
-	uint32_t parentId;
+	int id;
+	int parentId;
 	union
 	{
 		UConditionCfg conditionCfg;
-		uint32_t ActionValue;
+		int ActionValue;
 	};
 
 

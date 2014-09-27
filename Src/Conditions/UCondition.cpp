@@ -4,7 +4,7 @@
 UCondition::UCondition()
 {
 	ConditionID = 0;
-	for(uint8_t i = 0; i < CONDITION_NAME_LENGHT; i++)
+	for(int i = 0; i < CONDITION_NAME_LENGHT; i++)
 	{
 		ConditionName[i] = 0;
 	}
@@ -13,13 +13,13 @@ UCondition::UCondition()
 	ConditionOperator = OPERATOR_TYPE_NONE;
 }
 
-UCondition::UCondition(uint32_t mConditionID, uint32_t mSensorID, uint32_t mValue, UOperatorType mConditionOperator, uint8_t mConditionName[CONDITION_NAME_LENGHT])
+UCondition::UCondition(int mConditionID, int mSensorID, int mValue, UOperatorType mConditionOperator, char mConditionName[CONDITION_NAME_LENGHT])
 {
 	ConditionID = mConditionID;
 	SensorID = mSensorID;
 	Value = mValue;
 	ConditionOperator = mConditionOperator;
-	for(uint8_t i = 0; i < CONDITION_NAME_LENGHT; i++)
+	for(int i = 0; i < CONDITION_NAME_LENGHT; i++)
 	{
 		ConditionName[i] = mConditionName[i];
 	}
@@ -30,10 +30,10 @@ UCondition::~UCondition()
 }
 
 
-uint32_t UCondition::CheckCondition()
+int UCondition::CheckCondition()
 {
-	uint32_t retVal = 0;
-	uint32_t sensorValue = GetSensorValue(SensorID);
+	int retVal = 0;
+	int sensorValue = GetSensorValue(SensorID);
 
 	switch(ConditionOperator)
 	{
@@ -80,11 +80,11 @@ uint32_t UCondition::CheckCondition()
 	return retVal;
 }
 
-uint32_t UCondition::GetSensorValue(uint32_t mSensorID)
+int UCondition::GetSensorValue(int mSensorID)
 {
-	uint32_t value = 0;
+	int value = 0;
 
-	for(uint32_t i = 0; i < EventPoolIndex; i++)
+	for(int i = 0; i < EventPoolIndex; i++)
 	{
 		if(EventPool[i].sensorId == mSensorID)
 		{

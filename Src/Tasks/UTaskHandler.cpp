@@ -11,14 +11,18 @@ Semaphore semMailUTaskHandler(MAIL_LEN_UTASKHANDLER);
 Mail<UTaskRequest, MAIL_LEN_UTASKHANDLER>mailUTaskHandler;
 
 UTaskEvent EventPool[EVENT_POOL_SIZE];
-uint32_t EventPoolIndex;
+int EventPoolIndex;
 
-//TODO remove next line
-uint8_t testName[] = {'a','l','l','o'};
 
 UTaskHandler::UTaskHandler()
 {
 	DeviceListIndex = 0;
+}
+
+UTaskHandler::UTaskHandler(USensorHandler* sensorHandler, UActuatorHandler* actuatorHandler) {
+	DeviceListIndex = 0;
+    m_sensorHandler = sensorHandler;
+    m_actuatorHandler = actuatorHandler;
 }
 
 UTaskHandler::~UTaskHandler()
@@ -56,13 +60,20 @@ void UTaskHandler::start()
 
 void UTaskHandler::handleTaskEvent(const UTaskEvent taskEvent)
 {
-	AddEvent(taskEvent);
-	CheckDevice();
+	// TODO : remove after tests
+	printf("Task handler : Event from device %d : %d \r\n", taskEvent.sensorId, taskEvent.value);
+
+
+	//AddEvent(taskEvent);
+	//CheckDevice();
 }
 
 void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 {
-	uint8_t parentFound = 0;
+	//TODO remove next line
+	char testName[] = "testName";
+
+	int parentFound = 0;
 	switch(taskCfg.taskCfgType)
 	{
 		case TASK_CFG_TYPE_NONE:
@@ -74,8 +85,10 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 		}
 		case UDEVICE:
 		{
-			UDevice* newDevice = new UDevice(taskCfg.id,
-												testName);
+			// TODO : remove after tests
+			printf("Task handler : new device message recieved\r\n");
+			UDevice* newDevice = new UDevice(taskCfg.id, testName);
+
 			if(!AddDevice(newDevice))
 			{
 			#ifdef DEBUG_PRINT
@@ -87,8 +100,10 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 		}
 		case USCENERY:
 		{
+			// TODO : remove after tests
+			printf("Task handler : new scenery message recieved\r\n");
 
-			for(uint32_t i = 0; i < DeviceListIndex; i++)
+			for(int i = 0; i < DeviceListIndex; i++)
 			{
 				if(DeviceList[i]->DeviceID == taskCfg.parentId)
 				{
@@ -116,10 +131,12 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 		}
 		case UTASK:
 		{
+			// TODO : remove after tests
+			printf("Task handler : new task message recieved\r\n");
 
-			for(uint32_t i = 0; i < DeviceListIndex; i++)
+			for(int i = 0; i < DeviceListIndex; i++)
 			{
-				for(uint32_t j = 0; j < DeviceList[i]->SceneryListIndex; j++)
+				for(int j = 0; j < DeviceList[i]->SceneryListIndex; j++)
 				{
 					if(DeviceList[i]->SceneryList[j]->SceneryID == taskCfg.parentId)
 					{
@@ -156,11 +173,14 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 		}
 		case UCONDITION:
 		{
-			for(uint32_t i = 0; i < DeviceListIndex; i++)
+			// TODO : remove after tests
+			printf("Task handler : new condition message recieved\r\n");
+
+			for(int i = 0; i < DeviceListIndex; i++)
 			{
-				for(uint32_t j = 0; j < DeviceList[i]->SceneryListIndex; j++)
+				for(int j = 0; j < DeviceList[i]->SceneryListIndex; j++)
 				{
-					for(uint32_t k = 0; k < DeviceList[i]->SceneryList[j]->TaskListIndex; k++)
+					for(int k = 0; k < DeviceList[i]->SceneryList[j]->TaskListIndex; k++)
 					{
 						if(DeviceList[i]->SceneryList[j]->TaskList[k]->TaskID == taskCfg.parentId)
 						{
@@ -203,29 +223,40 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 	}
 }
 
-uint8_t UTaskHandler::AddDevice(UDevice *mDevice)
+int UTaskHandler::AddDevice(UDevice *mDevice)
 {
-	uint8_t retVal = 0;
+	USensorType type = Temperature;
+	int pin = 2;
+	int timeBetweenReads = 5000;
 
+	if(m_sensorHandler->AddNewSensor(type, mDevice->DeviceID, pin, timeBetweenReads, mDevice->DeviceName)) {
+		return 1;
+	}
+	else {
+		return 0;
+	}
+
+	/*
+	int retVal = 0;
 	if (DeviceListIndex < MAX_DEVICE_NUMBER)
 	{
-
 		DeviceList[DeviceListIndex++] = mDevice;
 		retVal = 1;
 	}
-	return retVal;
+
+	return retVal;*/
 }
 
 
-void UTaskHandler::DelDevice(uint32_t mDeviceID)
+void UTaskHandler::DelDevice(int mDeviceID)
 {
-	uint32_t i = 0;
+	int i = 0;
 
 	for (; i < MAX_DEVICE_NUMBER; i++)
 	{
 		if (DeviceList[i]->DeviceID == mDeviceID)
 		{
-			uint32_t j = i;
+			int j = i;
 
 			delete DeviceList[i];
 			for (; j < MAX_DEVICE_NUMBER - 1; j++)
@@ -248,9 +279,9 @@ void UTaskHandler::DelDevice(uint32_t mDeviceID)
 	}
 }
 
-uint8_t UTaskHandler::AddEvent(UTaskEvent mEvent)
+int UTaskHandler::AddEvent(UTaskEvent mEvent)
 {
-	uint8_t retVal = 0;
+	int retVal = 0;
 
 	if (EventPoolIndex < EVENT_POOL_SIZE)
 	{
@@ -262,13 +293,13 @@ uint8_t UTaskHandler::AddEvent(UTaskEvent mEvent)
 }
 
 
-void UTaskHandler::DelEvent(uint32_t mSensorID)
+void UTaskHandler::DelEvent(int mSensorID)
 {
-	for (uint32_t i = 0; i < EVENT_POOL_SIZE; i++)
+	for (int i = 0; i < EVENT_POOL_SIZE; i++)
 	{
 		if (EventPool[i].sensorId == mSensorID)
 		{
-			for (uint32_t j = i; j < EVENT_POOL_SIZE - 1; j++)
+			for (int j = i; j < EVENT_POOL_SIZE - 1; j++)
 			{
 				if (EventPool[j + 1].sensorId != 0)
 				{
@@ -290,9 +321,9 @@ void UTaskHandler::DelEvent(uint32_t mSensorID)
 	}
 }
 
-uint32_t UTaskHandler::CheckDevice()
+int UTaskHandler::CheckDevice()
 {
-	for (uint32_t i = 0; i < DeviceListIndex; i++)
+	for (int i = 0; i < DeviceListIndex; i++)
 	{
 		DeviceList[i]->DoScenery();
 	}

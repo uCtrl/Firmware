@@ -3,6 +3,9 @@
 #include "cfg.h"
 #include "UController.h"
 #include "UComDriver.h"
+#include "FakeMessageHandler.h"
+#include "UActuatorHandler.h"
+#include "USensorHandler.h"
 #include "UMessageHandler.h"
 #include "UTaskHandler.h"
 #include "UTaskCfg.h"
@@ -25,75 +28,36 @@ DigitalOut ledr(LED_RED);
 DigitalOut ledg(LED_GREEN);
 DigitalOut ledb(LED_BLUE);
 
+USensorHandler uSensorHandler = USensorHandler();
+UActuatorHandler uActuatorHandler = UActuatorHandler();
 
-
-
-void controllerThread(void const *args)
-{
-	UController uController;
-	uController.start();
-}
-
-void comDriverThread(void const *args)
-{
-	UComDriver uComDriver;
-	uComDriver.start();
+void sensorPoolingThread(void const *args) {
+	uSensorHandler.StartPoolingSensors();
 }
 
 void taskHandlerThread(void const *args)
 {
-	UTaskHandler uTaskHandler;
+	UTaskHandler uTaskHandler = UTaskHandler(&uSensorHandler, &uActuatorHandler);
 	uTaskHandler.start();
 }
-/*
-void sensorHandlerThread(void const *args) {
-	USensorHandler uSensorHandler;
-	uSensorHandler.start();
-}
-
-void actuatorHandlerThread(void const *args) {
-	UActuatorHandler uActuatorHandler;
-	uActuatorHandler.start();
-}
-
-void messageHandlerThread(void const *args) {
-	UMessageHandler uMessageHandler;
-	uMessageHandler.start();
-}
-*/
 
 int main (void)
 {
 	ledr = false;
 	ledg = false;
 	ledb = false;
-    Thread ctrlThread(controllerThread,NULL,CONTROLLER_PRIORITY,CONTROLLER_STACK_SIZE);
-    //Thread comThread(comDriverThread,NULL,COM_DRIVER_PRIORITY,COM_DRIVER_STACK_SIZE);
 
     Thread taskThread(taskHandlerThread,NULL,TASK_HANDLER_PRIORITY,TASK_HANDLER_STACK_SIZE);
+    Thread sensorThread(sensorPoolingThread,NULL,SENSOR_HANDLER_PRIORITY,SENSOR_HANDLER_STACK_SIZE);
 
-    /*
-    Thread sensorThread(sensorHandlerThread,NULL,SENSOR_HANDLER_PRIORITY,SENSOR_HANDLER_STACK_SIZE);
-    Thread actuatorThread(actuatorHandlerThread,NULL,ACTUATOR_HANDLER_PRIORITY,ACTUATOR_HANDLER_STACK_SIZE);
-    Thread messageThread(messageHandlerThread,NULL,MESSAGE_HANDLER_PRIORITY,MESSAGE_HANDLER_STACK_SIZE);
-    */
-    //    osEvent evt;
-    //Thread::wait(5000);
-
-    uint32_t i = 0;
-
+    int i = 0;
     for(;;)
     {
-    	/*ledr = false;
-    	Thread::wait(100);
-    	ledr = true;*/
-    	//for testing purpose
-		#ifdef DEBUG_PRINT
-    		semMailUTaskHandler.wait();
-    		UTaskRequest *mail = mailUTaskHandler.alloc();
+    	if(i <= 10) {
+			semMailUTaskHandler.wait();
+			UTaskRequest *mail = mailUTaskHandler.alloc();
 			if(mail != NULL)
 			{
-
 				if(i == 0)
 				{
 					mail->taskRequestType = CONFIG;
@@ -102,18 +66,15 @@ int main (void)
 					mail->taskCfg.id = 12;
 					mail->taskCfg.parentId = 0;
 					mailUTaskHandler.put(mail);
-					printf("Sent Device %lu config\n\r", mail->taskCfg.id);
 				}
 				if(i == 1)
 				{
-
 					mail->taskRequestType = CONFIG;
 					mail->taskCfg.taskCfgType = USCENERY;
 					mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
 					mail->taskCfg.id = 7;
 					mail->taskCfg.parentId = 12;
 					mailUTaskHandler.put(mail);
-					printf("Sent Scenery %lu config\n\r", mail->taskCfg.id);
 				}
 				if(i == 2)
 				{
@@ -124,7 +85,6 @@ int main (void)
 					mail->taskCfg.parentId = 7;
 					mail->taskCfg.ActionValue = 124;
 					mailUTaskHandler.put(mail);
-					printf("Sent Task %lu config\n\r", mail->taskCfg.id);
 				}
 				if(i == 3)
 				{
@@ -137,7 +97,6 @@ int main (void)
 					mail->taskCfg.conditionCfg.value = 934;
 					mail->taskCfg.conditionCfg.operatorType = EQUAL;
 					mailUTaskHandler.put(mail);
-					printf("Sent Condition %lu config\n\r", mail->taskCfg.id);
 				}
 				if(i == 4)
 				{
@@ -147,7 +106,6 @@ int main (void)
 					mail->taskCfg.id = 7645;
 					mail->taskCfg.parentId = 0;
 					mailUTaskHandler.put(mail);
-					printf("Sent Device %lu config\n\r", mail->taskCfg.id);
 				}
 				if(i == 5)
 				{
@@ -158,7 +116,6 @@ int main (void)
 					mail->taskCfg.id = 93;
 					mail->taskCfg.parentId = 7645;
 					mailUTaskHandler.put(mail);
-					printf("Sent Scenery %lu config\n\r", mail->taskCfg.id);
 				}
 				if(i == 6)
 				{
@@ -169,7 +126,6 @@ int main (void)
 					mail->taskCfg.parentId = 93;
 					mail->taskCfg.ActionValue = 4933;
 					mailUTaskHandler.put(mail);
-					printf("Sent Task %lu config\n\r", mail->taskCfg.id);
 				}
 				if(i == 7)
 				{
@@ -180,7 +136,6 @@ int main (void)
 					mail->taskCfg.parentId = 7;
 					mail->taskCfg.ActionValue = 1397592;
 					mailUTaskHandler.put(mail);
-					printf("Sent Task %lu config\n\r", mail->taskCfg.id);
 				}
 				if(i == 8)
 				{
@@ -188,7 +143,6 @@ int main (void)
 					mail->event.sensorId = 1245;
 					mail->event.value = 934;
 					mailUTaskHandler.put(mail);
-					printf("Sent event from sensor %lu\n\r", mail->event.sensorId);
 				}
 				if(i == 9)
 				{
@@ -201,7 +155,6 @@ int main (void)
 					mail->taskCfg.conditionCfg.value = 2351;
 					mail->taskCfg.conditionCfg.operatorType = EQUAL;
 					mailUTaskHandler.put(mail);
-					printf("Sent Condition %lu config\n\r", mail->taskCfg.id);
 				}
 				if(i == 10)
 				{
@@ -209,7 +162,6 @@ int main (void)
 					mail->event.sensorId = 234;
 					mail->event.value = 2351;
 					mailUTaskHandler.put(mail);
-					printf("Sent event from sensor %lu\n\r", mail->event.sensorId);
 				}
 				i++;
 			}
@@ -220,7 +172,8 @@ int main (void)
 				Thread::wait(500);
 				ledg = true;*/
 			}
-		#endif
+			semMailUTaskHandler.release();
+    	}
 		Thread::wait(200);
     }
 }

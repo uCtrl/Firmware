@@ -19,6 +19,7 @@ typedef enum {
 class UController
 {
 private:
+	Serial m_pcSerial;
 	DigitalOut m_activityLed;
 public:
 	UController();

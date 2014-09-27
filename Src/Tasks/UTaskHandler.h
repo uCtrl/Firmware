@@ -22,11 +22,18 @@
 #include "TaskHandlerConfigFile.h"
 #include "UTaskRequest.h"
 
+#include "USensorHandler.h"
+#include "UActuatorHandler.h"
+
 extern Semaphore semMailUTaskHandler;
 extern Mail<UTaskRequest, MAIL_LEN_UTASKHANDLER>mailUTaskHandler;
 
 extern UTaskEvent EventPool[];
-extern uint32_t EventPoolIndex;
+extern int EventPoolIndex;
+
+// Forward Declaration
+class USensorHandler;
+class UActuatorHandler;
 
 /** UTaskCfg class contains all user defined Scenery, Tasks, Conditions and
  *  Actions*/
@@ -35,6 +42,7 @@ class UTaskHandler
 public:
 	/** start the content of thread */
 	UTaskHandler();
+	UTaskHandler(USensorHandler* sensorHandler, UActuatorHandler* actuatorHandler);
 	~UTaskHandler();
 	void start();
 private:
@@ -43,14 +51,16 @@ private:
 	/** handle UTaskRequest of UTaskRequestType CONFIG */
 	void handleTaskCfg(const UTaskCfg taskCfg);
 
-	uint8_t AddDevice(UDevice *mDevice);
-	void DelDevice(uint32_t mDeviceID);
-	uint8_t AddEvent(UTaskEvent mEvent);
-	void DelEvent(uint32_t mSensorID);
-	uint32_t CheckDevice();
+	int AddDevice(UDevice *mDevice);
+	void DelDevice(int mDeviceID);
+	int AddEvent(UTaskEvent mEvent);
+	void DelEvent(int mSensorID);
+	int CheckDevice();
 
 	UDevice* DeviceList[MAX_DEVICE_NUMBER];
-	uint32_t DeviceListIndex;
+	int DeviceListIndex;
+	USensorHandler* m_sensorHandler;
+	UActuatorHandler* m_actuatorHandler;
 };
 
 #endif /* UTASKHANDLER_H_ */

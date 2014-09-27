@@ -62,6 +62,10 @@ INCLUDE_PATHS += -I$(ETH_PATH)lwip-eth/arch/TARGET_Freescale/
 OBJECTS += $(ETH_PATH)lwip-eth/arch/TARGET_Freescale/fsl_enet_driver.o
 OBJECTS += $(ETH_PATH)lwip-eth/arch/TARGET_Freescale/k64f_emac.o
 OBJECTS += $(ETH_PATH)lwip-eth/arch/TARGET_Freescale/hardware_init_MK64F12.o
+
+#common net files
+include ./Targets/TargetsExtension/eth.mk
+include ./Targets/TargetsExtension/lwip.mk
 ###############################################################################
 #Flags
 ###############################################################################
