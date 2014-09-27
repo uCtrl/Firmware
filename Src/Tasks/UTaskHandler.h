@@ -22,8 +22,9 @@
 #include "TaskHandlerConfigFile.h"
 #include "UTaskRequest.h"
 
-#include "USensorHandler.h"
-#include "UActuatorHandler.h"
+//#include "USensorHandler.h"
+//#include "UActuatorHandler.h"
+#include "UDeviceHandler.h"
 
 extern Semaphore semMailUTaskHandler;
 extern Mail<UTaskRequest, MAIL_LEN_UTASKHANDLER>mailUTaskHandler;
@@ -32,8 +33,9 @@ extern UTaskEvent EventPool[];
 extern int EventPoolIndex;
 
 // Forward Declaration
-class USensorHandler;
-class UActuatorHandler;
+//class USensorHandler;
+//class UActuatorHandler;
+class UDeviceHandler;
 
 /** UTaskCfg class contains all user defined Scenery, Tasks, Conditions and
  *  Actions*/
@@ -42,7 +44,7 @@ class UTaskHandler
 public:
 	/** start the content of thread */
 	UTaskHandler();
-	UTaskHandler(USensorHandler* sensorHandler, UActuatorHandler* actuatorHandler);
+	UTaskHandler(UDeviceHandler* a_deviceHandler);
 	~UTaskHandler();
 	void start();
 private:
@@ -59,8 +61,9 @@ private:
 
 	UDevice* DeviceList[MAX_DEVICE_NUMBER];
 	int DeviceListIndex;
-	USensorHandler* m_sensorHandler;
-	UActuatorHandler* m_actuatorHandler;
+	//USensorHandler* m_sensorHandler;
+	//UActuatorHandler* m_actuatorHandler;
+	UDeviceHandler* m_deviceHandler;
 };
 
 #endif /* UTASKHANDLER_H_ */

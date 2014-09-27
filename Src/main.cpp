@@ -4,11 +4,13 @@
 #include "UController.h"
 #include "UComDriver.h"
 #include "FakeMessageHandler.h"
-#include "UActuatorHandler.h"
-#include "USensorHandler.h"
 #include "UMessageHandler.h"
 #include "UTaskHandler.h"
 #include "UTaskCfg.h"
+
+//#include "UActuatorHandler.h"
+//#include "USensorHandler.h"
+#include "UDeviceHandler.h"
 
 #ifdef DEBUG_PRINT
 extern Semaphore semMailUTaskHandler;
@@ -23,21 +25,26 @@ DigitalOut ledr(LED_RED);
 DigitalOut ledg(LED_GREEN);
 DigitalOut ledb(LED_BLUE);
 
-USensorHandler uSensorHandler = USensorHandler();
-UActuatorHandler uActuatorHandler = UActuatorHandler();
+//USensorHandler uSensorHandler = USensorHandler();
+//UActuatorHandler uActuatorHandler = UActuatorHandler();
+UDeviceHandler m_DeviceHandler = UDeviceHandler();
 
 void sensorPoolingThread(void const *args) {
-	uSensorHandler.StartPoolingSensors();
+	m_DeviceHandler.StartPoolingSensors();
 }
 
 void taskHandlerThread(void const *args)
 {
-	UTaskHandler uTaskHandler = UTaskHandler(&uSensorHandler, &uActuatorHandler);
+	UTaskHandler uTaskHandler = UTaskHandler(&m_DeviceHandler);
 	uTaskHandler.start();
 }
 
 int main (void)
 {
+	#ifdef DEBUG_PRINT
+		printf("Test debug print\r\n");
+	#endif
+
 	ledr = false;
 	ledg = false;
 	ledb = false;

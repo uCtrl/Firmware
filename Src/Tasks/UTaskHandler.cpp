@@ -19,10 +19,9 @@ UTaskHandler::UTaskHandler()
 	DeviceListIndex = 0;
 }
 
-UTaskHandler::UTaskHandler(USensorHandler* sensorHandler, UActuatorHandler* actuatorHandler) {
+UTaskHandler::UTaskHandler(UDeviceHandler* deviceHandler) {
 	DeviceListIndex = 0;
-    m_sensorHandler = sensorHandler;
-    m_actuatorHandler = actuatorHandler;
+    m_deviceHandler = deviceHandler;
 }
 
 UTaskHandler::~UTaskHandler()
@@ -60,9 +59,9 @@ void UTaskHandler::start()
 
 void UTaskHandler::handleTaskEvent(const UTaskEvent taskEvent)
 {
-	// TODO : remove after tests
-	printf("Task handler : Event from device %d : %d \r\n", taskEvent.sensorId, taskEvent.value);
-
+	#ifdef DEBUG_PRINT
+		printf("Task handler : Event from device %d : %d \r\n", taskEvent.sensorId, taskEvent.value);
+	#endif
 
 	//AddEvent(taskEvent);
 	//CheckDevice();
@@ -70,7 +69,6 @@ void UTaskHandler::handleTaskEvent(const UTaskEvent taskEvent)
 
 void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 {
-	//TODO remove next line
 	char testName[] = "testName";
 
 	int parentFound = 0;
@@ -85,14 +83,16 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 		}
 		case UDEVICE:
 		{
-			// TODO : remove after tests
-			printf("Task handler : new device message recieved\r\n");
+			#ifdef DEBUG_PRINT
+				printf("Task handler : new device message recieved\r\n");
+			#endif
+
 			UDevice* newDevice = new UDevice(taskCfg.id, testName);
 
 			if(!AddDevice(newDevice))
 			{
 			#ifdef DEBUG_PRINT
-				printf("Error Adding deviceId:%lu\n\r", newDevice->DeviceID);
+				printf("Error Adding deviceId:%lu\n\r", newDevice->m_deviceID);
 			#endif
 			}
 
@@ -100,15 +100,15 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 		}
 		case USCENERY:
 		{
-			// TODO : remove after tests
-			printf("Task handler : new scenery message recieved\r\n");
+			#ifdef DEBUG_PRINT
+				printf("Task handler : new scenery message received\r\n");
+			#endif
 
 			for(int i = 0; i < DeviceListIndex; i++)
 			{
-				if(DeviceList[i]->DeviceID == taskCfg.parentId)
+				if(DeviceList[i]->m_deviceID == taskCfg.parentId)
 				{
-					UScenery *newScenery = new UScenery(taskCfg.id,
-														testName);
+					UScenery *newScenery = new UScenery(taskCfg.id, testName);
 
 					if(!DeviceList[i]->AddScenery(newScenery))
 					{
@@ -131,8 +131,9 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 		}
 		case UTASK:
 		{
-			// TODO : remove after tests
-			printf("Task handler : new task message recieved\r\n");
+			#ifdef DEBUG_PRINT
+				printf("Task handler : new task message recieved\r\n");
+			#endif
 
 			for(int i = 0; i < DeviceListIndex; i++)
 			{
@@ -140,10 +141,11 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 				{
 					if(DeviceList[i]->SceneryList[j]->SceneryID == taskCfg.parentId)
 					{
-						UTask *newTask = new UTask(taskCfg.id,
+						UTask *newTask = new UTask(	taskCfg.id,
 													testName,
 													taskCfg.ActionValue,
-													DeviceList[i]->DeviceID);
+													DeviceList[i]->m_deviceID);
+
 						if(!DeviceList[i]->SceneryList[j]->AddTask(newTask))
 						{
 						#ifdef DEBUG_PRINT
@@ -173,8 +175,9 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 		}
 		case UCONDITION:
 		{
-			// TODO : remove after tests
-			printf("Task handler : new condition message recieved\r\n");
+			#ifdef DEBUG_PRINT
+				printf("Task handler : new condition message received\r\n");
+			#endif
 
 			for(int i = 0; i < DeviceListIndex; i++)
 			{
@@ -184,11 +187,12 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 					{
 						if(DeviceList[i]->SceneryList[j]->TaskList[k]->TaskID == taskCfg.parentId)
 						{
-							UCondition *newCondition = new UCondition(taskCfg.id,
+							UCondition *newCondition = new UCondition(	taskCfg.id,
 																		taskCfg.conditionCfg.sensorId,
 																		taskCfg.conditionCfg.value,
 																		taskCfg.conditionCfg.operatorType,
 																		testName);
+
 							if(!DeviceList[i]->SceneryList[j]->TaskList[k]->AddCondition(newCondition))
 							{
 							#ifdef DEBUG_PRINT
@@ -229,7 +233,7 @@ int UTaskHandler::AddDevice(UDevice *mDevice)
 	int pin = 2;
 	int timeBetweenReads = 5000;
 
-	if(m_sensorHandler->AddNewSensor(type, mDevice->DeviceID, pin, timeBetweenReads, mDevice->DeviceName)) {
+	if(m_deviceHandler->AddNewSensor(type, mDevice->m_deviceID, pin, timeBetweenReads, mDevice->DeviceName)) {
 		return 1;
 	}
 	else {
@@ -254,7 +258,7 @@ void UTaskHandler::DelDevice(int mDeviceID)
 
 	for (; i < MAX_DEVICE_NUMBER; i++)
 	{
-		if (DeviceList[i]->DeviceID == mDeviceID)
+		if (DeviceList[i]->m_deviceID == mDeviceID)
 		{
 			int j = i;
 

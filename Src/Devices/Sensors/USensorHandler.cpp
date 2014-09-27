@@ -1,3 +1,5 @@
+/*
+
 #include "USensorHandler.h"
 
 USensorHandler::USensorHandler()
@@ -68,16 +70,16 @@ bool USensorHandler::DeleteSensor(int sensorId) {
 
         if(sensorId == m_Sensors[i]->GetId()) {
             delete m_Sensors[i];
-            /*
-            char tmp_id[10];
-            sprintf(tmp_id,"%d", sensorId);
 
-            char buf[BUFFER_SIZE] = {0};
-            strcat(buf, "Deleted sensor: ");
-            strcat(buf, tmp_id);
+            //char tmp_id[10];
+            //sprintf(tmp_id,"%d", sensorId);
 
-            m_messageHandler->SendMessage(buf);
-			*/
+            //char buf[BUFFER_SIZE] = {0};
+            //strcat(buf, "Deleted sensor: ");
+            //strcat(buf, tmp_id);
+
+            //m_messageHandler->SendMessage(buf);
+
 
             // We now need to shift the sensors in the array by 1 position
             for(int j = i; j < m_SensorCount; j++) {
@@ -127,3 +129,4 @@ char** USensorHandler::GetSensorNames()
 
     return tmp;
 }
+*/

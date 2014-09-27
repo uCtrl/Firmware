@@ -2,7 +2,8 @@
 
 UDevice::UDevice()
 {
-	DeviceID = 0;
+	m_deviceID = 0;
+
 	for(int i = 0; i < SCENERY_NAME_LENGHT; i++)
 	{
 		DeviceName[i] = 0;
@@ -10,9 +11,9 @@ UDevice::UDevice()
 	SceneryListIndex = 0;
 }
 
-UDevice::UDevice(int mDeviceID, char mDeviceName[DEVICE_NAME_LENGHT])
+UDevice::UDevice(int a_deviceID, char mDeviceName[DEVICE_NAME_LENGHT])
 {
-	DeviceID = mDeviceID;
+	m_deviceID = a_deviceID;
 
 	for(int i = 0; i < SCENERY_NAME_LENGHT; i++)
 	{

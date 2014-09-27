@@ -5,6 +5,10 @@
 #include "TaskHandlerConfigFile.h"
 #include "UScenery.h"
 
+#include "UActuatorType.h"
+#include "USensorType.h"
+#include "UDeviceType.h"
+
 class UDevice
 {
 public:
@@ -15,7 +19,14 @@ public:
 	void DelScenery(int mSceneryID);
 	int DoScenery();
 
-	int DeviceID;
+	int m_deviceID;
+	int m_pinNumber;
+	int m_timeBetweenReads;
+
+	UActuatorType m_actuatorType;
+	USensorType m_sensorType;
+	UDeviceType m_deviceType;
+
 	char DeviceName[SCENERY_NAME_LENGHT];
 	UScenery *SceneryList[MAX_SCENERY_NUMBER];
 	int SceneryListIndex;

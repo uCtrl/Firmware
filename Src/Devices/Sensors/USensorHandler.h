@@ -1,3 +1,5 @@
+
+/*
 #ifndef SENSORS_USENSORHANDLER_H_
 #define SENSORS_USENSORHANDLER_H_
 
@@ -46,4 +48,4 @@ public:
 
 };
 
-#endif  // SENSORS_USENSORHANDLER_H_
+#endif  // SENSORS_USENSORHANDLER_H_*/
