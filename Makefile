@@ -14,6 +14,9 @@ include ./config.mk
 TARGET ?= FRDM-KL25Z
 MBED_RTOS_PATH ?= ../mbed/libraries/rtos/
 MBED_PATH ?= ../mbed/libraries/mbed/
+NET_PATH ?= ../mbed/libraries/net/
+ETH_PATH = $(NET_PATH)eth/
+LWIP_PATH = $(NET_PATH)lwip/
 
 #to be usedf by targets
 ARM_TOOLCHAIN = TOOLCHAIN_GCC_ARM
@@ -53,7 +56,6 @@ INCLUDE_PATHS += -I./Src/Conditions
 INCLUDE_PATHS += -I./Src/Controller
 INCLUDE_PATHS += -I./Src/Communication
 INCLUDE_PATHS += -I./Src/Communication/frozen
-INCLUDE_PATHS += -I./Src/TaskHandler
 INCLUDE_PATHS += -I./Src/Devices
 INCLUDE_PATHS += -I./Src/Devices/Actuators
 INCLUDE_PATHS += -I./Src/Devices/Sensors
@@ -63,7 +65,6 @@ INCLUDE_PATHS += -I./Src/Utils
 OBJECTS += ./Src/main.o
 OBJECTS += ./Src/Conditions/UCondition.o
 OBJECTS += ./Src/Controller/UController.o
-OBJECTS += ./Src/Communication/FakeMessageHandler.o
 OBJECTS += ./Src/Communication/UComDriverIn.o
 OBJECTS += ./Src/Communication/UComDriverOut.o
 OBJECTS += ./Src/Communication/UMsgHandler.o
@@ -80,11 +81,6 @@ OBJECTS += ./Src/Tasks/UTask.o
 OBJECTS += ./Src/Utils/UPinUtils.o
 OBJECTS += ./Src/Utils/UMathUtils.o
 
-#really hacky way to add object files (not functionnal)
-#CPP_OBJECTS = "find ./Src -name *.cpp"
-#OBJECTS += $(CPP_OBJECTS//.cpp/.o)
-#test:
-#	echo $(OBJECTS)
 ###############################################################################
 #Makefile target build
 ###############################################################################
@@ -94,11 +90,17 @@ CPP     = $(GCC_BIN)arm-none-eabi-g++
 LD      = $(GCC_BIN)arm-none-eabi-gcc
 OBJCOPY = $(GCC_BIN)arm-none-eabi-objcopy
 
+#for clearing .d files
+OBJECTS_D = $(OBJECTS:.o=.d)
+
 .PHONY: clean configure
 
 all: $(PROJECT).bin
 	 cp $(PROJECT).bin /media/MBED;sync;
 	 ../enableSerialPort.sh;
+#ifeq ($(UCTRL_BUILD_TYPE), Debug)
+#	 ../startDBGServer.sh
+#endif
 
 clean:
 	rm -f $(PROJECT).bin $(PROJECT).elf $(OBJECTS)

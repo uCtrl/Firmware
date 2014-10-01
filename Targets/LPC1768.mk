@@ -1,5 +1,5 @@
 # uCtrl 
-#FRDM-KL25Z specific files
+#LPC1768 specific files
 CPU = -mcpu=cortex-m3 -mthumb
 ARM_ARCH = TARGET_M3
 ###############################################################################
@@ -8,7 +8,6 @@ ARM_ARCH = TARGET_M3
 LPC1768_PATH = TARGET_NXP/TARGET_LPC176X/
 LPC176X_HAL_PATH = $(MBED_PATH)targets/hal/$(LPC1768_PATH)
 LPC1768_HAL_PATH = $(LPC176X_HAL_PATH)TARGET_MBED_LPC1768/
-CMSIS_PATH = $(MBED_PATH)targets/cmsis
 LPC1768_CMSIS_PATH = $(MBED_PATH)targets/cmsis/$(LPC1768_PATH)
 ###############################################################################
 #MBED
@@ -37,7 +36,7 @@ OBJECTS += $(LPC176X_HAL_PATH)us_ticker.o
 OBJECTS += $(LPC1768_CMSIS_PATH)cmsis_nvic.o $(LPC1768_CMSIS_PATH)system_LPC17xx.o 
 
 #cmsis toolchain specific files
-SYS_OBJECTS += $(LPC1768_CMSIS_PATH)$(ARM_TOOLCHAIN)/startup_LPC17xx.o
+OBJECTS += $(LPC1768_CMSIS_PATH)$(ARM_TOOLCHAIN)/startup_LPC17xx.o
 
 INCLUDE_PATHS += -I$(LPC1768_CMSIS_PATH) -I$(LPC1768_CMSIS_PATH)$(ARM_TOOLCHAIN)
 
@@ -51,10 +50,16 @@ OBJECTS += $(MBED_RTOS_PATH)rtx/$(ARM_ARCH)/$(TOOLCHAIN)/SVC_Table.o $(MBED_RTOS
 INCLUDE_PATHS += -I$(MBED_RTOS_PATH)rtx/$(ARM_ARCH) -I$(MBED_RTOS_PATH)rtx/$(ARM_ARCH)/$(TOOLCHAIN)
 
 ###############################################################################
-#lwip
+#net
 ###############################################################################
-#Nothing yet
+INCLUDE_PATHS += -I$(ETH_PATH)lwip-eth/arch/TARGET_NXP/
 
+OBJECTS += $(ETH_PATH)lwip-eth/arch/TARGET_NXP/lpc17_emac.o
+OBJECTS += $(ETH_PATH)lwip-eth/arch/TARGET_NXP/lpc_phy_dp83848.c
+
+#common net files
+include ./Targets/TargetsExtension/eth.mk
+include ./Targets/TargetsExtension/lwip.mk
 ###############################################################################
 #Flags
 ###############################################################################
