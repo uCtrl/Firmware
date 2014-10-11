@@ -55,7 +55,7 @@ INCLUDE_PATHS += -I$(MBED_RTOS_PATH)rtx/$(ARM_ARCH) -I$(MBED_RTOS_PATH)rtx/$(ARM
 INCLUDE_PATHS += -I$(ETH_PATH)lwip-eth/arch/TARGET_NXP/
 
 OBJECTS += $(ETH_PATH)lwip-eth/arch/TARGET_NXP/lpc17_emac.o
-OBJECTS += $(ETH_PATH)lwip-eth/arch/TARGET_NXP/lpc_phy_dp83848.c
+OBJECTS += $(ETH_PATH)lwip-eth/arch/TARGET_NXP/lpc_phy_dp83848.o
 
 #common net files
 include ./Targets/TargetsExtension/eth.mk

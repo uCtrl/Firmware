@@ -17,3 +17,6 @@ echo >> ./config.mk
 echo \# net library root path >> ./config.mk
 echo NET_PATH = ../mbed/libraries/net/ >> ./config.mk
 echo >> ./config.mk
+echo \# net library root path >> ./config.mk
+echo PLC_PATH = ../uPLC/ >> ./config.mk
+echo >> ./config.mk

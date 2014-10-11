@@ -24,4 +24,16 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>mbed</name>
+			<type>2</type>
+			<location>/home/uctrl/Desktop/mbed</location>
+		</link>
+		<link>
+			<name>uPLC</name>
+			<type>2</type>
+			<location>/home/uctrl/Desktop/uPLC</location>
+		</link>
+	</linkedResources>
 </projectDescription>

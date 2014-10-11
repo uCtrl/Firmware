@@ -15,6 +15,7 @@ TARGET ?= FRDM-KL25Z
 MBED_RTOS_PATH ?= ../mbed/libraries/rtos/
 MBED_PATH ?= ../mbed/libraries/mbed/
 NET_PATH ?= ../mbed/libraries/net/
+PLC_PATH ?= ../uPLC/
 ETH_PATH = $(NET_PATH)eth/
 LWIP_PATH = $(NET_PATH)lwip/
 
@@ -61,7 +62,7 @@ INCLUDE_PATHS += -I./Src/Devices/Sensors
 INCLUDE_PATHS += -I./Src/Events
 INCLUDE_PATHS += -I./Src/Tasks
 INCLUDE_PATHS += -I./Src/Utils
-OBJECTS += ./Src/main.o
+OBJECTS += ./Src/mainJF.o
 OBJECTS += ./Src/Conditions/UCondition.o
 OBJECTS += ./Src/Controller/UController.o
 OBJECTS += ./Src/Communication/FakeMessageHandler.o

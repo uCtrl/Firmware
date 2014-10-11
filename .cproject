@@ -115,7 +115,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Src/Devices/Sensors|Src/Devices/Actuators|Dependancies/Controller|Src/Actuators|Src/Sensors|Src/ucontroller|Dependancies/Sensors|Controller|Src/Communication|Dependancies/Actuators|Src/Utils|Src/UController|Dependancies/Utils|Src/Controller|Dependancies/Communication|Communication" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="Dependancies/Controller|Src/Actuators|Src/Sensors|Src/ucontroller|Dependancies/Sensors|Src/Devices/Sensors|Controller|Src/Communication|Dependancies/Actuators|Src/Utils|Src/UController|Src/Controller|Dependancies/Utils|Src/Devices/Actuators|Dependancies/Communication|Communication" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Communication"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Controller"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Devices/Actuators"/>
@@ -181,7 +181,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="Src/Devices/Sensors|Src/Devices/Actuators|Dependancies/Controller|Src/Actuators|Src/Sensors|Src/ucontroller|Dependancies/Sensors|Controller|Src/Communication|Dependancies/Actuators|Src/Utils|Src/UController|Dependancies/Utils|Src/Controller|Dependancies/Communication|Communication" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="Dependancies/Controller|Src/Actuators|Src/Sensors|Src/ucontroller|Dependancies/Sensors|Src/Devices/Sensors|Controller|Src/Communication|Dependancies/Actuators|Src/Utils|Src/UController|Src/Controller|Dependancies/Utils|Src/Devices/Actuators|Dependancies/Communication|Communication" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Communication"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Controller"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="Src/Devices/Actuators"/>
