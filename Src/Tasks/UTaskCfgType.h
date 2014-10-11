@@ -14,7 +14,7 @@ typedef enum
 {
 	TASK_CFG_TYPE_NONE = 0,
 	UDEVICE,
-	USCENERY,
+	USCENARIO,
 	UTASK,
 	UCONDITION
 } UTaskCfgType;

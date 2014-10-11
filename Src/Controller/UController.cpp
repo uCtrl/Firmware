@@ -1,9 +1,9 @@
 /*
- * UController.cpp
- *
- *  Created on: Mar 23, 2014
- *      Author: uctrl
- */
+* UController.cpp
+*
+* Created on: Mar 23, 2014
+* Author: µCtrl
+*/
 
 #include "UController.h"
 #ifdef TARGET_LPC1768
@@ -22,7 +22,9 @@ void UController::start()
 {
 	for(;;)
 	{
-		Thread::wait(5000);
-		m_activityLed = !m_activityLed;
+		Thread::wait(3000);
+		m_activityLed = false;
+		Thread::wait(200);
+		m_activityLed = true;
 	}
 }

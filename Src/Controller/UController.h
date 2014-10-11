@@ -1,9 +1,10 @@
 /*
- * UController.h
- *
- *  Created on: Mar 23, 2014
- *      Author: uctrl
- */
+* UController.h
+*
+* Created on: Mar 23, 2014
+* Author: µCtrl
+*/
+
 
 #ifndef UCONTROLLER_H_
 #define UCONTROLLER_H_

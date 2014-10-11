@@ -34,18 +34,6 @@ extern uint32_t ACTUATOR_HANDLER_STACK_SIZE;
 extern osPriority MESSAGE_HANDLER_PRIORITY;
 extern uint32_t MESSAGE_HANDLER_STACK_SIZE;
 
-//PLC threads
-osPriority PLC_DRIVER_IN_PRIORITY = osPriorityAboveNormal;
-int PLC_DRIVER_IN_STACK_SIZE = 512;
-
-osPriority PLC_DRIVER_OUT_PRIORITY = osPriorityAboveNormal;
-int PLC_DRIVER_OUT_STACK_SIZE = 512;
-
-osPriority PLC_HANDLER_PRIORITY = osPriorityAboveNormal;
-int PLC_HANDLER_STACK_SIZE = 512;
-
-
-
 
 #endif /* CFG_H_ */
 
