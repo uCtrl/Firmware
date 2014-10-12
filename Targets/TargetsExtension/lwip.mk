@@ -2,6 +2,8 @@
 #lwip
 LWIP_PATH ?= $(NET_PATH)lwip/
 
+INCLUDE_PATHS += -I$(NET_PATH)
+INCLUDE_PATHS += -I$(LWIP_PATH)
 INCLUDE_PATHS += -I$(LWIP_PATH)lwip-sys/
 INCLUDE_PATHS += -I$(LWIP_PATH)lwip-sys/arch/
 INCLUDE_PATHS += -I$(LWIP_PATH)lwip/

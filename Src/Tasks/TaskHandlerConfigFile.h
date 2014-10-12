@@ -12,8 +12,8 @@
 #define MAX_DEVICE_NUMBER 8
 
 //Scenery definition
-#define SCENERY_NAME_LENGHT 8
-#define MAX_SCENERY_NUMBER 8
+#define SCENARIO_NAME_LENGHT 8
+#define MAX_SCENARIO_NUMBER 8
 
 //Task definition
 #define TASK_NAME_LENGHT 8

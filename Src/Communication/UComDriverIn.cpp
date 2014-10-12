@@ -34,7 +34,15 @@ void UComDriverIn::start()
 	m_led = true;
 	if(USE_LWIP)
 	{
+		printf("\n\r - LWIP Mode - \n\r");
+
+	    EthernetInterface eth;
+	    eth.init(); //Use DHCP
+	    eth.connect();
+	    printf("IP Address is %s\n", eth.getIPAddress());
+
 	    m_udpSocket.bind(UDPSOCKET_PORT);
+
 	    printf("UDP Socket binded to port %d\n\r", UDPSOCKET_PORT);
 	    while(true)
 		{
@@ -47,11 +55,13 @@ void UComDriverIn::start()
 	}
 	else
 	{
+		printf("\n\r - Serial Mode - \n\r");
 		//SERIAL handle one char at the time
 		char c;
 		while(true)
 		{
 			c = m_uart.getc();
+			//printf("%c", c);
 			// EOT 0x04 (End Of Transmission) || 0x13 Enter Key (for debugging)
 			if(c == 4 || c == 13)
 			{

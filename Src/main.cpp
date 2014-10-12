@@ -9,11 +9,12 @@
 #include "rtos.h"
 #include "cfg.h"
 #include "UController.h"
-#include "UComDriver.h"
+#include "UComDriverIn.h"
+#include "UComDriverOut.h"
 #include "FakeMessageHandler.h"
 #include "UActuatorHandler.h"
 #include "USensorHandler.h"
-#include "UMessageHandler.h"
+#include "UMsgHandler.h"
 #include "UTaskHandler.h"
 #include "UTaskCfg.h"
 
@@ -22,43 +23,39 @@
 //extern Mail<UTaskRequest, MAIL_LEN_UTASKHANDLER>mailUTaskHandler;
 #endif
 
-DigitalOut ledr(LED_RED);
-=======
-*/
 #ifdef TARGET_LPC1768
 #define LED_RED LED1
 #define LED_GREEN LED2
 #define LED_BLUE LED3
 #endif
-DigitalOut ledr(LED_RED);
-DigitalOut ledg(LED_GREEN);
-DigitalOut ledb(LED_BLUE);
+
+DigitalOut ledr(UPinUtils::digitalInOut[0]);
+DigitalOut ledg(UPinUtils::digitalInOut[1]);
+DigitalOut ledb(UPinUtils::digitalInOut[2]);
 
 USensorHandler uSensorHandler = USensorHandler();
 UActuatorHandler uActuatorHandler = UActuatorHandler();
 
-void startControllerThread(void const *args) {
+void startComDriverInThread(void const *args)
 {
-	UController uController;
-	uController.start();
-}
-
-void startComDriverInThread(void const *args) {
 	UComDriverIn comDriverIn;
 	comDriverIn.start();
 }
 
-void startComDriverOutThread(void const *args) {
+void startComDriverOutThread(void const *args)
+{
 	UComDriverOut comDriverOut;
 	comDriverOut.start();
 }
 
-void startMsgHandlerThread(void const *args) {
+void startMsgHandlerThread(void const *args)
+{
 	UMsgHandler msgHandler;
 	msgHandler.start();
 }
 
-void sensorPoolingThread(void const *args) {
+void sensorPoolingThread(void const *args)
+{
 	uSensorHandler.StartPoolingSensors();
 }
 
@@ -70,18 +67,23 @@ void taskHandlerThread(void const *args)
 
 int main (void)
 {
-	/*
+    Thread comDriverInThread(startComDriverInThread);
+    Thread comDriverOutThread(startComDriverOutThread);
+    Thread msgHandlerThread(startMsgHandlerThread);
+
 	ledr = false;
 	ledg = false;
 	ledb = false;
 
-    Thread taskThread(taskHandlerThread,NULL,TASK_HANDLER_PRIORITY,TASK_HANDLER_STACK_SIZE);
-    Thread sensorThread(sensorPoolingThread,NULL,SENSOR_HANDLER_PRIORITY,SENSOR_HANDLER_STACK_SIZE);
+	Thread taskThread(taskHandlerThread,NULL,TASK_HANDLER_PRIORITY,TASK_HANDLER_STACK_SIZE);
+	Thread sensorThread(sensorPoolingThread,NULL,SENSOR_HANDLER_PRIORITY,SENSOR_HANDLER_STACK_SIZE);
 
-    int i = 0;
-    for(;;)
-    {
-    	if(i <= 10) {
+	//*/
+	int i = 0;
+	for(;;)
+	{
+		ledr = !ledr;
+		if(i <= 10) {
 			semMailUTaskHandler.wait();
 			UTaskRequest *mail = mailUTaskHandler.alloc();
 			if(mail != NULL)
@@ -98,7 +100,7 @@ int main (void)
 				if(i == 1)
 				{
 					mail->taskRequestType = CONFIG;
-					mail->taskCfg.taskCfgType = USCENERY;
+					mail->taskCfg.taskCfgType = USCENARIO;
 					mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
 					mail->taskCfg.id = 7;
 					mail->taskCfg.parentId = 12;
@@ -139,7 +141,7 @@ int main (void)
 				{
 
 					mail->taskRequestType = CONFIG;
-					mail->taskCfg.taskCfgType = USCENERY;
+					mail->taskCfg.taskCfgType = USCENARIO;
 					mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
 					mail->taskCfg.id = 93;
 					mail->taskCfg.parentId = 7645;
@@ -201,25 +203,9 @@ int main (void)
 				//ledg = true;
 			}
 			semMailUTaskHandler.release();
-    	}
+		}
+
+
 		Thread::wait(200);
-    }*/
-
-	Thread controllerThread(startControllerThread,NULL,CONTROLLER_PRIORITY,CONTROLLER_STACK_SIZE);
-    Thread comDriverInThread(startComDriverInThread);
-    Thread comDriverOutThread(startComDriverOutThread);
-    Thread msgHandlerThread(startMsgHandlerThread);
-    /*
-        Thread sensorThread(sensorHandlerThread,NULL,SENSOR_HANDLER_PRIORITY,SENSOR_HANDLER_STACK_SIZE);
-        Thread actuatorThread(actuatorHandlerThread,NULL,ACTUATOR_HANDLER_PRIORITY,ACTUATOR_HANDLER_STACK_SIZE);
-        Thread messageThread(messageHandlerThread,NULL,MESSAGE_HANDLER_PRIORITY,MESSAGE_HANDLER_STACK_SIZE);
-	*/
-
-    ledr = true;
-    for(;;)
-    {
-    	ledr = !ledr;
-        Thread::wait(5000);
-
-    }
+	}
 }

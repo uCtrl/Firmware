@@ -60,6 +60,11 @@ void UMsgHandler::parse(UMsgHandlerMailType *aMail)
 		if(tok != 0)	//messageType trouvé
 		{
 			messageType = atoi(tok->ptr);
+
+			int scenarioId;
+			const json_token* name_from_json;
+			char* name;
+			UScenario scenario;
 			
 			//System > Platform > Device > Scenario > Task > Condition
 			switch(messageType)
@@ -69,12 +74,19 @@ void UMsgHandler::parse(UMsgHandlerMailType *aMail)
 					//TODO
 					break;
 				case REQ_GETDEVICES:
+					//tok = find_json_token(tokens, "deviceId");
 					//TODO
 					break;
 				case REQ_GETSCENARIOS:
-					tok = find_json_token(tokens, "deviceId");
-					strcpy(mailOut->msg, tok->ptr);
-					mailOut->msg[tok->len] = '\0';
+
+					scenarioId = atoi(find_json_token(tokens, "scenarioId")->ptr);
+					name_from_json = find_json_token(tokens, "name");
+					name = (char*) name_from_json->ptr;
+					scenario = UScenario(scenarioId, name);
+
+					strcpy(mailOut->msg, scenario.GetJSON());
+
+					//mailOut->msg[name->len] = '\0';
 					break;
 				case REQ_GETTASKS:
 					tok = find_json_token(tokens, "scenarioId");
@@ -130,12 +142,14 @@ void UMsgHandler::parse(UMsgHandlerMailType *aMail)
 		}
 		else
 		{
-			strcpy(mailOut->msg, "Error : No uCtrl JSON string\0");	
+			strcpy(mailOut->msg, "Error : No uCtrl message type found\0");
 		}
 	}
 	else
 	{
-		strcpy(mailOut->msg, "Error : No JSON string\0");	
+		//strcpy(mailOut->msg, "Error : No JSON string\0");
+		strcpy(mailOut->msg, "Error : No JSON string");
+		strcat(mailOut->msg, "\0");
 	}
 	comDriverOutMail.put(mailOut);
 }

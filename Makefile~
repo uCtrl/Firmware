@@ -77,6 +77,7 @@ OBJECTS += ./Src/Devices/Sensors/USensorTemperature.o
 OBJECTS += ./Src/Devices/Sensors/USensorHandler.o
 OBJECTS += ./Src/Tasks/UScenery.o
 OBJECTS += ./Src/Tasks/UTask.o
+OBJECTS += ./Src/Tasks/UTaskHandler.o
 OBJECTS += ./Src/Utils/UPinUtils.o
 OBJECTS += ./Src/Utils/UMathUtils.o
 

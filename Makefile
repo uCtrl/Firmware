@@ -62,6 +62,7 @@ INCLUDE_PATHS += -I./Src/Devices/Sensors
 INCLUDE_PATHS += -I./Src/Events
 INCLUDE_PATHS += -I./Src/Tasks
 INCLUDE_PATHS += -I./Src/Utils
+OBJECTS += ./Src/cfg.o
 OBJECTS += ./Src/main.o
 OBJECTS += ./Src/Conditions/UCondition.o
 OBJECTS += ./Src/Controller/UController.o
@@ -76,8 +77,9 @@ OBJECTS += ./Src/Devices/Sensors/USensor.o
 OBJECTS += ./Src/Devices/Sensors/USensorLight.o
 OBJECTS += ./Src/Devices/Sensors/USensorTemperature.o
 OBJECTS += ./Src/Devices/Sensors/USensorHandler.o
-OBJECTS += ./Src/Tasks/UScenery.o
+OBJECTS += ./Src/Tasks/UScenario.o
 OBJECTS += ./Src/Tasks/UTask.o
+OBJECTS += ./Src/Tasks/UTaskHandler.o
 OBJECTS += ./Src/Utils/UPinUtils.o
 OBJECTS += ./Src/Utils/UMathUtils.o
 
@@ -103,7 +105,7 @@ all: $(PROJECT).bin
 #endif
 
 clean:
-	rm -f $(PROJECT).bin $(PROJECT).elf $(OBJECTS)
+	rm -f $(PROJECT).bin $(PROJECT).elf $(OBJECTS) $(OBJECTS_D)
 	
 configure:
 	./configure

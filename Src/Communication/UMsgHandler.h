@@ -13,6 +13,7 @@
 #include "cfg.h"
 #include "UMsgHandlerMailType.h"
 #include "frozen.h"
+#include "UScenario.h"
 
 extern Mail<UMsgHandlerMailType, 2> msgHandlerMail;
 extern Mail<UMsgHandlerMailType, 2> comDriverOutMail;
