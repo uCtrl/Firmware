@@ -1,0 +1,161 @@
+/*
+* main.cpp
+*
+* Created on: Mar 23, 2014
+* Author: µCtrl
+*/
+
+#include "mbed.h"
+#include "rtos.h"
+#include "cfg.h"
+#include "EthernetInterface.h"
+#include "UComDriverIn.h"
+#include "UComDriverOut.h"
+#include "UMsgHandler.h"
+
+
+DigitalOut led(LED4);
+Serial pc(USBTX, USBRX);
+
+void startComDriverInThread(void const *args) {
+	UComDriverIn comDriverIn;
+	comDriverIn.start();
+}
+
+void startComDriverOutThread(void const *args) {
+	UComDriverOut comDriverOut;
+	comDriverOut.start();
+}
+
+void startMsgHandlerThread(void const *args) {
+	UMsgHandler msgHandler;
+	msgHandler.start();
+}
+
+void startInterfaceEth0()
+{
+	EthernetInterface m_eth0;
+    m_eth0.init();
+    printf("\n\rInterface eth0 is turned ON.\n\r");
+    m_eth0.connect();
+	printf("IP Address is %s\n\r", m_eth0.getIPAddress());	
+	//m_eth0.disconnect();
+}
+
+int main (void) {
+    printf("\n\r##########################\n\ruCtrl - Firmware\n\r##########################\n\r");
+    startInterfaceEth0();
+	
+    Thread msgHandlerThread(startMsgHandlerThread);
+	Thread comDriverInThread(startComDriverInThread);
+    Thread comDriverOutThread(startComDriverOutThread);
+    
+    led = true;
+    for(;;)
+    {
+    	led = !led;
+        Thread::wait(1000);
+    }
+}
+
+
+/* SAMPLE OF TCP SOCKET SERVER
+	EthernetInterface eth;
+    TCPSocketServer tcp;
+    int flag = eth.init();
+    if(flag == 0)
+    {
+    	pc.puts("\n\rTurn on eth0.");
+    	flag = eth.connect();
+    	if(flag == 0)
+    	{
+    		printf("\n\rIP Address is %s", eth.getIPAddress());
+    		//printf("n\rConnecting...");
+		    printf("\n\r");
+		    
+		    TCPSocketServer sockSrv;
+		    TCPSocketConnection sockConn;
+		    sockSrv.bind(80);
+		    printf("\n\rSocket binded to port 80.");
+		    sockSrv.listen(1);
+		    printf("\n\rSocket is listening for incomming connections.");
+		    sockSrv.accept(sockConn);
+		    //
+		    sockConn.connect("192.168.15.102", 55056);
+		    
+		    if(sockConn.is_connected())
+		    {
+		    	printf("\n\rNew client connected.");
+		    	printf("\n\r");
+			    char http_cmd[] = "Thank you";
+			    char buffer[300];
+			    int ret;
+			    while (true) {
+			        ret = sockConn.receive(buffer, sizeof(buffer)-1);
+			        if (ret <= 0)
+			            break;
+			        buffer[ret] = '\0';
+			        //printf("n\rReceived %d chars from client: %s", ret, buffer);
+			        printf("%s", buffer);
+			        sockConn.send_all(http_cmd, sizeof(http_cmd)-1);
+			    }
+		    }
+			      
+		    sockConn.close();
+		    
+		    eth.disconnect();
+    	}
+    }
+
+*/
+
+/*
+EthernetInterface eth;
+    int flag = eth.init();
+    if(flag == 0)
+    {
+    	pc.puts("\n\reth0 Turned ON.");
+    	flag = eth.connect();
+    	if(flag == 0)
+    	{
+    		printf("\n\rIP Address is %s", eth.getIPAddress());
+		    printf("\n\r");
+		    
+		    UDPSocket udpSocket;
+		    udpSocket.bind(7);
+		    printf("\n\rUDP Socket binded to port 7.");
+		    Endpoint client;  
+	    	printf("\n\r");
+		    char http_cmd[] = "UDP Thank you";
+		    char buffer[256];
+		    int ret;
+		    while (true) {
+		        printf("\n\rWait for packet...");
+		        ret = udpSocket.receiveFrom(client, buffer, sizeof(buffer));
+		        //if (ret <= 0)
+		        //    break;
+		        buffer[ret] = '\0';
+		        printf("Received packet from: %s\n", client.get_address());
+		        printf("%s", buffer);
+		        udpSocket.sendTo(client, http_cmd, sizeof(http_cmd));
+		    }
+		    //
+		    Endpoint nist;
+		    nist.set_address("utcnist.colorado.edu", 37);
+    
+		    char out_buffer[] = "plop"; // Does not matter
+		    sock.sendTo(nist, out_buffer, sizeof(out_buffer));
+    
+		    char in_buffer[4];
+		    int n = sock.receiveFrom(nist, in_buffer, sizeof(in_buffer));
+    
+		    unsigned int timeRes = ntohl( *((unsigned int*)in_buffer));
+		    printf("Received %d bytes from server %s on port %d: %u seconds since 1/01/1900 00:00 GMT\n", n, nist.get_address(), nist.get_port(), timeRes);
+    		//
+		      
+		    udpSocket.close();
+		    
+		    eth.disconnect();
+    	}
+    }
+    */

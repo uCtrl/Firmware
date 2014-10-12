@@ -1,37 +1,61 @@
+/*
+* main.cpp
+*
+* Created on: Mar 23, 2014
+* Author: µCtrl
+*/
+
 #include "mbed.h"
 #include "rtos.h"
 #include "cfg.h"
 #include "UController.h"
-#include "UComDriver.h"
+#include "UComDriverIn.h"
+#include "UComDriverOut.h"
 #include "FakeMessageHandler.h"
 #include "UActuatorHandler.h"
 #include "USensorHandler.h"
-#include "UMessageHandler.h"
+#include "UMsgHandler.h"
 #include "UTaskHandler.h"
 #include "UTaskCfg.h"
 
 #ifdef DEBUG_PRINT
-extern Semaphore semMailUTaskHandler;
-extern Mail<UTaskRequest, MAIL_LEN_UTASKHANDLER>mailUTaskHandler;
+//extern Semaphore semMailUTaskHandler;
+//extern Mail<UTaskRequest, MAIL_LEN_UTASKHANDLER>mailUTaskHandler;
 #endif
 
-/*
-#include "USensorHandler.h"
-#include "UActuatorHandler.h"
-*/
 #ifdef TARGET_LPC1768
 #define LED_RED LED1
 #define LED_GREEN LED2
 #define LED_BLUE LED3
 #endif
-DigitalOut ledr(LED_RED);
-DigitalOut ledg(LED_GREEN);
-DigitalOut ledb(LED_BLUE);
+
+DigitalOut ledr(UPinUtils::digitalInOut[0]);
+DigitalOut ledg(UPinUtils::digitalInOut[1]);
+DigitalOut ledb(UPinUtils::digitalInOut[2]);
 
 USensorHandler uSensorHandler = USensorHandler();
 UActuatorHandler uActuatorHandler = UActuatorHandler();
 
-void sensorPoolingThread(void const *args) {
+void startComDriverInThread(void const *args)
+{
+	UComDriverIn comDriverIn;
+	comDriverIn.start();
+}
+
+void startComDriverOutThread(void const *args)
+{
+	UComDriverOut comDriverOut;
+	comDriverOut.start();
+}
+
+void startMsgHandlerThread(void const *args)
+{
+	UMsgHandler msgHandler;
+	msgHandler.start();
+}
+
+void sensorPoolingThread(void const *args)
+{
 	uSensorHandler.StartPoolingSensors();
 }
 
@@ -43,17 +67,23 @@ void taskHandlerThread(void const *args)
 
 int main (void)
 {
+    Thread comDriverInThread(startComDriverInThread);
+    Thread comDriverOutThread(startComDriverOutThread);
+    Thread msgHandlerThread(startMsgHandlerThread);
+
 	ledr = false;
 	ledg = false;
 	ledb = false;
 
-    Thread taskThread(taskHandlerThread,NULL,TASK_HANDLER_PRIORITY,TASK_HANDLER_STACK_SIZE);
-    Thread sensorThread(sensorPoolingThread,NULL,SENSOR_HANDLER_PRIORITY,SENSOR_HANDLER_STACK_SIZE);
+	Thread taskThread(taskHandlerThread,NULL,TASK_HANDLER_PRIORITY,TASK_HANDLER_STACK_SIZE);
+	Thread sensorThread(sensorPoolingThread,NULL,SENSOR_HANDLER_PRIORITY,SENSOR_HANDLER_STACK_SIZE);
 
-    int i = 0;
-    for(;;)
-    {
-    	if(i <= 10) {
+	//*/
+	int i = 0;
+	for(;;)
+	{
+		ledr = !ledr;
+		if(i <= 10) {
 			semMailUTaskHandler.wait();
 			UTaskRequest *mail = mailUTaskHandler.alloc();
 			if(mail != NULL)
@@ -70,7 +100,7 @@ int main (void)
 				if(i == 1)
 				{
 					mail->taskRequestType = CONFIG;
-					mail->taskCfg.taskCfgType = USCENERY;
+					mail->taskCfg.taskCfgType = USCENARIO;
 					mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
 					mail->taskCfg.id = 7;
 					mail->taskCfg.parentId = 12;
@@ -111,7 +141,7 @@ int main (void)
 				{
 
 					mail->taskRequestType = CONFIG;
-					mail->taskCfg.taskCfgType = USCENERY;
+					mail->taskCfg.taskCfgType = USCENARIO;
 					mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
 					mail->taskCfg.id = 93;
 					mail->taskCfg.parentId = 7645;
@@ -168,12 +198,14 @@ int main (void)
 			else
 			{
 				//error, should never happen with semaphore
-				/*ledg = false;
-				Thread::wait(500);
-				ledg = true;*/
+				//ledg = false;
+				//Thread::wait(500);
+				//ledg = true;
 			}
 			semMailUTaskHandler.release();
-    	}
+		}
+
+
 		Thread::wait(200);
-    }
+	}
 }

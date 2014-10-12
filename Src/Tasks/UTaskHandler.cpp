@@ -98,22 +98,22 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 
 			break;
 		}
-		case USCENERY:
+		case USCENARIO:
 		{
 			// TODO : remove after tests
-			printf("Task handler : new scenery message recieved\r\n");
+			printf("Task handler : new scenario message recieved\r\n");
 
 			for(int i = 0; i < DeviceListIndex; i++)
 			{
 				if(DeviceList[i]->DeviceID == taskCfg.parentId)
 				{
-					UScenery *newScenery = new UScenery(taskCfg.id,
-														testName);
+					UScenario *newScenario = new UScenario(taskCfg.id,
+														   testName);
 
-					if(!DeviceList[i]->AddScenery(newScenery))
+					if(!DeviceList[i]->AddScenario(newScenario))
 					{
 					#ifdef DEBUG_PRINT
-						printf("Error Adding sceneryId:%lu\n\r", newScenery->SceneryID);
+						printf("Error Adding sceneryId:%lu\n\r", newScenario->ScenarioID);
 					#endif
 					}
 					parentFound = 1;
@@ -136,15 +136,15 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 
 			for(int i = 0; i < DeviceListIndex; i++)
 			{
-				for(int j = 0; j < DeviceList[i]->SceneryListIndex; j++)
+				for(int j = 0; j < DeviceList[i]->ScenarioListIndex; j++)
 				{
-					if(DeviceList[i]->SceneryList[j]->SceneryID == taskCfg.parentId)
+					if(DeviceList[i]->ScenarioList[j]->ScenarioID == taskCfg.parentId)
 					{
 						UTask *newTask = new UTask(taskCfg.id,
 													testName,
 													taskCfg.ActionValue,
 													DeviceList[i]->DeviceID);
-						if(!DeviceList[i]->SceneryList[j]->AddTask(newTask))
+						if(!DeviceList[i]->ScenarioList[j]->AddTask(newTask))
 						{
 						#ifdef DEBUG_PRINT
 							printf("Error Adding TaskId:%lu\n\r", newTask->TaskID);
@@ -164,7 +164,7 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 			if(!parentFound)
 			{
 			#ifdef DEBUG_PRINT
-				printf("Error Scenery ID not found\n\r");
+				printf("Error Scenario ID not found\n\r");
 			#endif
 			}
 
@@ -178,18 +178,18 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 
 			for(int i = 0; i < DeviceListIndex; i++)
 			{
-				for(int j = 0; j < DeviceList[i]->SceneryListIndex; j++)
+				for(int j = 0; j < DeviceList[i]->ScenarioListIndex; j++)
 				{
-					for(int k = 0; k < DeviceList[i]->SceneryList[j]->TaskListIndex; k++)
+					for(int k = 0; k < DeviceList[i]->ScenarioList[j]->TaskListIndex; k++)
 					{
-						if(DeviceList[i]->SceneryList[j]->TaskList[k]->TaskID == taskCfg.parentId)
+						if(DeviceList[i]->ScenarioList[j]->TaskList[k]->TaskID == taskCfg.parentId)
 						{
 							UCondition *newCondition = new UCondition(taskCfg.id,
 																		taskCfg.conditionCfg.sensorId,
 																		taskCfg.conditionCfg.value,
 																		taskCfg.conditionCfg.operatorType,
 																		testName);
-							if(!DeviceList[i]->SceneryList[j]->TaskList[k]->AddCondition(newCondition))
+							if(!DeviceList[i]->ScenarioList[j]->TaskList[k]->AddCondition(newCondition))
 							{
 							#ifdef DEBUG_PRINT
 								printf("Error Adding ConditionId:%lu\n\r", newCondition->ConditionID);
@@ -325,7 +325,7 @@ int UTaskHandler::CheckDevice()
 {
 	for (int i = 0; i < DeviceListIndex; i++)
 	{
-		DeviceList[i]->DoScenery();
+		DeviceList[i]->DoScenario();
 	}
 
 	return 0;
