@@ -14,7 +14,7 @@ class UCondition
 public:
 
 	UCondition();
-	UCondition(int mConditionID, int mSensorID, int mValue, UOperatorType mConditionOperator, char mConditionName[CONDITION_NAME_LENGHT]);
+	UCondition(int mConditionID, char mConditionName[CONDITION_NAME_LENGHT], int mSensorID, int mValue, UOperatorType mConditionOperator);
 	virtual ~UCondition();
 	virtual int CheckCondition();
 	int GetSensorValue(int mSensorID);

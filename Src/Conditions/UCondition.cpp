@@ -13,7 +13,7 @@ UCondition::UCondition()
 	ConditionOperator = OPERATOR_TYPE_NONE;
 }
 
-UCondition::UCondition(int mConditionID, int mSensorID, int mValue, UOperatorType mConditionOperator, char mConditionName[CONDITION_NAME_LENGHT])
+UCondition::UCondition(int mConditionID, char mConditionName[CONDITION_NAME_LENGHT], int mSensorID, int mValue, UOperatorType mConditionOperator)
 {
 	ConditionID = mConditionID;
 	SensorID = mSensorID;

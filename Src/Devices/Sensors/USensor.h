@@ -6,6 +6,7 @@
 #include "UPinUtils.h"
 #include "rtos.h"
 #include "UDevice.h"
+#include "UDeviceType.h"
 
 class UDevice;
 

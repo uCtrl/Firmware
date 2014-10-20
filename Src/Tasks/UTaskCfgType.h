@@ -13,6 +13,7 @@
 typedef enum
 {
 	TASK_CFG_TYPE_NONE = 0,
+	UPLATFORM,
 	UDEVICE,
 	USCENARIO,
 	UTASK,

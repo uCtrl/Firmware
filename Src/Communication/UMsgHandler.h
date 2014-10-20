@@ -14,6 +14,15 @@
 #include "UMsgHandlerMailType.h"
 #include "frozen.h"
 #include "UScenario.h"
+#include "UTaskHandler.h"
+#include "UDeviceType.h"
+#include "UJsonUtils.h"
+
+#include "UPlatform.h"
+#include "UDevice.h"
+#include "UScenario.h"
+#include "UTask.h"
+#include "UCondition.h"
 
 extern Mail<UMsgHandlerMailType, 2> msgHandlerMail;
 extern Mail<UMsgHandlerMailType, 2> comDriverOutMail;
@@ -59,6 +68,8 @@ class UMsgHandler
         void parse(UMsgHandlerMailType *aMail);
         void create(const char* aInput);
         ~UMsgHandler();
+
+		static void SendMessage(char* message, Endpoint* endpoint);
 };
 
 #endif  //UMSGHANDLER_H_

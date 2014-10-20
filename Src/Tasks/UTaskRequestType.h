@@ -13,6 +13,8 @@ typedef enum
 	TASKREQUEST_TYPE_NONE = 0,
 	CONFIG = 1,
 	EVENT = 2,
+	GET_INFO = 3,
+	SAVE_INFO = 4,
 } UTaskRequestType;
 
 

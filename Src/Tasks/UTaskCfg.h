@@ -11,6 +11,13 @@
 #include "UTaskCfgType.h"
 #include "UConditionCfg.h"
 #include "UTaskCfgMod.h"
+#include "EthernetInterface.h"
+
+#include "UPlatform.h"
+#include "UDevice.h"
+#include "UScenario.h"
+#include "UTask.h"
+#include "UCondition.h"
 
 /** UTaskCfg struct contains all data for the creation of sceneries, tasks,
  * actions and conditions in the task system.
@@ -24,11 +31,18 @@ typedef struct
 	UTaskCfgMod taskCfgMod;
 	int id;
 	int parentId;
+	Endpoint* endpoint;
 	union
 	{
 		UConditionCfg conditionCfg;
 		int ActionValue;
 	};
+
+	UPlatform* platform;
+	UDevice* device;
+	UScenario* scenario;
+	UTask* task;
+	UCondition* condition;
 
 
 } UTaskCfg;

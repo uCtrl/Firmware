@@ -10,9 +10,10 @@ UDevice::UDevice()
 	ScenarioListIndex = 0;
 }
 
-UDevice::UDevice(int mDeviceID, char mDeviceName[DEVICE_NAME_LENGHT])
+UDevice::UDevice(int mDeviceID, char mDeviceName[DEVICE_NAME_LENGHT], UDeviceType type)
 {
 	DeviceID = mDeviceID;
+	DeviceType = type;
 
 	for(int i = 0; i < SCENARIO_NAME_LENGHT; i++)
 	{

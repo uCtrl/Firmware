@@ -23,7 +23,7 @@ USensor::USensor()
 }
 
 USensor::USensor(int a_id, int a_pin, int a_timeBetweenReads, char* a_deviceName)
-: UDevice(a_id, a_deviceName),
+: UDevice(a_id, a_deviceName, Undefined),
   analogIn(UPinUtils::analogIn[a_pin])
 
 {

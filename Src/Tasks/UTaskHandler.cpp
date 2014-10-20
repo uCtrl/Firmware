@@ -17,12 +17,14 @@ int EventPoolIndex;
 UTaskHandler::UTaskHandler()
 {
 	DeviceListIndex = 0;
+	m_platform = new UPlatform;
 }
 
 UTaskHandler::UTaskHandler(USensorHandler* sensorHandler, UActuatorHandler* actuatorHandler) {
 	DeviceListIndex = 0;
     m_sensorHandler = sensorHandler;
     m_actuatorHandler = actuatorHandler;
+    m_platform = new UPlatform;
 }
 
 UTaskHandler::~UTaskHandler()
@@ -44,6 +46,14 @@ void UTaskHandler::start()
 			else if(mail->taskRequestType == CONFIG)
 			{
 				this->handleTaskCfg(mail->taskCfg);
+			}
+			else if(mail->taskRequestType == GET_INFO)
+			{
+				this->handleGetInfo(mail->taskCfg);
+			}
+			else if(mail->taskRequestType == SAVE_INFO)
+			{
+				this->handleSaveInfo(mail->taskCfg);
 			}
 			else
 			{
@@ -87,7 +97,7 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 		{
 			// TODO : remove after tests
 			printf("Task handler : new device message recieved\r\n");
-			UDevice* newDevice = new UDevice(taskCfg.id, testName);
+			UDevice* newDevice = new UDevice(taskCfg.id, testName, Undefined);
 
 			if(!AddDevice(newDevice))
 			{
@@ -103,30 +113,14 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 			// TODO : remove after tests
 			printf("Task handler : new scenario message recieved\r\n");
 
-			for(int i = 0; i < DeviceListIndex; i++)
-			{
-				if(DeviceList[i]->DeviceID == taskCfg.parentId)
-				{
-					UScenario *newScenario = new UScenario(taskCfg.id,
-														   testName);
-
-					if(!DeviceList[i]->AddScenario(newScenario))
-					{
-					#ifdef DEBUG_PRINT
-						printf("Error Adding sceneryId:%lu\n\r", newScenario->ScenarioID);
-					#endif
-					}
-					parentFound = 1;
-					break;
-				}
+			if(taskCfg.endpoint != NULL) {
+				char* message = new char[36];
+				strcpy(message, "New Scenario information sent.\0");
+				UMsgHandler::SendMessage(message, taskCfg.endpoint);
+				AddScenario(taskCfg.id, taskCfg.parentId, "scenarioName");
 			}
 
-			if(!parentFound)
-			{
-			#ifdef DEBUG_PRINT
-				printf("Error Device ID not found\n\r");
-			#endif
-			}
+
 			break;
 		}
 		case UTASK:
@@ -184,11 +178,12 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 					{
 						if(DeviceList[i]->ScenarioList[j]->TaskList[k]->TaskID == taskCfg.parentId)
 						{
-							UCondition *newCondition = new UCondition(taskCfg.id,
+							UCondition *newCondition = new UCondition(	taskCfg.id,
+																		testName,
 																		taskCfg.conditionCfg.sensorId,
 																		taskCfg.conditionCfg.value,
-																		taskCfg.conditionCfg.operatorType,
-																		testName);
+																		taskCfg.conditionCfg.operatorType);
+
 							if(!DeviceList[i]->ScenarioList[j]->TaskList[k]->AddCondition(newCondition))
 							{
 							#ifdef DEBUG_PRINT
@@ -218,6 +213,128 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 				printf("Error Task ID not found\n\r");
 			#endif
 			}
+			break;
+		}
+	}
+}
+
+void UTaskHandler::handleGetInfo(const UTaskCfg taskCfg)
+{
+	char* json;
+	bool status;
+	int messageType;
+	int error;
+	int size;
+	UTaskCfgType type;
+
+	switch(taskCfg.taskCfgType)
+	{
+		case UPLATFORM:
+		{
+			// TODO : remove after tests
+			printf("Task handler : returning platform information\r\n");
+
+			status = true;
+			messageType = 2;
+			error = 0;
+			size = 1;
+			type = UPLATFORM;
+
+			json = m_platform->GetJSON();
+
+			UMsgHandler::SendMessage(
+					UJsonUtils::AddJsonGetShell(json, taskCfg.parentId, status, error, messageType, size, type),
+					taskCfg.endpoint);
+
+			//UMsgHandler::SendMessage(m_platform->GetJSON(), taskCfg.endpoint);
+
+			break;
+		}
+		case UDEVICE:
+		{
+			// TODO : remove after tests
+			printf("Task handler : information of devices on platform %d\r\n", taskCfg.parentId);
+
+			break;
+		}
+		case USCENARIO:
+		{
+			// TODO : remove after tests
+			printf("Task handler : information of scenarios on device %d\r\n", taskCfg.parentId);
+
+			break;
+		}
+		case UTASK:
+		{
+			// TODO : remove after tests
+			printf("Task handler : information of tasks on scenario %d\r\n", taskCfg.parentId);
+
+			break;
+		}
+		case UCONDITION:
+		{
+			// TODO : remove after tests
+			printf("Task handler : information of conditions on task %d\r\n", taskCfg.parentId);
+
+			break;
+		}
+		default:
+		{
+			printf("Task handler : default Get Event\r\n");
+			break;
+		}
+	}
+}
+
+void UTaskHandler::handleSaveInfo(const UTaskCfg taskCfg)
+{
+
+	switch(taskCfg.taskCfgType)
+	{
+		case UPLATFORM:
+		{
+			// TODO : remove after tests
+			printf("Task handler : saving platform information\r\n");
+			printf("Task handler : platform : %d, %s, %s, %s\r\n",
+					taskCfg.platform->id,
+					taskCfg.platform->enabled,
+					taskCfg.platform->name,
+					taskCfg.platform->room);
+
+		    m_platform = taskCfg.platform;
+
+			break;
+		}
+		case UDEVICE:
+		{
+			// TODO : remove after tests
+			printf("Task handler : saving devices on platform %d\r\n", taskCfg.parentId);
+
+			break;
+		}
+		case USCENARIO:
+		{
+			// TODO : remove after tests
+			printf("Task handler : saving scenarios on device %d\r\n", taskCfg.parentId);
+
+			break;
+		}
+		case UTASK:
+		{
+			// TODO : remove after tests
+			printf("Task handler : saving tasks on scenario %d\r\n", taskCfg.parentId);
+
+			break;
+		}
+		case UCONDITION:
+		{
+			// TODO : remove after tests
+			printf("Task handler : saving conditions on task %d\r\n", taskCfg.parentId);
+
+			break;
+		}
+		default:
+		{
 			break;
 		}
 	}
@@ -330,3 +447,63 @@ int UTaskHandler::CheckDevice()
 
 	return 0;
 }
+
+void UTaskHandler::SendMessage(char* message, Endpoint* endpoint)
+{
+	//printf("Message : %s\r\n", message);
+
+	UMsgHandlerMailType *mailOut = comDriverOutMail.alloc();
+
+	if(USE_LWIP)
+	{
+		mailOut->endPoint->set_address(endpoint->get_address(), endpoint->get_port());
+	}
+
+	strcpy(mailOut->msg, message);
+	//strcat(mailOut->msg, "\0");
+
+	//comDriverOutMail.put(mailOut);
+
+	delete endpoint;
+}
+
+void UTaskHandler::AddScenario(int scenarioId, int parentId, char* scenarioName)
+{
+	int parentFound = 0;
+
+	for(int i = 0; i < DeviceListIndex; i++)
+	{
+		if(DeviceList[i]->DeviceID == parentId)
+		{
+			UScenario *newScenario = new UScenario(scenarioId,
+												   scenarioName);
+
+			if(!DeviceList[i]->AddScenario(newScenario))
+			{
+			#ifdef DEBUG_PRINT
+				printf("Error Adding sceneryId:%lu\n\r", newScenario->ScenarioID);
+			#endif
+			}
+			parentFound = 1;
+			break;
+		}
+	}
+
+	if(!parentFound)
+	{
+	#ifdef DEBUG_PRINT
+		printf("Error Device ID not found\n\r");
+	#endif
+	}
+}
+
+void UTaskHandler::AddTask(int taskId, int parentId, char* status)
+{
+
+}
+
+void UTaskHandler::AddCondition(int taskId, int parentId, int type)
+{
+
+}
+

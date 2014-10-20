@@ -95,6 +95,7 @@ int main (void)
 					mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
 					mail->taskCfg.id = 12;
 					mail->taskCfg.parentId = 0;
+					mail->taskCfg.endpoint = NULL;
 					mailUTaskHandler.put(mail);
 				}
 				if(i == 1)
@@ -104,6 +105,7 @@ int main (void)
 					mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
 					mail->taskCfg.id = 7;
 					mail->taskCfg.parentId = 12;
+					mail->taskCfg.endpoint = NULL;
 					mailUTaskHandler.put(mail);
 				}
 				if(i == 2)
@@ -114,6 +116,7 @@ int main (void)
 					mail->taskCfg.id = 10;
 					mail->taskCfg.parentId = 7;
 					mail->taskCfg.ActionValue = 124;
+					mail->taskCfg.endpoint = NULL;
 					mailUTaskHandler.put(mail);
 				}
 				if(i == 3)
@@ -126,6 +129,7 @@ int main (void)
 					mail->taskCfg.conditionCfg.sensorId = 1245;
 					mail->taskCfg.conditionCfg.value = 934;
 					mail->taskCfg.conditionCfg.operatorType = EQUAL;
+					mail->taskCfg.endpoint = NULL;
 					mailUTaskHandler.put(mail);
 				}
 				if(i == 4)
@@ -135,6 +139,7 @@ int main (void)
 					mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
 					mail->taskCfg.id = 7645;
 					mail->taskCfg.parentId = 0;
+					mail->taskCfg.endpoint = NULL;
 					mailUTaskHandler.put(mail);
 				}
 				if(i == 5)
@@ -145,6 +150,7 @@ int main (void)
 					mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
 					mail->taskCfg.id = 93;
 					mail->taskCfg.parentId = 7645;
+					mail->taskCfg.endpoint = NULL;
 					mailUTaskHandler.put(mail);
 				}
 				if(i == 6)
@@ -155,6 +161,7 @@ int main (void)
 					mail->taskCfg.id = 14;
 					mail->taskCfg.parentId = 93;
 					mail->taskCfg.ActionValue = 4933;
+					mail->taskCfg.endpoint = NULL;
 					mailUTaskHandler.put(mail);
 				}
 				if(i == 7)
@@ -165,6 +172,7 @@ int main (void)
 					mail->taskCfg.id = 73;
 					mail->taskCfg.parentId = 7;
 					mail->taskCfg.ActionValue = 1397592;
+					mail->taskCfg.endpoint = NULL;
 					mailUTaskHandler.put(mail);
 				}
 				if(i == 8)
@@ -172,6 +180,7 @@ int main (void)
 					mail->taskRequestType = EVENT;
 					mail->event.sensorId = 1245;
 					mail->event.value = 934;
+					mail->taskCfg.endpoint = NULL;
 					mailUTaskHandler.put(mail);
 				}
 				if(i == 9)
@@ -184,6 +193,7 @@ int main (void)
 					mail->taskCfg.conditionCfg.sensorId = 234;
 					mail->taskCfg.conditionCfg.value = 2351;
 					mail->taskCfg.conditionCfg.operatorType = EQUAL;
+					mail->taskCfg.endpoint = NULL;
 					mailUTaskHandler.put(mail);
 				}
 				if(i == 10)
@@ -191,6 +201,7 @@ int main (void)
 					mail->taskRequestType = EVENT;
 					mail->event.sensorId = 234;
 					mail->event.value = 2351;
+					mail->taskCfg.endpoint = NULL;
 					mailUTaskHandler.put(mail);
 				}
 				i++;

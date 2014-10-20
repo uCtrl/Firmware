@@ -36,14 +36,15 @@ void UComDriverOut::start()
 			    m_udpSocket.init();
 			    //m_udpClient.set_address("192.168.15.102",8);	//TODO msghandler mail doit avoir le endpoint.
 			    //printf("UDP Socket is sending response to %s on port %d\n\r", m_udpClient.get_address(), m_udpClient.get_port());
-		        printf("UDP Socket is sending response to %s on port %d\n\r", mail->endPoint.get_address(), mail->endPoint.get_port());
-		        m_rxCount = m_udpSocket.sendTo(mail->endPoint, mail->msg, strlen(mail->msg));
+		        printf("UDP Socket is sending response to %s on port %d\n\r", mail->endPoint->get_address(), mail->endPoint->get_port());
+		        m_rxCount = m_udpSocket.sendTo(*mail->endPoint, mail->msg, strlen(mail->msg));
 		        printf("Send succeed. %d bytes sended\n\r", m_rxCount);
 			}
 			else
 			{
 				m_uart.puts(mail->msg);
 			}
+			delete mail->endPoint;
 			comDriverOutMail.free(mail);
 		}
 	}

@@ -8,7 +8,7 @@
 #define EVENT_POOL_SIZE 8
 
 //Device definition
-#define DEVICE_NAME_LENGHT 8
+#define DEVICE_NAME_LENGHT 15
 #define MAX_DEVICE_NUMBER 8
 
 //Scenery definition

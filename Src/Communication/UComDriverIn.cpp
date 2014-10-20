@@ -42,6 +42,7 @@ void UComDriverIn::start()
 	    printf("IP Address is %s\n", eth.getIPAddress());
 
 	    m_udpSocket.bind(UDPSOCKET_PORT);
+	    m_udpSocket.set_broadcasting();
 
 	    printf("UDP Socket binded to port %d\n\r", UDPSOCKET_PORT);
 	    while(true)
@@ -94,9 +95,10 @@ void UComDriverIn::start()
 void UComDriverIn::handleMsg()
 {
 	UMsgHandlerMailType *mail = msgHandlerMail.alloc();
+
 	if(USE_LWIP)
 	{
-		mail->endPoint = m_udpClient;
+		mail->endPoint = new Endpoint(m_udpClient);
 	}
 	strncpy(mail->msg, m_rxBuffer, sizeof(m_rxBuffer));
 	msgHandlerMail.put(mail);
