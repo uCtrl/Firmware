@@ -1,3 +1,5 @@
+/*
+
 #include "UActuatorHandler.h"
 
 UActuatorHandler::UActuatorHandler()
@@ -59,19 +61,19 @@ bool UActuatorHandler::DeleteActuator(int a_actuatorId)
 
 bool UActuatorHandler::SetActuatorValue(char* a_actuatorName, int a_value)
 {
-	/*m_messageHandler->SendMessage("test");
+	//m_messageHandler->SendMessage("test");
 
-    char tmp[10];
-    sprintf(tmp,"%d",m_ActuatorCount);
-	m_messageHandler->SendMessage(tmp);
+    //char tmp[10];
+    //sprintf(tmp,"%d",m_ActuatorCount);
+	//m_messageHandler->SendMessage(tmp);
 
-	/*
-    for(int i = 0; i < m_ActuatorCount; i++) {
-        if(strcmp(a_actuatorName, m_Actuators[i]->GetName()) == 0) {
-            //m_Actuators[i]->SetValue(a_value);
-            return true;
-        }
-    }*/
+
+    //for(int i = 0; i < m_ActuatorCount; i++) {
+    //    if(strcmp(a_actuatorName, m_Actuators[i]->GetName()) == 0) {
+    //        //m_Actuators[i]->SetValue(a_value);
+    //        return true;
+    //    }
+    //}
     return false;
 }
 
@@ -81,3 +83,4 @@ char** UActuatorHandler::GetActuatorNames()
 
     return tmp;
 }
+*/

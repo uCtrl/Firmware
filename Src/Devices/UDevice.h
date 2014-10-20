@@ -16,6 +16,10 @@ public:
 	void DelScenario(int mScenarioID);
 	int DoScenario();
 
+	int m_deviceID;
+	int m_pinNumber;
+	int m_timeBetweenReads;
+
 	int DeviceID;
 	UDeviceType DeviceType;
 	char DeviceName[SCENARIO_NAME_LENGHT];

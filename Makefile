@@ -72,6 +72,7 @@ OBJECTS += ./Src/Communication/UComDriverOut.o
 OBJECTS += ./Src/Communication/UMsgHandler.o
 OBJECTS += ./Src/Communication/frozen/frozen.o
 OBJECTS += ./Src/Devices/UDevice.o
+OBJECTS += ./Src/Devices/UDeviceHandler.o
 OBJECTS += ./Src/Devices/Actuators/FakeActuator.o
 OBJECTS += ./Src/Devices/Actuators/UActuatorHandler.o
 OBJECTS += ./Src/Devices/Sensors/USensor.o

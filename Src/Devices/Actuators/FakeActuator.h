@@ -6,8 +6,11 @@
 #include "mbed.h"
 #include "UPinUtils.h"
 #include <string.h>
+#include "UDevice.h"
 
-class FakeActuator
+class UDevice;
+
+class FakeActuator : public UDevice
 {
 
 protected:

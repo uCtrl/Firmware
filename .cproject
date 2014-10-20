@@ -15,7 +15,7 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration buildProperties="" description="Build the application on Debug for FRDM-KL25Z" id="org.eclipse.cdt.cross.arm.gnu.linux.toolchain.base.1967332641" name="Debug" parent="org.eclipse.cdt.build.core.emptycfg">
+				<configuration artifactName="Sensors" buildProperties="" description="Build the application on Debug for FRDM-KL25Z" id="org.eclipse.cdt.cross.arm.gnu.linux.toolchain.base.1967332641" name="Debug" parent="org.eclipse.cdt.build.core.emptycfg">
 					<folderInfo id="org.eclipse.cdt.cross.arm.gnu.linux.toolchain.base.1967332641.1167785272" name="/" resourcePath="">
 						<toolChain id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.toolchain.base.1207720364" name="ARM Linux GCC (Sourcery Lite Bare)" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.toolchain.base">
 							<option id="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.target.processor.1785805716" name="Processor" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.linux.option.target.processor"/>
@@ -128,6 +128,9 @@
 		</cconfiguration>
 		<cconfiguration id="org.eclipse.cdt.cross.arm.gnu.linux.toolchain.base.1967332641.214672044">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="org.eclipse.cdt.cross.arm.gnu.linux.toolchain.base.1967332641.214672044" moduleId="org.eclipse.cdt.core.settings" name="DebugPrint">
+				<macros>
+					<stringMacro name="DEBUG_PRINT" type="VALUE_TEXT" value="true"/>
+				</macros>
 				<externalSettings/>
 				<extensions>
 					<extension id="org.eclipse.cdt.core.GNU_ELF" point="org.eclipse.cdt.core.BinaryParser"/>
