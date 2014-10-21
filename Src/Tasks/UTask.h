@@ -1,6 +1,7 @@
 #ifndef UTASK_H_
 #define UTASK_H_
 
+#include "mbed.h"
 #include "UCondition.h"
 #include <stdint.h>
 #include <stdio.h>
@@ -16,6 +17,7 @@ public:
 	void DelCondition(int mCondtionID);
 	int CheckCondition();
 	void SetValue();
+	char* GetJSON();
 
 	int TaskID;
 	int DeviceID;

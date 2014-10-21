@@ -20,10 +20,9 @@ UTaskHandler::UTaskHandler()
 	m_platform = new UPlatform;
 }
 
-UTaskHandler::UTaskHandler(USensorHandler* sensorHandler, UActuatorHandler* actuatorHandler) {
+UTaskHandler::UTaskHandler(UDeviceHandler* deviceHandler) {
 	DeviceListIndex = 0;
-    m_sensorHandler = sensorHandler;
-    m_actuatorHandler = actuatorHandler;
+	m_deviceHandler = deviceHandler;
     m_platform = new UPlatform;
 }
 
@@ -97,7 +96,7 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 		{
 			// TODO : remove after tests
 			printf("Task handler : new device message recieved\r\n");
-			UDevice* newDevice = new UDevice(taskCfg.id, testName, Undefined);
+			UDevice* newDevice = new UDevice(taskCfg.id, testName, Sensor_Temperature);
 
 			if(!AddDevice(newDevice))
 			{
@@ -120,7 +119,6 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 				AddScenario(taskCfg.id, taskCfg.parentId, "scenarioName");
 			}
 
-
 			break;
 		}
 		case UTASK:
@@ -130,7 +128,7 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 
 			for(int i = 0; i < DeviceListIndex; i++)
 			{
-				for(int j = 0; j < DeviceList[i]->ScenarioListIndex; j++)
+				for(int j = 0; j < DeviceList[i]->ScenarioCount; j++)
 				{
 					if(DeviceList[i]->ScenarioList[j]->ScenarioID == taskCfg.parentId)
 					{
@@ -172,9 +170,9 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 
 			for(int i = 0; i < DeviceListIndex; i++)
 			{
-				for(int j = 0; j < DeviceList[i]->ScenarioListIndex; j++)
+				for(int j = 0; j < DeviceList[i]->ScenarioCount; j++)
 				{
-					for(int k = 0; k < DeviceList[i]->ScenarioList[j]->TaskListIndex; k++)
+					for(int k = 0; k < DeviceList[i]->ScenarioList[j]->TaskCount; k++)
 					{
 						if(DeviceList[i]->ScenarioList[j]->TaskList[k]->TaskID == taskCfg.parentId)
 						{
@@ -238,15 +236,12 @@ void UTaskHandler::handleGetInfo(const UTaskCfg taskCfg)
 			messageType = 2;
 			error = 0;
 			size = 1;
-			type = UPLATFORM;
 
 			json = m_platform->GetJSON();
 
 			UMsgHandler::SendMessage(
-					UJsonUtils::AddJsonGetShell(json, taskCfg.parentId, status, error, messageType, size, type),
+					UJsonUtils::AddJsonGetShell(json, taskCfg.parentId, status, error, messageType, size, taskCfg.taskCfgType),
 					taskCfg.endpoint);
-
-			//UMsgHandler::SendMessage(m_platform->GetJSON(), taskCfg.endpoint);
 
 			break;
 		}
@@ -255,12 +250,55 @@ void UTaskHandler::handleGetInfo(const UTaskCfg taskCfg)
 			// TODO : remove after tests
 			printf("Task handler : information of devices on platform %d\r\n", taskCfg.parentId);
 
+			json = new char[200];
+			memset(reinterpret_cast<void*>(json), 0, 200);
+
+			int* deviceIds = m_deviceHandler->GetDeviceIds();
+			for(int i = 0; i < m_deviceHandler->GetDeviceCount(); i++)
+			{
+				if(i != 0) {
+					strcat(json, ",");
+				}
+				strcat(json, m_deviceHandler->GetDevice(deviceIds[i])->GetJSON());
+			}
+
+			status = true;
+			messageType = 4;
+			error = 0;
+			size = m_deviceHandler->GetDeviceCount();
+
+			UMsgHandler::SendMessage(
+					UJsonUtils::AddJsonGetShell(json, taskCfg.parentId, status, error, messageType, size, taskCfg.taskCfgType),
+					taskCfg.endpoint);
+
 			break;
 		}
 		case USCENARIO:
 		{
 			// TODO : remove after tests
 			printf("Task handler : information of scenarios on device %d\r\n", taskCfg.parentId);
+
+			json = new char[200];
+			memset(reinterpret_cast<void*>(json), 0, 200);
+
+			printf("Number of devices: %d\r\n", taskCfg.parentId);
+
+			for(int i = 0; i < m_deviceHandler->GetDevice(taskCfg.parentId)->ScenarioCount; i++)
+			{
+				if(i != 0) {
+					strcat(json, ",");
+				}
+				strcat(json, m_deviceHandler->GetScenario(i)->GetJSON());
+			}
+
+			status = true;
+			messageType = 6;
+			error = 0;
+			size = m_deviceHandler->GetDeviceCount();
+
+			UMsgHandler::SendMessage(
+					UJsonUtils::AddJsonGetShell(json, taskCfg.parentId, status, error, messageType, size, taskCfg.taskCfgType),
+					taskCfg.endpoint);
 
 			break;
 		}
@@ -269,12 +307,56 @@ void UTaskHandler::handleGetInfo(const UTaskCfg taskCfg)
 			// TODO : remove after tests
 			printf("Task handler : information of tasks on scenario %d\r\n", taskCfg.parentId);
 
+			json = new char[200];
+			memset(reinterpret_cast<void*>(json), 0, 200);
+
+			printf("Number of devices: %d\r\n", taskCfg.parentId);
+
+			for(int i = 0; i < m_deviceHandler->GetScenario(taskCfg.parentId)->TaskCount; i++)
+			{
+				if(i != 0) {
+					strcat(json, ",");
+				}
+				strcat(json, m_deviceHandler->GetTask(i)->GetJSON());
+			}
+
+			status = true;
+			messageType = 8;
+			error = 0;
+			size = m_deviceHandler->GetDeviceCount();
+
+			UMsgHandler::SendMessage(
+					UJsonUtils::AddJsonGetShell(json, taskCfg.parentId, status, error, messageType, size, taskCfg.taskCfgType),
+					taskCfg.endpoint);
+
 			break;
 		}
 		case UCONDITION:
 		{
 			// TODO : remove after tests
 			printf("Task handler : information of conditions on task %d\r\n", taskCfg.parentId);
+
+			json = new char[200];
+			memset(reinterpret_cast<void*>(json), 0, 200);
+
+			printf("Number of devices: %d\r\n", taskCfg.parentId);
+
+			for(int i = 0; i < m_deviceHandler->GetDevice(taskCfg.parentId)->ScenarioCount; i++)
+			{
+				if(i != 0) {
+					strcat(json, ",");
+				}
+				strcat(json, m_deviceHandler->GetScenario(i)->GetJSON());
+			}
+
+			status = true;
+			messageType = 10;
+			error = 0;
+			size = m_deviceHandler->GetDeviceCount();
+
+			UMsgHandler::SendMessage(
+					UJsonUtils::AddJsonGetShell(json, taskCfg.parentId, status, error, messageType, size, taskCfg.taskCfgType),
+					taskCfg.endpoint);
 
 			break;
 		}
@@ -301,7 +383,7 @@ void UTaskHandler::handleSaveInfo(const UTaskCfg taskCfg)
 					taskCfg.platform->name,
 					taskCfg.platform->room);
 
-		    m_platform = taskCfg.platform;
+			m_platform = taskCfg.platform;
 
 			break;
 		}
@@ -310,12 +392,20 @@ void UTaskHandler::handleSaveInfo(const UTaskCfg taskCfg)
 			// TODO : remove after tests
 			printf("Task handler : saving devices on platform %d\r\n", taskCfg.parentId);
 
+			printf("Device name : %s\r\n", taskCfg.device->DeviceName);
+
+			if(taskCfg.parentId == m_platform->id) {
+				AddDevice(taskCfg.device);
+			}
+
 			break;
 		}
 		case USCENARIO:
 		{
 			// TODO : remove after tests
 			printf("Task handler : saving scenarios on device %d\r\n", taskCfg.parentId);
+
+			m_deviceHandler->GetDevice(taskCfg.parentId)->AddScenario(taskCfg.scenario);
 
 			break;
 		}
@@ -324,12 +414,16 @@ void UTaskHandler::handleSaveInfo(const UTaskCfg taskCfg)
 			// TODO : remove after tests
 			printf("Task handler : saving tasks on scenario %d\r\n", taskCfg.parentId);
 
+			m_deviceHandler->GetScenario(taskCfg.parentId)->AddTask(taskCfg.task);
+
 			break;
 		}
 		case UCONDITION:
 		{
 			// TODO : remove after tests
 			printf("Task handler : saving conditions on task %d\r\n", taskCfg.parentId);
+
+			m_deviceHandler->GetTask(taskCfg.parentId)->AddCondition(taskCfg.condition);
 
 			break;
 		}
@@ -342,15 +436,64 @@ void UTaskHandler::handleSaveInfo(const UTaskCfg taskCfg)
 
 int UTaskHandler::AddDevice(UDevice *mDevice)
 {
-	USensorType type = Temperature;
-	int pin = 2;
-	int timeBetweenReads = 5000;
+	int pin;
+	int timeBetweenReads;
 
-	if(m_sensorHandler->AddNewSensor(type, mDevice->DeviceID, pin, timeBetweenReads, mDevice->DeviceName)) {
-		return 1;
-	}
-	else {
-		return 0;
+	switch(mDevice->DeviceType) {
+		case Actuator_Led:
+
+			pin = 0;
+
+			if(m_deviceHandler->AddNewActuator(mDevice, pin)) {
+				return 1;
+			}
+			else {
+				return 0;
+			}
+
+			break;
+
+		case Sensor_Light:
+			pin = 0;
+			timeBetweenReads = 5000;
+
+			if(m_deviceHandler->AddNewSensor(mDevice, pin, timeBetweenReads)) {
+				return 1;
+			}
+			else {
+				return 0;
+			}
+			break;
+
+		case Sensor_Temperature:
+			pin = 1;
+			timeBetweenReads = 5000;
+
+			if(m_deviceHandler->AddNewSensor(mDevice, pin, timeBetweenReads)) {
+				return 1;
+			}
+			else {
+				return 0;
+			}
+			break;
+
+		case Sensor_Motion:
+
+			pin = 2;
+			timeBetweenReads = 5000;
+
+			printf("Adding device.\r\n");
+			if(m_deviceHandler->AddNewSensor(mDevice, pin, timeBetweenReads)) {
+				return 1;
+			}
+			else {
+				return 0;
+			}
+
+			break;
+
+		default:
+			break;
 	}
 
 	/*

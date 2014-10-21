@@ -17,6 +17,8 @@
 #include "UMsgHandler.h"
 #include "UTaskHandler.h"
 #include "UTaskCfg.h"
+#include "UPinUtils.h"
+#include "UDeviceHandler.h"
 
 #ifdef DEBUG_PRINT
 //extern Semaphore semMailUTaskHandler;
@@ -28,13 +30,11 @@
 #define LED_GREEN LED2
 #define LED_BLUE LED3
 #endif
-
 DigitalOut ledr(UPinUtils::digitalInOut[0]);
 DigitalOut ledg(UPinUtils::digitalInOut[1]);
 DigitalOut ledb(UPinUtils::digitalInOut[2]);
 
-USensorHandler uSensorHandler = USensorHandler();
-UActuatorHandler uActuatorHandler = UActuatorHandler();
+UDeviceHandler uDeviceHandler = UDeviceHandler();
 
 void startComDriverInThread(void const *args)
 {
@@ -56,12 +56,12 @@ void startMsgHandlerThread(void const *args)
 
 void sensorPoolingThread(void const *args)
 {
-	uSensorHandler.StartPoolingSensors();
+	uDeviceHandler.StartPoolingSensors();
 }
 
 void taskHandlerThread(void const *args)
 {
-	UTaskHandler uTaskHandler = UTaskHandler(&uSensorHandler, &uActuatorHandler);
+	UTaskHandler uTaskHandler = UTaskHandler(&uDeviceHandler);
 	uTaskHandler.start();
 }
 
@@ -83,6 +83,9 @@ int main (void)
 	for(;;)
 	{
 		ledr = !ledr;
+		Thread::wait(200);
+
+		/*
 		if(i <= 10) {
 			semMailUTaskHandler.wait();
 			UTaskRequest *mail = mailUTaskHandler.alloc();
@@ -90,6 +93,7 @@ int main (void)
 			{
 				if(i == 0)
 				{
+
 					mail->taskRequestType = CONFIG;
 					mail->taskCfg.taskCfgType = UDEVICE;
 					mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
@@ -97,9 +101,11 @@ int main (void)
 					mail->taskCfg.parentId = 0;
 					mail->taskCfg.endpoint = NULL;
 					mailUTaskHandler.put(mail);
+
 				}
 				if(i == 1)
 				{
+
 					mail->taskRequestType = CONFIG;
 					mail->taskCfg.taskCfgType = USCENARIO;
 					mail->taskCfg.taskCfgMod = TASK_CFG_ADD;
@@ -214,9 +220,8 @@ int main (void)
 				//ledg = true;
 			}
 			semMailUTaskHandler.release();
+
 		}
-
-
-		Thread::wait(200);
+		*/
 	}
 }

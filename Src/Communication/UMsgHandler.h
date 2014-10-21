@@ -70,6 +70,7 @@ class UMsgHandler
         ~UMsgHandler();
 
 		static void SendMessage(char* message, Endpoint* endpoint);
+		void ParseInnerJson(uint16_t messageType, int size, int parent, Endpoint* endpoint, json_token* tokens);
 };
 
 #endif  //UMSGHANDLER_H_

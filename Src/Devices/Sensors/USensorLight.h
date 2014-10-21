@@ -8,6 +8,7 @@
 #include "USensor.h"
 #include "UTaskRequest.h"
 #include "UTaskHandler.h"
+#include "UDevice.h"
 
 const int LIGHT_SENSOR_BUFFER_SIZE = 10;
 
@@ -15,7 +16,7 @@ class USensorLight : public USensor
 {
 
 public:
-    USensorLight(int a_id, int a_pin, int a_timeBetweenReads, char* a_sensorName);
+    USensorLight(UDevice* device, int a_pin, int a_timeBetweenReads);
     virtual ~USensorLight();
     virtual void Read();
 

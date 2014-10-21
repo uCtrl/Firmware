@@ -8,6 +8,7 @@
 #include "rtos.h"
 #include "USensor.h"
 #include "UTaskHandler.h"
+#include "UDevice.h"
 
 class USensorTemperature : public USensor
 {
@@ -15,7 +16,7 @@ protected:
 
 public:
 
-	USensorTemperature(int a_id, int a_pin, int timeBetweenReads, char* a_sensorName);
+	USensorTemperature(UDevice* a_device, int a_pin, int timeBetweenReads);
     virtual ~USensorTemperature();
     virtual void Read();
 

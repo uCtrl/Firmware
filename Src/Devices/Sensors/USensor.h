@@ -13,7 +13,6 @@ class UDevice;
 class USensor : public UDevice
 {
 protected:
-	int m_sensorId;
     int m_timeBetweenReads;
 
     AnalogIn analogIn;
@@ -29,7 +28,7 @@ public:
         @param a_name The sensor name
         @param a_pin The pin used to read the sensor
     */
-    USensor(int a_id, int a_pin, int a_timeBetweenReads, char* a_deviceName);
+    USensor(UDevice* a_device, int a_pin, int a_timeBetweenReads);
 
     virtual void Read();
     int ReadValue();
@@ -37,7 +36,7 @@ public:
     void SetTimeBetweenReads(int timeBetweenReads) { m_timeBetweenReads = timeBetweenReads; }
     int GetTimeBetweenReads() { return m_timeBetweenReads; }
 
-    int GetId() { return m_sensorId; }
+    UDevice* Device;
 
 };
 

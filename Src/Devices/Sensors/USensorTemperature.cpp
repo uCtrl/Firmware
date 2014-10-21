@@ -1,7 +1,7 @@
 #include "USensorTemperature.h"
 
-USensorTemperature::USensorTemperature(int a_id, int a_pin, int a_timeBetweenReads, char* a_sensorName)
-	: USensor(a_id, a_pin, a_timeBetweenReads, a_sensorName)
+USensorTemperature::USensorTemperature(UDevice* device, int a_pin, int a_timeBetweenReads)
+	: USensor(device, a_pin, a_timeBetweenReads)
 {
 	//Empty contructor
 }
@@ -20,7 +20,7 @@ void USensorTemperature::Read() {
 	UTaskRequest *mail = mailUTaskHandler.alloc();
 	if(mail != NULL) {
 		mail->taskRequestType = EVENT;
-		mail->event.sensorId = m_sensorId;
+		mail->event.sensorId = Device->DeviceID;
 		mail->event.value = (int) (temperature*10); // *10 to keep a 1 decimal precision
 		mailUTaskHandler.put(mail);
 	}

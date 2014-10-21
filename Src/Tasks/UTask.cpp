@@ -95,3 +95,30 @@ void UTask::SetValue()
 	printf("Set actuator %lu value to %lu \n\r", DeviceID, ActionValue);
 #endif
 }
+
+char* UTask::GetJSON()
+{
+	char JSON[100] = {0};
+
+	strcpy(JSON, "{\"id\":");
+	char buf1[10];
+	sprintf(buf1, "%d", TaskID);
+	strcat(JSON, buf1);
+
+	strcat(JSON, "{, \"name\":\"");
+	strcat(JSON, TaskName);
+
+	strcat(JSON, "\", \"deviceId\":");
+	char buf2[10];
+	sprintf(buf2, "%d", DeviceID);
+	strcat(JSON, buf2);
+
+	strcat(JSON, "{\"actionValue\":");
+	char buf3[10];
+	sprintf(buf3, "%d", ActionValue);
+	strcat(JSON, buf3);
+
+	strcat(JSON, "}");
+
+	return JSON;
+}

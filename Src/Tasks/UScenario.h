@@ -22,7 +22,7 @@ public:
 	int ScenarioID;
 	char ScenarioName[SCENARIO_NAME_LENGHT];
 	UTask *TaskList[MAX_TASK_NUMBER];
-	int TaskListIndex;
+	int TaskCount;
 };
 
 #endif // UScenario_H_

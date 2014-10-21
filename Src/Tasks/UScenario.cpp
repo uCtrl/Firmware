@@ -7,7 +7,7 @@ UScenario::UScenario()
 	{
 		ScenarioName[i] = 0;
 	}
-	TaskListIndex = 0;
+	TaskCount = 0;
 }
 
 UScenario::UScenario(int mScenarioID, char mScenarioName[SCENARIO_NAME_LENGHT])
@@ -21,7 +21,7 @@ UScenario::UScenario(int mScenarioID, char mScenarioName[SCENARIO_NAME_LENGHT])
 
 	ScenarioName[SCENARIO_NAME_LENGHT-1] = NULL;
 
-	TaskListIndex = 0;
+	TaskCount = 0;
 }
 
 
@@ -34,9 +34,9 @@ int UScenario::AddTask(UTask *mTask)
 {
 	int retVal = 0;
 
-	if (TaskListIndex < MAX_TASK_NUMBER)
+	if (TaskCount < MAX_TASK_NUMBER)
 	{
-		TaskList[TaskListIndex++] = mTask;
+		TaskList[TaskCount++] = mTask;
 		retVal = 1;
 	}
 	return retVal;
@@ -67,7 +67,7 @@ void UScenario::DelTask(int mTaskID)
 			}
 			delete TaskList[MAX_TASK_NUMBER - 1];
 			TaskList[MAX_TASK_NUMBER - 1] = new UTask;
-			TaskListIndex--;
+			TaskCount--;
 
 			break;
 		}
@@ -79,7 +79,7 @@ int UScenario::DoTask()
 {
 	int i = 0;
 
-	for (; i < TaskListIndex; i++)
+	for (; i < TaskCount; i++)
 	{
 		if (TaskList[i]->CheckCondition())
 		{

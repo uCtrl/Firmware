@@ -2,19 +2,14 @@
 
 // Constructor
 FakeActuator::FakeActuator()
-: UDevice(),
-  digitalOut(UPinUtils::digitalInOut[0])
+: digitalOut(UPinUtils::digitalInOut[0])
 {
-    m_actuatorId = 0;
-    m_actuatorName = "";
 }
 
-FakeActuator::FakeActuator(int a_id, int a_pin, char* a_deviceName)
-: UDevice(a_id, a_deviceName),
-  digitalOut(UPinUtils::digitalInOut[a_pin])
+FakeActuator::FakeActuator(UDevice* device, int a_pin)
+: digitalOut(UPinUtils::digitalInOut[a_pin])
 {
-    m_actuatorId = a_id;
-    m_actuatorName = a_deviceName;
+    Device = device;
 }
 
 // Save the current state of the sensor.

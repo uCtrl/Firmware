@@ -10,7 +10,7 @@
 
 class UDevice;
 
-class FakeActuator : public UDevice
+class FakeActuator
 {
 
 protected:
@@ -27,11 +27,13 @@ public:
         @param a_name The sensor name
         @param a_pin The pin used to read the sensor
     */
-    FakeActuator(int a_id, int a_pin, char* a_actuatorName);
+    FakeActuator(UDevice* device, int a_pin);
 
     void SetValue(int a_value);
 
     int GetId() { return m_actuatorId; }
+
+    UDevice* Device;
 
 };
 

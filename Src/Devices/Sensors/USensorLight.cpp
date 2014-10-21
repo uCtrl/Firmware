@@ -1,7 +1,7 @@
 #include "USensorLight.h"
 
-USensorLight::USensorLight(int a_id, int a_pin, int a_timeBetweenReads, char* a_sensorName)
-	: USensor(a_id, a_pin, a_timeBetweenReads, a_sensorName),
+USensorLight::USensorLight(UDevice* device, int a_pin, int a_timeBetweenReads)
+	: USensor(device, a_pin, a_timeBetweenReads),
 	  m_lightSensorBuffer{0}
 {
 	m_lightSensorCount = 0;
@@ -32,7 +32,7 @@ void USensorLight::Read() {
 	UTaskRequest *mail = mailUTaskHandler.alloc();
 	if(mail != NULL) {
 		mail->taskRequestType = EVENT;
-		mail->event.sensorId = m_sensorId;
+		mail->event.sensorId = Device->DeviceID;
 		mail->event.value = val;
 		mailUTaskHandler.put(mail);
 	}
