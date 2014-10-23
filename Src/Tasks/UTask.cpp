@@ -101,9 +101,9 @@ int UTask::CheckCondition(int device, int value)
 
 void UTask::SetValue()
 {
-//#ifdef DEBUG_PRINT
-//	printf("Set actuator %lu value to %lu \n\r", DeviceID, ActionValue);
-//#endif
+#ifdef DEBUG_PRINT
+	printf("Set actuator %lu value to %lu \n\r", DeviceID, ActionValue);
+#endif
 	DeviceHandler->SetActuatorValue(DeviceID, ActionValue);
 }
 

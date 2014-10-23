@@ -16,7 +16,6 @@ UScenario::UScenario(int mScenarioID, char* mScenarioName)
 {
 	ScenarioID = mScenarioID;
 	ScenarioName = mScenarioName;
-	//ScenarioName[SCENARIO_NAME_LENGHT-1] = NULL;
 
 	for(int i = 0; i < MAX_TASK_NUMBER; i++)
 	{

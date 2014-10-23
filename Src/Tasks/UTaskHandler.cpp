@@ -69,9 +69,10 @@ void UTaskHandler::start()
 
 void UTaskHandler::handleTaskEvent(const UTaskEvent taskEvent)
 {
-	// TODO : remove after tests
 
+#ifdef DEBUG_PRINT
 	printf("Task handler : Event from device %d : %d \r\n", taskEvent.sensorId, taskEvent.value);
+#endif
 
 
 	int* deviceIds = m_deviceHandler->GetDeviceIds();
@@ -104,8 +105,9 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 		}
 		case UDEVICE:
 		{
-			// TODO : remove after tests
+#ifdef DEBUG_PRINT
 			printf("Task handler : new device message recieved\r\n");
+#endif
 			UDevice* newDevice = new UDevice(taskCfg.id, testName, Sensor_Temperature);
 
 			/*
@@ -120,8 +122,9 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 		}
 		case USCENARIO:
 		{
-			// TODO : remove after tests
+#ifdef DEBUG_PRINT
 			printf("Task handler : new scenario message recieved\r\n");
+#endif
 
 			/*
 			if(taskCfg.endpoint != NULL) {
@@ -135,8 +138,9 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 		}
 		case UTASK:
 		{
-			// TODO : remove after tests
+#ifdef DEBUG_PRINT
 			printf("Task handler : new task message recieved\r\n");
+#endif
 
 			for(int i = 0; i < DeviceListIndex; i++)
 			{
@@ -177,8 +181,9 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 		}
 		case UCONDITION:
 		{
-			// TODO : remove after tests
+#ifdef DEBUG_PRINT
 			printf("Task handler : new condition message recieved\r\n");
+#endif
 
 			for(int i = 0; i < DeviceListIndex; i++)
 			{
@@ -442,13 +447,14 @@ void UTaskHandler::handleSaveInfo(const UTaskCfg taskCfg)
 	{
 		case UPLATFORM:
 		{
-			// TODO : remove after tests
+#ifdef DEBUG_PRINT
 			printf("Task handler : saving platform information\r\n");
 			printf("Task handler : platform : %d, %s, %s, %s\r\n",
 					taskCfg.platform->id,
 					taskCfg.platform->enabled,
 					taskCfg.platform->name,
 					taskCfg.platform->room);
+#endif
 
 			m_platform = taskCfg.platform;
 
@@ -456,10 +462,11 @@ void UTaskHandler::handleSaveInfo(const UTaskCfg taskCfg)
 		}
 		case UDEVICE:
 		{
-			// TODO : remove after tests
+#ifdef DEBUG_PRINT
 			printf("Task handler : saving devices on platform %d\r\n", taskCfg.parentId);
 
 			printf("Device name : %s\r\n", taskCfg.device->DeviceName);
+#endif
 
 			if(taskCfg.parentId == m_platform->id) {
 				if(m_deviceHandler->GetDevice(taskCfg.device->DeviceID) == NULL)
@@ -478,8 +485,9 @@ void UTaskHandler::handleSaveInfo(const UTaskCfg taskCfg)
 		}
 		case USCENARIO:
 		{
-			// TODO : remove after tests
+#ifdef DEBUG_PRINT
 			printf("Task handler : saving scenarios on device %d\r\n", taskCfg.parentId);
+#endif
 
 			m_deviceHandler->GetDevice(taskCfg.parentId)->AddScenario(taskCfg.scenario);
 
@@ -487,9 +495,10 @@ void UTaskHandler::handleSaveInfo(const UTaskCfg taskCfg)
 		}
 		case UTASK:
 		{
-			// TODO : remove after tests
+#ifdef DEBUG_PRINT
 			printf("Task handler : saving tasks on scenario %d\r\n",
 					m_deviceHandler->GetScenario(taskCfg.parentId)->ScenarioID);
+#endif
 
 			m_deviceHandler->GetScenario(taskCfg.parentId)->AddTask(taskCfg.task);
 			taskCfg.task->DeviceHandler = m_deviceHandler;
@@ -498,9 +507,10 @@ void UTaskHandler::handleSaveInfo(const UTaskCfg taskCfg)
 		}
 		case UCONDITION:
 		{
-			// TODO : remove after tests
+#ifdef DEBUG_PRINT
 			printf("Task handler : saving conditions on task %d\r\n",
 					m_deviceHandler->GetTask(taskCfg.parentId)->TaskID);
+#endif
 
 			m_deviceHandler->GetTask(taskCfg.parentId)->AddCondition(taskCfg.condition);
 			taskCfg.condition->DeviceHandler = m_deviceHandler;
@@ -556,21 +566,8 @@ void UTaskHandler::DelEvent(int mSensorID)
 	}
 }
 
-/*
-int UTaskHandler::CheckDevice()
-{
-	for (int i = 0; i < DeviceListIndex; i++)
-	{
-		DeviceList[i]->DoScenario();
-	}
-
-	return 0;
-}*/
-
 void UTaskHandler::SendMessage(char* message, Endpoint* endpoint)
 {
-	//printf("Message : %s\r\n", message);
-
 	UMsgHandlerMailType *mailOut = comDriverOutMail.alloc();
 
 	if(USE_LWIP)
@@ -579,51 +576,6 @@ void UTaskHandler::SendMessage(char* message, Endpoint* endpoint)
 	}
 
 	strcpy(mailOut->msg, message);
-	//strcat(mailOut->msg, "\0");
-
-	//comDriverOutMail.put(mailOut);
 
 	delete endpoint;
 }
-
-/*
-void UTaskHandler::AddScenario(int scenarioId, int parentId, char* scenarioName)
-{
-	int parentFound = 0;
-
-	for(int i = 0; i < DeviceListIndex; i++)
-	{
-		if(DeviceList[i]->DeviceID == parentId)
-		{
-			UScenario *newScenario = new UScenario(scenarioId,
-												   scenarioName);
-
-			if(!DeviceList[i]->AddScenario(newScenario))
-			{
-			#ifdef DEBUG_PRINT
-				printf("Error Adding sceneryId:%lu\n\r", newScenario->ScenarioID);
-			#endif
-			}
-			parentFound = 1;
-			break;
-		}
-	}
-
-	if(!parentFound)
-	{
-	#ifdef DEBUG_PRINT
-		printf("Error Device ID not found\n\r");
-	#endif
-	}
-}
-
-void UTaskHandler::AddTask(int taskId, int parentId, char* status)
-{
-
-}
-
-void UTaskHandler::AddCondition(int taskId, int parentId, int type)
-{
-
-}
-*/

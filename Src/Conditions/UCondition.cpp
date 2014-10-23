@@ -39,10 +39,14 @@ int UCondition::CheckCondition(int device, int value)
 		case LESSER:
 			if(sensorValue < Value)
 			{
+#ifdef DEBUG_PRINT
 				printf("true! \r\n");
+#endif
 				retVal = 1;
 			} else {
+#ifdef DEBUG_PRINT
 				printf("false! \r\n");
+#endif
 			}
 			break;
 		case LESSER_EQUAL:
@@ -54,10 +58,14 @@ int UCondition::CheckCondition(int device, int value)
 		case GREATER:
 			if(sensorValue > Value)
 			{
+#ifdef DEBUG_PRINT
 				printf("true! \r\n");
+#endif
 				retVal = 1;
 			} else {
+#ifdef DEBUG_PRINT
 				printf("false! \r\n");
+#endif
 			}
 			break;
 			break;

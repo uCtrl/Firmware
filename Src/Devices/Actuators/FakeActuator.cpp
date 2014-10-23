@@ -15,6 +15,8 @@ FakeActuator::FakeActuator(UDevice* device, int a_pin)
 // Save the current state of the sensor.
 void FakeActuator::SetValue(int a_value)
 {
+#ifdef DEBUG_PRINT
 	printf("Setting value to %d\r\n", a_value);
+#endif
     digitalOut = a_value;
 }

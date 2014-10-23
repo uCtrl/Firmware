@@ -79,7 +79,9 @@ int UDevice::DoScenario(int device, int value)
 
 	for (; i < ScenarioCount; i++)
 	{
+#ifdef DEBUG_PRINT
 		printf("Doing scenario of device : %d\r\n", DeviceID);
+#endif
 		ScenarioList[i]->DoTask(device, value);
 	}
 
