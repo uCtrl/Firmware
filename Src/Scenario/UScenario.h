@@ -18,7 +18,7 @@ public:
 	~UScenario();
 	int AddTask(UTask *mTask);
 	void DelTask(int mTaskID);
-	int DoTask();
+	int DoTask(int device, int value);
 	char* GetJSON();
 
 	int ScenarioID;

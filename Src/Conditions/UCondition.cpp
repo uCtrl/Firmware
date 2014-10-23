@@ -23,52 +23,65 @@ UCondition::~UCondition()
 }
 
 
-int UCondition::CheckCondition()
+int UCondition::CheckCondition(int device, int value)
 {
 	int retVal = 0;
-	USensor* sensor = DeviceHandler->GetSensor(SensorID);
-	int sensorValue = sensor->ReadValue(); //UDeviceHandler->;
 
-	switch(ConditionOperator)
-	{
-	case LESSER:
-		if(sensorValue < Value)
+#ifdef DEBUG_PRINT
+	printf("Checking condition...");
+#endif
+
+	if(device == SensorID) {
+		int sensorValue = value;
+
+		switch(ConditionOperator)
 		{
-			retVal = 1;
+		case LESSER:
+			if(sensorValue < Value)
+			{
+				printf("true! \r\n");
+				retVal = 1;
+			} else {
+				printf("false! \r\n");
+			}
+			break;
+		case LESSER_EQUAL:
+			if(sensorValue <= Value)
+			{
+				retVal = 1;
+			}
+			break;
+		case GREATER:
+			if(sensorValue > Value)
+			{
+				printf("true! \r\n");
+				retVal = 1;
+			} else {
+				printf("false! \r\n");
+			}
+			break;
+			break;
+		case GREATER_EQUAL:
+			if(sensorValue <= Value)
+			{
+				retVal = 1;
+			}
+			break;
+		case EQUAL:
+			if(sensorValue == Value)
+			{
+				retVal = 1;
+			}
+			break;
+		case NOT_EQUAL:
+			if(sensorValue != Value)
+			{
+				retVal = 1;
+			}
+			break;
+		case OPERATOR_TYPE_NONE:
+			break;
 		}
-		break;
-	case LESSER_EQUAL:
-		if(sensorValue <= Value)
-		{
-			retVal = 1;
-		}
-		break;
-	case GREATER:
-		if(sensorValue > Value)
-		{
-			retVal = 1;
-		}
-		break;
-	case GREATER_EQUAL:
-		if(sensorValue <= Value)
-		{
-			retVal = 1;
-		}
-		break;
-	case EQUAL:
-		if(sensorValue == Value)
-		{
-			retVal = 1;
-		}
-		break;
-	case NOT_EQUAL:
-		if(sensorValue != Value)
-		{
-			retVal = 1;
-		}
-		break;
-	case OPERATOR_TYPE_NONE:
-		break;
 	}
 
 	return retVal;

@@ -426,27 +426,16 @@ void UMsgHandler::ParseInnerJson(uint16_t messageType, int size, int parent, End
 				case REQ_SAVECONDITIONS:
 
 					Thread::wait(100);
-					printf("id\r\n");
 
 					id = atoi(find_json_token(newTokens, "id")->ptr);
-
-					printf("name\r\n");
 
 					length = find_json_token(newTokens, "name")->len;
 					name = new char[length+1];
 					memset(reinterpret_cast<void*>(name), 0, length+1);
 					memcpy(name, find_json_token(newTokens, "name")->ptr, length);
 
-					printf("deviceId\r\n");
-
 					deviceId = atoi(find_json_token(newTokens, "deviceId")->ptr);
-
-					printf("value\r\n");
-
 					value = atoi(find_json_token(newTokens, "value")->ptr);
-
-					printf("conditionOperator\r\n");
-
 					UOperatorType conditionOperator =
 						static_cast<UOperatorType>(atoi(find_json_token(newTokens, "conditionOperator")->ptr));
 

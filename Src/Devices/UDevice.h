@@ -16,7 +16,7 @@ public:
 	~UDevice();
 	bool AddScenario(UScenario *mScenario);
 	void DelScenario(int mScenarioID);
-	int DoScenario();
+	int DoScenario(int device, int value);
 	char* GetJSON();
 
 	int m_pinNumber;

@@ -80,23 +80,29 @@ void UTask::DelCondition(int mCondtionID)
 }
 
 
-int UTask::CheckCondition()
+int UTask::CheckCondition(int device, int value)
 {
-	int RetVal = 1;
-
-	for (int i = 0; i < ConditionListIndex; i++)
-	{
-		RetVal &= ConditionList[i]->CheckCondition();
+	if(ConditionListIndex == 0) {
+		return false;
 	}
+	else
+	{
+		int RetVal = 1;
 
-	return RetVal;
+		for (int i = 0; i < ConditionListIndex; i++)
+		{
+			RetVal &= ConditionList[i]->CheckCondition(device, value);
+		}
+
+		return RetVal;
+	}
 }
 
 
 void UTask::SetValue()
 {
 //#ifdef DEBUG_PRINT
-	printf("Set actuator %lu value to %lu \n\r", DeviceID, ActionValue);
+//	printf("Set actuator %lu value to %lu \n\r", DeviceID, ActionValue);
 //#endif
 	DeviceHandler->SetActuatorValue(DeviceID, ActionValue);
 }

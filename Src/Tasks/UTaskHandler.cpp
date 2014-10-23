@@ -40,7 +40,7 @@ void UTaskHandler::start()
 			UTaskRequest *mail = (UTaskRequest*)evt.value.p;
 			if(mail->taskRequestType == EVENT)
 			{
-				this->handleTaskEvent(mail->event, mail->taskCfg);
+				this->handleTaskEvent(mail->event);
 			}
 			else if(mail->taskRequestType == CONFIG)
 			{
@@ -67,12 +67,21 @@ void UTaskHandler::start()
 	}
 }
 
-void UTaskHandler::handleTaskEvent(const UTaskEvent taskEvent, const UTaskCfg taskCfg)
+void UTaskHandler::handleTaskEvent(const UTaskEvent taskEvent)
 {
 	// TODO : remove after tests
-	//printf("Task handler : Event from device %d, name: %s : %d \r\n", taskEvent.sensorId, taskCfg.device->DeviceName, taskEvent.value);
 
-	m_deviceHandler->GetDevice(taskCfg.device->DeviceID)->DoScenario();
+	printf("Task handler : Event from device %d : %d \r\n", taskEvent.sensorId, taskEvent.value);
+
+
+	int* deviceIds = m_deviceHandler->GetDeviceIds();
+	for(int i = 0; i < m_deviceHandler->GetDeviceCount(); i++)
+	{
+		if(m_deviceHandler->GetDevice(deviceIds[i])->DeviceType == Actuator_Led)
+		{
+			m_deviceHandler->GetDevice(deviceIds[i])->DoScenario(taskEvent.sensorId, taskEvent.value);
+		}
+	}
 
 	//AddEvent(taskEvent);
 	//CheckDevice();
@@ -250,7 +259,7 @@ void UTaskHandler::handleGetInfo(const UTaskCfg taskCfg)
 		}
 		case UDEVICE:
 		{
-			if(m_platform->id != taskCfg.parentId)
+			if(m_platform->id == taskCfg.parentId)
 			{
 				// TODO : remove after tests
 				printf("Task handler : information of devices on platform %d\r\n", taskCfg.parentId);
@@ -483,6 +492,7 @@ void UTaskHandler::handleSaveInfo(const UTaskCfg taskCfg)
 					m_deviceHandler->GetScenario(taskCfg.parentId)->ScenarioID);
 
 			m_deviceHandler->GetScenario(taskCfg.parentId)->AddTask(taskCfg.task);
+			taskCfg.task->DeviceHandler = m_deviceHandler;
 
 			break;
 		}
@@ -493,6 +503,7 @@ void UTaskHandler::handleSaveInfo(const UTaskCfg taskCfg)
 					m_deviceHandler->GetTask(taskCfg.parentId)->TaskID);
 
 			m_deviceHandler->GetTask(taskCfg.parentId)->AddCondition(taskCfg.condition);
+			taskCfg.condition->DeviceHandler = m_deviceHandler;
 
 			break;
 		}
@@ -545,6 +556,7 @@ void UTaskHandler::DelEvent(int mSensorID)
 	}
 }
 
+/*
 int UTaskHandler::CheckDevice()
 {
 	for (int i = 0; i < DeviceListIndex; i++)
@@ -553,7 +565,7 @@ int UTaskHandler::CheckDevice()
 	}
 
 	return 0;
-}
+}*/
 
 void UTaskHandler::SendMessage(char* message, Endpoint* endpoint)
 {

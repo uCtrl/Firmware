@@ -29,9 +29,10 @@
 #define LED_GREEN LED2
 #define LED_BLUE LED3
 #endif
-DigitalOut ledr(UPinUtils::digitalInOut[0]);
-DigitalOut ledg(UPinUtils::digitalInOut[1]);
-DigitalOut ledb(UPinUtils::digitalInOut[2]);
+DigitalOut ledr(UPinUtils::leds[0]);
+DigitalOut ledg(UPinUtils::leds[1]);
+DigitalOut ledb(UPinUtils::leds[2]);
+DigitalOut ledw(UPinUtils::leds[3]);
 
 UDeviceHandler uDeviceHandler = UDeviceHandler();
 
@@ -69,10 +70,6 @@ int main (void)
     Thread comDriverInThread(startComDriverInThread);
     Thread comDriverOutThread(startComDriverOutThread);
     Thread msgHandlerThread(startMsgHandlerThread);
-
-	ledr = false;
-	ledg = false;
-	ledb = false;
 
 	Thread taskThread(taskHandlerThread,NULL,TASK_HANDLER_PRIORITY,TASK_HANDLER_STACK_SIZE);
 	Thread sensorThread(sensorPoolingThread,NULL,SENSOR_HANDLER_PRIORITY,SENSOR_HANDLER_STACK_SIZE);

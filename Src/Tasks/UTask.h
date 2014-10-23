@@ -6,9 +6,9 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "TaskHandlerConfigFile.h"
-#include "UDeviceHandler.h"
+//#include "UDeviceHandler.h"
 
-//class UDeviceHandler;
+class UDeviceHandler;
 
 class UTask
 {
@@ -18,7 +18,7 @@ public:
 	~UTask();
 	int AddCondition(UCondition *mCondition);
 	void DelCondition(int mCondtionID);
-	int CheckCondition();
+	int CheckCondition(int device, int value);
 	void SetValue();
 	char* GetJSON();
 

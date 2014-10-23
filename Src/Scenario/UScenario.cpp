@@ -1,4 +1,5 @@
 #include "UScenario.h"
+#include "UTask.h"
 
 UScenario::UScenario()
 {
@@ -76,13 +77,13 @@ void UScenario::DelTask(int mTaskID)
 }
 
 
-int UScenario::DoTask()
+int UScenario::DoTask(int device, int value)
 {
 	int i = 0;
 
 	for (; i < TaskCount; i++)
 	{
-		if (TaskList[i]->CheckCondition())
+		if (TaskList[i]->CheckCondition(device, value))
 		{
 			TaskList[i]->SetValue();
 		}

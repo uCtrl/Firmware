@@ -6,8 +6,8 @@
 #include "TaskHandlerConfigFile.h"
 #include <stdint.h>
 #include "UEvent.h"
-//#include "UDeviceHandler.h"
 #include "USensor.h"
+#include "UDeviceHandler.h"
 
 extern UTaskEvent EventPool[];
 extern int EventPoolIndex;
@@ -21,7 +21,7 @@ public:
 	UCondition();
 	UCondition(int mConditionID, char* mConditionName, int mSensorID, int mValue, UOperatorType mConditionOperator);
 	virtual ~UCondition();
-	virtual int CheckCondition();
+	virtual int CheckCondition(int device, int value);
 	int GetSensorValue(int mSensorID);
 	char* GetJSON();
 

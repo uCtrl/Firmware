@@ -53,7 +53,7 @@ public:
 	void start();
 private:
 	/** handle UTaskRequest of UTaskRequestType EVENT */
-	void handleTaskEvent(const UTaskEvent taskEvent, const UTaskCfg taskCfg);
+	void handleTaskEvent(const UTaskEvent taskEvent);
 
 	/** handle UTaskRequest of UTaskRequestType CONFIG */
 	void handleTaskCfg(const UTaskCfg taskCfg);
@@ -66,7 +66,7 @@ private:
 
 	int AddEvent(UTaskEvent mEvent);
 	void DelEvent(int mSensorID);
-	int CheckDevice();
+	//int CheckDevice();
 
 	void SendMessage(char* message, Endpoint* endpoint);
 

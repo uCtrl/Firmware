@@ -2,12 +2,12 @@
 
 // Constructor
 FakeActuator::FakeActuator()
-: digitalOut(UPinUtils::digitalInOut[0])
+: digitalOut(UPinUtils::leds[0])
 {
 }
 
 FakeActuator::FakeActuator(UDevice* device, int a_pin)
-: digitalOut(UPinUtils::digitalInOut[a_pin])
+: digitalOut(UPinUtils::leds[a_pin])
 {
     Device = device;
 }
@@ -15,5 +15,6 @@ FakeActuator::FakeActuator(UDevice* device, int a_pin)
 // Save the current state of the sensor.
 void FakeActuator::SetValue(int a_value)
 {
+	printf("Setting value to %d\r\n", a_value);
     digitalOut = a_value;
 }

@@ -73,14 +73,14 @@ void UDevice::DelScenario(int mScenarioID)
 }
 
 // Returns how many scenarios were accomplished
-int UDevice::DoScenario()
+int UDevice::DoScenario(int device, int value)
 {
 	int i = 0;
 
 	for (; i < ScenarioCount; i++)
 	{
-		printf("Doing scenario of device : %d", DeviceID);
-		ScenarioList[i]->DoTask();
+		printf("Doing scenario of device : %d\r\n", DeviceID);
+		ScenarioList[i]->DoTask(device, value);
 	}
 
 	return i;
