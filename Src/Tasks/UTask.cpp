@@ -4,21 +4,25 @@
 UTask::UTask()
 {
 	TaskID = 0;
-	for(int i = 0; i < TASK_NAME_LENGHT; i++)
-	{
-		TaskName[i] = 0;
-	}
 	ConditionListIndex = 0;
+
+	for(int i = 0; i < MAX_CONDITION_NUMBER; i++)
+	{
+		ConditionList[i] = NULL;
+	}
 }
 
-UTask::UTask(int mTaskID, char mTaskName[TASK_NAME_LENGHT], int mActionValue, int mDeviceID)
+UTask::UTask(int mTaskID, char* mTaskName, int mActionValue, int mDeviceID)
 {
 	TaskID = mTaskID;
 	DeviceID = mDeviceID;
-	for(int i = 0; i < TASK_NAME_LENGHT; i++)
+	TaskName = mTaskName;
+
+	for(int i = 0; i < MAX_CONDITION_NUMBER; i++)
 	{
-		TaskName[i] = mTaskName[i];
+		ConditionList[i] = NULL;
 	}
+
 	ConditionListIndex = 0;
 	ActionValue = mActionValue;
 }
@@ -91,9 +95,10 @@ int UTask::CheckCondition()
 
 void UTask::SetValue()
 {
-#ifdef DEBUG_PRINT
+//#ifdef DEBUG_PRINT
 	printf("Set actuator %lu value to %lu \n\r", DeviceID, ActionValue);
-#endif
+//#endif
+	DeviceHandler->SetActuatorValue(DeviceID, ActionValue);
 }
 
 char* UTask::GetJSON()
@@ -105,7 +110,7 @@ char* UTask::GetJSON()
 	sprintf(buf1, "%d", TaskID);
 	strcat(JSON, buf1);
 
-	strcat(JSON, "{, \"name\":\"");
+	strcat(JSON, ", \"name\":\"");
 	strcat(JSON, TaskName);
 
 	strcat(JSON, "\", \"deviceId\":");
@@ -113,7 +118,7 @@ char* UTask::GetJSON()
 	sprintf(buf2, "%d", DeviceID);
 	strcat(JSON, buf2);
 
-	strcat(JSON, "{\"actionValue\":");
+	strcat(JSON, ", \"actionValue\":");
 	char buf3[10];
 	sprintf(buf3, "%d", ActionValue);
 	strcat(JSON, buf3);

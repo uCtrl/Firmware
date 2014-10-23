@@ -3,27 +3,25 @@
 UDevice::UDevice()
 {
 	DeviceID = 0;
-
-	/*
-	for(int i = 0; i < SCENARIO_NAME_LENGHT; i++)
-	{
-		DeviceName[i] = 0;
-	}*/
 	ScenarioCount = 0;
+
+	for(int i = 0; i < MAX_SCENARIO_NUMBER; i++)
+	{
+		ScenarioList[i] = NULL;
+	}
 }
 
-UDevice::UDevice(int mDeviceID, char* mDeviceName/*[DEVICE_NAME_LENGHT]*/, UDeviceType type)
+UDevice::UDevice(int mDeviceID, char* mDeviceName, UDeviceType type)
 {
 	DeviceID = mDeviceID;
 	DeviceType = type;
 	DeviceName = mDeviceName;
-	/*
-	for(int i = 0; i < DEVICE_NAME_LENGHT; i++)
-	{
-		DeviceName[i] = mDeviceName[i];
-	}*/
 
 	ScenarioCount = 0;
+	for(int i = 0; i < MAX_SCENARIO_NUMBER; i++)
+	{
+		ScenarioList[i] = NULL;
+	}
 }
 
 
@@ -81,6 +79,7 @@ int UDevice::DoScenario()
 
 	for (; i < ScenarioCount; i++)
 	{
+		printf("Doing scenario of device : %d", DeviceID);
 		ScenarioList[i]->DoTask();
 	}
 
@@ -94,7 +93,7 @@ char* UDevice::GetJSON()
 
 	strcpy(JSON, "{\"id\":");
 	char buf1[10];
-	sprintf(buf1, "%d", m_deviceID);
+	sprintf(buf1, "%d", DeviceID);
 	strcat(JSON, buf1);
 
 	strcat(JSON, ", \"name\":\"");

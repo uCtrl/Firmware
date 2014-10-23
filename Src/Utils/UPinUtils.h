@@ -10,6 +10,7 @@ public:
     //static const PinName pins[];
     static const PinName analogIn[];
     static const PinName analogOut[];
+    static const PinName leds[];
     static const PinName digitalInOut[];
 
 };

@@ -3,23 +3,24 @@
 UScenario::UScenario()
 {
 	ScenarioID = 0;
-	for(int i = 0; i < SCENARIO_NAME_LENGHT; i++)
-	{
-		ScenarioName[i] = 0;
-	}
 	TaskCount = 0;
+
+	for(int i = 0; i < MAX_TASK_NUMBER; i++)
+	{
+		TaskList[i] = NULL;
+	}
 }
 
-UScenario::UScenario(int mScenarioID, char mScenarioName[SCENARIO_NAME_LENGHT])
+UScenario::UScenario(int mScenarioID, char* mScenarioName)
 {
 	ScenarioID = mScenarioID;
+	ScenarioName = mScenarioName;
+	//ScenarioName[SCENARIO_NAME_LENGHT-1] = NULL;
 
-	for(int i = 0; i < SCENARIO_NAME_LENGHT; i++)
+	for(int i = 0; i < MAX_TASK_NUMBER; i++)
 	{
-		ScenarioName[i] = mScenarioName[i];
+		TaskList[i] = NULL;
 	}
-
-	ScenarioName[SCENARIO_NAME_LENGHT-1] = NULL;
 
 	TaskCount = 0;
 }

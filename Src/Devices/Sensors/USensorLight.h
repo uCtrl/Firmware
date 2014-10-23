@@ -6,8 +6,6 @@
 #include "UPinUtils.h"
 #include "rtos.h"
 #include "USensor.h"
-#include "UTaskRequest.h"
-#include "UTaskHandler.h"
 #include "UDevice.h"
 
 const int LIGHT_SENSOR_BUFFER_SIZE = 10;

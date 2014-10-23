@@ -4,25 +4,18 @@
 UCondition::UCondition()
 {
 	ConditionID = 0;
-	for(int i = 0; i < CONDITION_NAME_LENGHT; i++)
-	{
-		ConditionName[i] = 0;
-	}
 	SensorID = 0;
 	Value = 0;
 	ConditionOperator = OPERATOR_TYPE_NONE;
 }
 
-UCondition::UCondition(int mConditionID, char mConditionName[CONDITION_NAME_LENGHT], int mSensorID, int mValue, UOperatorType mConditionOperator)
+UCondition::UCondition(int mConditionID, char* mConditionName, int mSensorID, int mValue, UOperatorType mConditionOperator)
 {
 	ConditionID = mConditionID;
 	SensorID = mSensorID;
 	Value = mValue;
 	ConditionOperator = mConditionOperator;
-	for(int i = 0; i < CONDITION_NAME_LENGHT; i++)
-	{
-		ConditionName[i] = mConditionName[i];
-	}
+	ConditionName = mConditionName;
 }
 
 UCondition::~UCondition()
@@ -33,7 +26,8 @@ UCondition::~UCondition()
 int UCondition::CheckCondition()
 {
 	int retVal = 0;
-	int sensorValue = GetSensorValue(SensorID);
+	USensor* sensor = DeviceHandler->GetSensor(SensorID);
+	int sensorValue = sensor->ReadValue(); //UDeviceHandler->;
 
 	switch(ConditionOperator)
 	{
@@ -93,4 +87,36 @@ int UCondition::GetSensorValue(int mSensorID)
 	}
 
 	return value;
+}
+
+char* UCondition::GetJSON()
+{
+	char JSON[100] = {0};
+
+	strcpy(JSON, "{\"id\":");
+	char buf1[10];
+	sprintf(buf1, "%d", ConditionID);
+	strcat(JSON, buf1);
+
+	strcat(JSON, ", \"name\":\"");
+	strcat(JSON, ConditionName);
+
+	strcat(JSON, "\", \"deviceId\":");
+	char buf2[10];
+	sprintf(buf2, "%d", SensorID);
+	strcat(JSON, buf2);
+
+	strcat(JSON, ", \"value\":");
+	char buf3[10];
+	sprintf(buf3, "%d", Value);
+	strcat(JSON, buf3);
+
+	strcat(JSON, ", \"conditionOperator\":");
+	char buf4[10];
+	sprintf(buf4, "%d", ConditionOperator);
+	strcat(JSON, buf4);
+
+	strcat(JSON, "}");
+
+	return JSON;
 }

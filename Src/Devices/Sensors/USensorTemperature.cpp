@@ -1,5 +1,8 @@
 #include "USensorTemperature.h"
 
+extern Semaphore semMailUTaskHandler;
+extern Mail<UTaskRequest, MAIL_LEN_UTASKHANDLER> mailUTaskHandler;
+
 USensorTemperature::USensorTemperature(UDevice* device, int a_pin, int a_timeBetweenReads)
 	: USensor(device, a_pin, a_timeBetweenReads)
 {

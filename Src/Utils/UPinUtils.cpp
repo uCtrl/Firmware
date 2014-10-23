@@ -21,6 +21,7 @@ const PinName UPinUtils::analogOut[] = { P0_26 };
 // LED3 = P1_21
 // LED4 = P1_23
 
+const PinName UPinUtils::leds[] = { LED1, LED2, LED3, LED4 };
 const PinName UPinUtils::digitalInOut[] = { P1_18, P1_20, P1_21, P1_23,
 											P0_9, P0_8, P0_7, P0_6 }; // Can be completed if needed
 #endif

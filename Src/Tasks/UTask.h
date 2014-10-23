@@ -6,12 +6,15 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "TaskHandlerConfigFile.h"
+#include "UDeviceHandler.h"
+
+//class UDeviceHandler;
 
 class UTask
 {
 public:
 	UTask();
-	UTask(int mTaskID, char mTaskName[TASK_NAME_LENGHT], int mActionValue, int mDeviceID);
+	UTask(int mTaskID, char* mTaskName, int mActionValue, int mDeviceID);
 	~UTask();
 	int AddCondition(UCondition *mCondition);
 	void DelCondition(int mCondtionID);
@@ -21,10 +24,11 @@ public:
 
 	int TaskID;
 	int DeviceID;
-	char TaskName[TASK_NAME_LENGHT];
+	char* TaskName;
 	UCondition *ConditionList[MAX_CONDITION_NUMBER];
 	int ConditionListIndex;
 	int ActionValue;
+	UDeviceHandler* DeviceHandler;
 };
 
 #endif // UTASK_H_

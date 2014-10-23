@@ -13,11 +13,11 @@ extern "C"
 }*/
 
 // Constructor
-USensor::USensor()
-: UDevice(),
+USensor::USensor() :
   analogIn(UPinUtils::analogIn[0])
 
 {
+	Device = NULL;
     m_timeBetweenReads = 1000;
 }
 

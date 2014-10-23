@@ -40,7 +40,7 @@ void UTaskHandler::start()
 			UTaskRequest *mail = (UTaskRequest*)evt.value.p;
 			if(mail->taskRequestType == EVENT)
 			{
-				this->handleTaskEvent(mail->event);
+				this->handleTaskEvent(mail->event, mail->taskCfg);
 			}
 			else if(mail->taskRequestType == CONFIG)
 			{
@@ -67,11 +67,12 @@ void UTaskHandler::start()
 	}
 }
 
-void UTaskHandler::handleTaskEvent(const UTaskEvent taskEvent)
+void UTaskHandler::handleTaskEvent(const UTaskEvent taskEvent, const UTaskCfg taskCfg)
 {
 	// TODO : remove after tests
-	printf("Task handler : Event from device %d : %d \r\n", taskEvent.sensorId, taskEvent.value);
+	//printf("Task handler : Event from device %d, name: %s : %d \r\n", taskEvent.sensorId, taskCfg.device->DeviceName, taskEvent.value);
 
+	m_deviceHandler->GetDevice(taskCfg.device->DeviceID)->DoScenario();
 
 	//AddEvent(taskEvent);
 	//CheckDevice();
@@ -98,12 +99,13 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 			printf("Task handler : new device message recieved\r\n");
 			UDevice* newDevice = new UDevice(taskCfg.id, testName, Sensor_Temperature);
 
+			/*
 			if(!AddDevice(newDevice))
 			{
 			#ifdef DEBUG_PRINT
 				printf("Error Adding deviceId:%lu\n\r", newDevice->DeviceID);
 			#endif
-			}
+			}*/
 
 			break;
 		}
@@ -112,12 +114,13 @@ void UTaskHandler::handleTaskCfg(const UTaskCfg taskCfg)
 			// TODO : remove after tests
 			printf("Task handler : new scenario message recieved\r\n");
 
+			/*
 			if(taskCfg.endpoint != NULL) {
 				char* message = new char[36];
 				strcpy(message, "New Scenario information sent.\0");
 				UMsgHandler::SendMessage(message, taskCfg.endpoint);
 				AddScenario(taskCfg.id, taskCfg.parentId, "scenarioName");
-			}
+			}*/
 
 			break;
 		}
@@ -247,116 +250,171 @@ void UTaskHandler::handleGetInfo(const UTaskCfg taskCfg)
 		}
 		case UDEVICE:
 		{
-			// TODO : remove after tests
-			printf("Task handler : information of devices on platform %d\r\n", taskCfg.parentId);
-
-			json = new char[200];
-			memset(reinterpret_cast<void*>(json), 0, 200);
-
-			int* deviceIds = m_deviceHandler->GetDeviceIds();
-			for(int i = 0; i < m_deviceHandler->GetDeviceCount(); i++)
+			if(m_platform->id != taskCfg.parentId)
 			{
-				if(i != 0) {
-					strcat(json, ",");
+				// TODO : remove after tests
+				printf("Task handler : information of devices on platform %d\r\n", taskCfg.parentId);
+
+				json = new char[200];
+				memset(reinterpret_cast<void*>(json), 0, 200);
+
+				int* deviceIds = m_deviceHandler->GetDeviceIds();
+				for(int i = 0; i < m_deviceHandler->GetDeviceCount(); i++)
+				{
+					if(i != 0) {
+						strcat(json, ",");
+					}
+					strcat(json, m_deviceHandler->GetDevice(deviceIds[i])->GetJSON());
 				}
-				strcat(json, m_deviceHandler->GetDevice(deviceIds[i])->GetJSON());
+
+				status = true;
+				messageType = 4;
+				error = 0;
+				size = m_deviceHandler->GetDeviceCount();
+
+				UMsgHandler::SendMessage(
+						UJsonUtils::AddJsonGetShell(json, taskCfg.parentId, status, error, messageType, size, taskCfg.taskCfgType),
+						taskCfg.endpoint);
 			}
+			else
+			{
+				status = false;
+				messageType = 4;
+				error = 1;
+				size = 0;
 
-			status = true;
-			messageType = 4;
-			error = 0;
-			size = m_deviceHandler->GetDeviceCount();
-
-			UMsgHandler::SendMessage(
-					UJsonUtils::AddJsonGetShell(json, taskCfg.parentId, status, error, messageType, size, taskCfg.taskCfgType),
-					taskCfg.endpoint);
+				UMsgHandler::SendMessage(
+						UJsonUtils::AddJsonGetShell("", taskCfg.parentId, status, error, messageType, size, taskCfg.taskCfgType),
+						taskCfg.endpoint);
+			}
 
 			break;
 		}
 		case USCENARIO:
 		{
-			// TODO : remove after tests
-			printf("Task handler : information of scenarios on device %d\r\n", taskCfg.parentId);
+			if(m_deviceHandler->GetDevice(taskCfg.parentId) != NULL) {
+				// TODO : remove after tests
+				printf("Task handler : information of scenarios on device %d\r\n",
+						m_deviceHandler->GetDevice(taskCfg.parentId)->DeviceID);
 
-			json = new char[200];
-			memset(reinterpret_cast<void*>(json), 0, 200);
+				json = new char[200];
+				memset(reinterpret_cast<void*>(json), 0, 200);
 
-			printf("Number of devices: %d\r\n", taskCfg.parentId);
+				printf("Number of scenarios: %d\r\n", m_deviceHandler->GetDevice(taskCfg.parentId)->ScenarioCount);
 
-			for(int i = 0; i < m_deviceHandler->GetDevice(taskCfg.parentId)->ScenarioCount; i++)
-			{
-				if(i != 0) {
-					strcat(json, ",");
+				for(int i = 0; i < m_deviceHandler->GetDevice(taskCfg.parentId)->ScenarioCount; i++)
+				{
+					if(i != 0) {
+						strcat(json, ",");
+					}
+					strcat(json, m_deviceHandler->GetDevice(taskCfg.parentId)->ScenarioList[i]->GetJSON());
 				}
-				strcat(json, m_deviceHandler->GetScenario(i)->GetJSON());
+
+				status = true;
+				messageType = 6;
+				error = 0;
+				size = m_deviceHandler->GetDevice(taskCfg.parentId)->ScenarioCount;
+
+				UMsgHandler::SendMessage(
+						UJsonUtils::AddJsonGetShell(json, taskCfg.parentId, status, error, messageType, size, taskCfg.taskCfgType),
+						taskCfg.endpoint);
 			}
+			else
+			{
+				status = false;
+				messageType = 8;
+				error = 1;
+				size =  0;
 
-			status = true;
-			messageType = 6;
-			error = 0;
-			size = m_deviceHandler->GetDeviceCount();
-
-			UMsgHandler::SendMessage(
-					UJsonUtils::AddJsonGetShell(json, taskCfg.parentId, status, error, messageType, size, taskCfg.taskCfgType),
-					taskCfg.endpoint);
-
+				UMsgHandler::SendMessage(
+						UJsonUtils::AddJsonGetShell("", taskCfg.parentId, status, error, messageType, size, taskCfg.taskCfgType),
+						taskCfg.endpoint);
+			}
 			break;
 		}
 		case UTASK:
 		{
-			// TODO : remove after tests
-			printf("Task handler : information of tasks on scenario %d\r\n", taskCfg.parentId);
+			if(m_deviceHandler->GetScenario(taskCfg.parentId) != NULL) {
+				// TODO : remove after tests
+				printf("Task handler : information of tasks on scenario %d\r\n",
+						m_deviceHandler->GetScenario(taskCfg.parentId)->ScenarioID);
 
-			json = new char[200];
-			memset(reinterpret_cast<void*>(json), 0, 200);
+				json = new char[200];
+				memset(reinterpret_cast<void*>(json), 0, 200);
 
-			printf("Number of devices: %d\r\n", taskCfg.parentId);
+				printf("Number of tasks: %d\r\n", m_deviceHandler->GetScenario(taskCfg.parentId)->TaskCount);
 
-			for(int i = 0; i < m_deviceHandler->GetScenario(taskCfg.parentId)->TaskCount; i++)
-			{
-				if(i != 0) {
-					strcat(json, ",");
+				for(int i = 0; i < m_deviceHandler->GetScenario(taskCfg.parentId)->TaskCount; i++)
+				{
+					if(i != 0) {
+						strcat(json, ",");
+					}
+					strcat(json, m_deviceHandler->GetScenario(taskCfg.parentId)->TaskList[i]->GetJSON());
 				}
-				strcat(json, m_deviceHandler->GetTask(i)->GetJSON());
+
+				status = true;
+				messageType = 8;
+				error = 0;
+				size =  m_deviceHandler->GetScenario(taskCfg.parentId)->TaskCount;
+
+				UMsgHandler::SendMessage(
+						UJsonUtils::AddJsonGetShell(json, taskCfg.parentId, status, error, messageType, size, taskCfg.taskCfgType),
+						taskCfg.endpoint);
 			}
+			else
+			{
+				status = false;
+				messageType = 8;
+				error = 1;
+				size =  0;
 
-			status = true;
-			messageType = 8;
-			error = 0;
-			size = m_deviceHandler->GetDeviceCount();
-
-			UMsgHandler::SendMessage(
-					UJsonUtils::AddJsonGetShell(json, taskCfg.parentId, status, error, messageType, size, taskCfg.taskCfgType),
-					taskCfg.endpoint);
+				UMsgHandler::SendMessage(
+						UJsonUtils::AddJsonGetShell("", taskCfg.parentId, status, error, messageType, size, taskCfg.taskCfgType),
+						taskCfg.endpoint);
+			}
 
 			break;
 		}
 		case UCONDITION:
 		{
-			// TODO : remove after tests
-			printf("Task handler : information of conditions on task %d\r\n", taskCfg.parentId);
+			if(m_deviceHandler->GetTask(taskCfg.parentId) != NULL) {
+				// TODO : remove after tests
+				printf("Task handler : information of conditions on task %d\r\n",
+						m_deviceHandler->GetTask(taskCfg.parentId)->TaskID);
 
-			json = new char[200];
-			memset(reinterpret_cast<void*>(json), 0, 200);
+				json = new char[200];
+				memset(reinterpret_cast<void*>(json), 0, 200);
 
-			printf("Number of devices: %d\r\n", taskCfg.parentId);
+				printf("Number of conditions: %d\r\n", m_deviceHandler->GetTask(taskCfg.parentId)->ConditionListIndex);
 
-			for(int i = 0; i < m_deviceHandler->GetDevice(taskCfg.parentId)->ScenarioCount; i++)
-			{
-				if(i != 0) {
-					strcat(json, ",");
+				for(int i = 0; i < m_deviceHandler->GetTask(taskCfg.parentId)->ConditionListIndex; i++)
+				{
+					if(i != 0) {
+						strcat(json, ",");
+					}
+					strcat(json, m_deviceHandler->GetTask(taskCfg.parentId)->ConditionList[i]->GetJSON());
 				}
-				strcat(json, m_deviceHandler->GetScenario(i)->GetJSON());
+
+				status = true;
+				messageType = 10;
+				error = 0;
+				size = m_deviceHandler->GetTask(taskCfg.parentId)->ConditionListIndex;
+
+				UMsgHandler::SendMessage(
+						UJsonUtils::AddJsonGetShell(json, taskCfg.parentId, status, error, messageType, size, taskCfg.taskCfgType),
+						taskCfg.endpoint);
 			}
+			else
+			{
+				status = false;
+				messageType = 8;
+				error = 1;
+				size =  0;
 
-			status = true;
-			messageType = 10;
-			error = 0;
-			size = m_deviceHandler->GetDeviceCount();
-
-			UMsgHandler::SendMessage(
-					UJsonUtils::AddJsonGetShell(json, taskCfg.parentId, status, error, messageType, size, taskCfg.taskCfgType),
-					taskCfg.endpoint);
+				UMsgHandler::SendMessage(
+						UJsonUtils::AddJsonGetShell("", taskCfg.parentId, status, error, messageType, size, taskCfg.taskCfgType),
+						taskCfg.endpoint);
+			}
 
 			break;
 		}
@@ -395,7 +453,16 @@ void UTaskHandler::handleSaveInfo(const UTaskCfg taskCfg)
 			printf("Device name : %s\r\n", taskCfg.device->DeviceName);
 
 			if(taskCfg.parentId == m_platform->id) {
-				AddDevice(taskCfg.device);
+				if(m_deviceHandler->GetDevice(taskCfg.device->DeviceID) == NULL)
+				{
+					m_deviceHandler->AddDevice(taskCfg.device);
+				}
+				else
+				{
+					// Replace the device with our new one
+					m_deviceHandler->DeleteDevice(taskCfg.device);
+					m_deviceHandler->AddDevice(taskCfg.device);
+				}
 			}
 
 			break;
@@ -412,7 +479,8 @@ void UTaskHandler::handleSaveInfo(const UTaskCfg taskCfg)
 		case UTASK:
 		{
 			// TODO : remove after tests
-			printf("Task handler : saving tasks on scenario %d\r\n", taskCfg.parentId);
+			printf("Task handler : saving tasks on scenario %d\r\n",
+					m_deviceHandler->GetScenario(taskCfg.parentId)->ScenarioID);
 
 			m_deviceHandler->GetScenario(taskCfg.parentId)->AddTask(taskCfg.task);
 
@@ -421,7 +489,8 @@ void UTaskHandler::handleSaveInfo(const UTaskCfg taskCfg)
 		case UCONDITION:
 		{
 			// TODO : remove after tests
-			printf("Task handler : saving conditions on task %d\r\n", taskCfg.parentId);
+			printf("Task handler : saving conditions on task %d\r\n",
+					m_deviceHandler->GetTask(taskCfg.parentId)->TaskID);
 
 			m_deviceHandler->GetTask(taskCfg.parentId)->AddCondition(taskCfg.condition);
 
@@ -429,111 +498,6 @@ void UTaskHandler::handleSaveInfo(const UTaskCfg taskCfg)
 		}
 		default:
 		{
-			break;
-		}
-	}
-}
-
-int UTaskHandler::AddDevice(UDevice *mDevice)
-{
-	int pin;
-	int timeBetweenReads;
-
-	switch(mDevice->DeviceType) {
-		case Actuator_Led:
-
-			pin = 0;
-
-			if(m_deviceHandler->AddNewActuator(mDevice, pin)) {
-				return 1;
-			}
-			else {
-				return 0;
-			}
-
-			break;
-
-		case Sensor_Light:
-			pin = 0;
-			timeBetweenReads = 5000;
-
-			if(m_deviceHandler->AddNewSensor(mDevice, pin, timeBetweenReads)) {
-				return 1;
-			}
-			else {
-				return 0;
-			}
-			break;
-
-		case Sensor_Temperature:
-			pin = 1;
-			timeBetweenReads = 5000;
-
-			if(m_deviceHandler->AddNewSensor(mDevice, pin, timeBetweenReads)) {
-				return 1;
-			}
-			else {
-				return 0;
-			}
-			break;
-
-		case Sensor_Motion:
-
-			pin = 2;
-			timeBetweenReads = 5000;
-
-			printf("Adding device.\r\n");
-			if(m_deviceHandler->AddNewSensor(mDevice, pin, timeBetweenReads)) {
-				return 1;
-			}
-			else {
-				return 0;
-			}
-
-			break;
-
-		default:
-			break;
-	}
-
-	/*
-	int retVal = 0;
-	if (DeviceListIndex < MAX_DEVICE_NUMBER)
-	{
-		DeviceList[DeviceListIndex++] = mDevice;
-		retVal = 1;
-	}
-
-	return retVal;*/
-}
-
-
-void UTaskHandler::DelDevice(int mDeviceID)
-{
-	int i = 0;
-
-	for (; i < MAX_DEVICE_NUMBER; i++)
-	{
-		if (DeviceList[i]->DeviceID == mDeviceID)
-		{
-			int j = i;
-
-			delete DeviceList[i];
-			for (; j < MAX_DEVICE_NUMBER - 1; j++)
-			{
-				if (DeviceList[j + 1] != 0)
-				{
-					DeviceList[j] = DeviceList[j + 1];
-				}
-				else
-				{
-					break;
-				}
-			}
-			delete DeviceList[MAX_DEVICE_NUMBER - 1];
-			DeviceList[MAX_DEVICE_NUMBER - 1] = new UDevice;
-			DeviceListIndex--;
-
 			break;
 		}
 	}
@@ -610,6 +574,7 @@ void UTaskHandler::SendMessage(char* message, Endpoint* endpoint)
 	delete endpoint;
 }
 
+/*
 void UTaskHandler::AddScenario(int scenarioId, int parentId, char* scenarioName)
 {
 	int parentFound = 0;
@@ -649,4 +614,4 @@ void UTaskHandler::AddCondition(int taskId, int parentId, int type)
 {
 
 }
-
+*/

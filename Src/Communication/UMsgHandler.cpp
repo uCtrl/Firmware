@@ -8,6 +8,8 @@
 #include "UMsgHandler.h"
 
 Mail<UMsgHandlerMailType, 2> msgHandlerMail;
+extern Semaphore semMailUTaskHandler;
+extern Mail<UTaskRequest, MAIL_LEN_UTASKHANDLER> mailUTaskHandler;
 
 /*
  * Constructor
@@ -158,7 +160,7 @@ void UMsgHandler::parse(UMsgHandlerMailType *aMail)
 					taskId = atoi(find_json_token(tokens, "TaskId")->ptr);
 
 					mail->taskRequestType = GET_INFO;
-					mail->taskCfg.taskCfgType = UTASK;
+					mail->taskCfg.taskCfgType = UCONDITION;
 					mail->taskCfg.taskCfgMod = TASK_CFG_MOD_NONE;
 					mail->taskCfg.id = 0;
 					mail->taskCfg.parentId = taskId;
@@ -277,13 +279,13 @@ void UMsgHandler::ParseInnerJson(uint16_t messageType, int size, int parent, End
 			initialJson = find_json_token(tokens, "devices");
 			break;
 		case REQ_SAVESCENARIOS:
-			initialJson = find_json_token(tokens, "devices");
+			initialJson = find_json_token(tokens, "scenarios");
 			break;
 		case REQ_SAVETASKS:
-			initialJson = find_json_token(tokens, "devices");
+			initialJson = find_json_token(tokens, "tasks");
 			break;
 		case REQ_SAVECONDITIONS:
-			initialJson = find_json_token(tokens, "devices");
+			initialJson = find_json_token(tokens, "conditions");
 			break;
 	}
 
@@ -301,7 +303,7 @@ void UMsgHandler::ParseInnerJson(uint16_t messageType, int size, int parent, End
 		strncpy(jsonToParse, jsonArray, position+1);
 		jsonToParse[position+1] = '\0';
 
-		struct json_token newTokens[10];
+		struct json_token newTokens[20];
 		uint16_t newSize = sizeof(newTokens) / sizeof(newTokens[0]);
 
 		int length;
@@ -356,8 +358,6 @@ void UMsgHandler::ParseInnerJson(uint16_t messageType, int size, int parent, End
 					memset(reinterpret_cast<void*>(name), 0, length+1);
 					memcpy(name, find_json_token(newTokens, "name")->ptr, length);
 
-					printf("length : %d\r\n", length);
-
 					semMailUTaskHandler.wait();
 					mail = mailUTaskHandler.alloc();
 
@@ -374,6 +374,7 @@ void UMsgHandler::ParseInnerJson(uint16_t messageType, int size, int parent, End
 
 					break;
 				case REQ_SAVESCENARIOS:
+
 					id = atoi(find_json_token(newTokens, "id")->ptr);
 
 					length = find_json_token(newTokens, "name")->len;
@@ -423,16 +424,31 @@ void UMsgHandler::ParseInnerJson(uint16_t messageType, int size, int parent, End
 					break;
 
 				case REQ_SAVECONDITIONS:
+
+					Thread::wait(100);
+					printf("id\r\n");
+
 					id = atoi(find_json_token(newTokens, "id")->ptr);
+
+					printf("name\r\n");
 
 					length = find_json_token(newTokens, "name")->len;
 					name = new char[length+1];
 					memset(reinterpret_cast<void*>(name), 0, length+1);
 					memcpy(name, find_json_token(newTokens, "name")->ptr, length);
 
+					printf("deviceId\r\n");
+
 					deviceId = atoi(find_json_token(newTokens, "deviceId")->ptr);
+
+					printf("value\r\n");
+
 					value = atoi(find_json_token(newTokens, "value")->ptr);
-					UOperatorType conditionOperator = static_cast<UOperatorType>(atoi(find_json_token(newTokens, "conditionOperator")->ptr));
+
+					printf("conditionOperator\r\n");
+
+					UOperatorType conditionOperator =
+						static_cast<UOperatorType>(atoi(find_json_token(newTokens, "conditionOperator")->ptr));
 
 					semMailUTaskHandler.wait();
 					mail = mailUTaskHandler.alloc();

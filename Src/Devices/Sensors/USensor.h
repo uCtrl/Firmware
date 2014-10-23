@@ -5,17 +5,18 @@
 #include "mbed.h"
 #include "UPinUtils.h"
 #include "rtos.h"
-#include "UDevice.h"
 #include "UDeviceType.h"
 
 class UDevice;
 
-class USensor : public UDevice
+class USensor
 {
 protected:
     int m_timeBetweenReads;
 
     AnalogIn analogIn;
+
+
 
 public:
     /*  Default constructor
@@ -30,8 +31,8 @@ public:
     */
     USensor(UDevice* a_device, int a_pin, int a_timeBetweenReads);
 
-    virtual void Read();
     int ReadValue();
+    virtual void Read();
 
     void SetTimeBetweenReads(int timeBetweenReads) { m_timeBetweenReads = timeBetweenReads; }
     int GetTimeBetweenReads() { return m_timeBetweenReads; }

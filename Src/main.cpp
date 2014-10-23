@@ -16,7 +16,6 @@
 #include "USensorHandler.h"
 #include "UMsgHandler.h"
 #include "UTaskHandler.h"
-#include "UTaskCfg.h"
 #include "UPinUtils.h"
 #include "UDeviceHandler.h"
 

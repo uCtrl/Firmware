@@ -8,7 +8,6 @@
 #include "rtos.h"
 #include "USensor.h"
 #include "UTaskHandler.h"
-#include "UDevice.h"
 
 class USensorTemperature : public USensor
 {
