@@ -355,3 +355,4 @@ int json_emit_quoted_str(char *buf, int buf_len, const char *str) {
 int json_emit_raw_str(char *buf, int buf_len, const char *str) {
   return buf_len <= 0 ? 0 : snprintf(buf, buf_len, "%s", str);
 }
+

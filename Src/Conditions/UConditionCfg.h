@@ -8,16 +8,17 @@
 #ifndef UCONDITIONCFG_H_
 #define UCONDITIONCFG_H_
 
-#include "UOperatorType.h"
+#include "UComparisonType.h"
 
 /** UConditionCfg struct contains additional data to complement UTaskCfg. It
  *  contains all data useful to the creation of a condition in the task
  *  system.*/
 typedef struct
 {
-	UOperatorType operatorType;
+	UComparisonType comparisonType;
 	int value;
 	int sensorId;
 } UConditionCfg;
 
 #endif /* UCONDITIONCFG_H_ */
+

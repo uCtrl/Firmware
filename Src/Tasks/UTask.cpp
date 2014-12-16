@@ -1,24 +1,36 @@
 #include "UTask.h"
 
+extern Serial usbSerial;
 
 UTask::UTask()
 {
 	TaskID = 0;
-	for(int i = 0; i < TASK_NAME_LENGHT; i++)
-	{
-		TaskName[i] = 0;
-	}
 	ConditionListIndex = 0;
+
+	for(int i = 0; i < MAX_CONDITION_NUMBER; i++)
+	{
+		ConditionList[i] = NULL;
+	}
 }
 
-UTask::UTask(int mTaskID, char mTaskName[TASK_NAME_LENGHT], int mActionValue, int mDeviceID)
+UTask::UTask(int mTaskID, bool enabled, int lastUpdated, string mActionValue)
 {
+#ifdef MINIMALIST_PRINT
+	printf("Creating task %d\r\n", mTaskID);
+#endif
 	TaskID = mTaskID;
-	DeviceID = mDeviceID;
-	for(int i = 0; i < TASK_NAME_LENGHT; i++)
+	DeviceID = -1; //mDeviceID;
+	//TaskName = mTaskName;
+	Enabled = enabled;
+	LastUpdated = lastUpdated;
+	
+	ConditionList = new UCondition*[MAX_CONDITION_NUMBER];
+
+	for(int i = 0; i < MAX_CONDITION_NUMBER; i++)
 	{
-		TaskName[i] = mTaskName[i];
+		ConditionList[i] = NULL;
 	}
+
 	ConditionListIndex = 0;
 	ActionValue = mActionValue;
 }
@@ -26,6 +38,11 @@ UTask::UTask(int mTaskID, char mTaskName[TASK_NAME_LENGHT], int mActionValue, in
 
 UTask::~UTask()
 {
+	for(int i = 0; i < MAX_CONDITION_NUMBER; i++)
+	{
+		delete [] ConditionList[i];
+	}
+	delete [] ConditionList;
 }
 
 
@@ -45,29 +62,19 @@ int UTask::AddCondition(UCondition *mCondition)
 }
 
 
-void UTask::DelCondition(int mCondtionID)
+void UTask::DelCondition(int mConditionID)
 {
-	int i = 0;
-
-	for (; i < MAX_CONDITION_NUMBER; i++)
+	for (int i = 0; i < MAX_CONDITION_NUMBER; i++)
 	{
-		if (ConditionList[i]->ConditionID == mCondtionID)
+		if (ConditionList[i]->ConditionId == mConditionID)
 		{
-			int j = i;
-
 			delete ConditionList[i];
-			for (; j < MAX_CONDITION_NUMBER - 1; j++)
+			for (int j = i; j < MAX_CONDITION_NUMBER - 1; j++)
 			{
-				if (ConditionList[j + 1] != 0)
-				{
-					ConditionList[j] = ConditionList[j + 1];
-				}
-				else
-				{
-					break;
-				}
+				ConditionList[j] = ConditionList[j+1];
 			}
-			ConditionList[MAX_CONDITION_NUMBER - 1] = new UCondition;
+			ConditionList[MAX_CONDITION_NUMBER] = NULL;
+			
 			ConditionListIndex--;
 
 			break;
@@ -76,22 +83,66 @@ void UTask::DelCondition(int mCondtionID)
 }
 
 
-int UTask::CheckCondition()
+int UTask::CheckCondition(int device)
 {
-	int RetVal = 1;
-
-	for (int i = 0; i < ConditionListIndex; i++)
+	if(!Enabled) 
 	{
-		RetVal &= ConditionList[i]->CheckCondition();
+		return 0;
 	}
+	if(ConditionListIndex == 0) {
+		return false;
+	}
+	else
+	{
+		int RetVal = 1;
 
-	return RetVal;
+#ifdef DEBUG_CONDITIONS
+		printf("Task id %d\r\n", TaskID);
+#endif
+		for (int i = 0; i < ConditionListIndex; i++)
+		{
+			int conditionValue = 
+			RetVal &= ConditionList[i]->CheckCondition(device);
+#ifdef DEBUG_CONDITIONS
+			printf("Condition value %d\r\n", conditionValue);
+			printf("RetVal value %d\r\n", RetVal);
+#endif
+		}
+
+		return RetVal;
+	}
 }
 
 
 void UTask::SetValue()
 {
 #ifdef DEBUG_PRINT
-	printf("Set actuator %lu value to %lu \n\r", DeviceID, ActionValue);
+	usbSerial.printf("Set actuator %lu value to %s \n\r", DeviceID, ActionValue.c_str());
 #endif
+	DeviceHandler->SetActuatorValue(DeviceID, ActionValue);
 }
+
+void UTask::GetJSON(char* returnValue)
+{
+	strcpy(returnValue, "{\"id\":\"");
+	char buf1[10];
+	sprintf(buf1, "%d", TaskID);
+	strcat(returnValue, buf1);
+
+	strcat(returnValue, "\", \"value\":\"");
+	strcat(returnValue, ActionValue.c_str());
+	
+	strcat(returnValue, "\", \"enabled\":");
+	if(Enabled)
+		strcat(returnValue, "true");
+	else
+		strcat(returnValue, "false");
+
+	strcat(returnValue, ", \"lastUpdated\":");
+	char buf7[12];
+	sprintf(buf7, "%d", LastUpdated);
+	
+	strcat(returnValue, buf7);
+	strcat(returnValue, "}");
+}
+

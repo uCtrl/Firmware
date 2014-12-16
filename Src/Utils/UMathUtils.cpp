@@ -19,3 +19,11 @@ int UMathUtils::gcdOfMultipleNumbers(int* values, int length)
     }
     return lastGcd;
 }
+
+int UMathUtils::power( int val, int _pow ) 
+{
+	if ( _pow <= 0 )
+		return 1;
+	return val * power( val, _pow-1 );
+}
+

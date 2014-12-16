@@ -52,36 +52,53 @@ include ./Targets/Target.mk
 ###############################################################################
 #uCtrl sources
 ###############################################################################
-#INCLUDE_PATHS += -I./Src
-#INCLUDE_PATHS += -I./Src/Conditions
-#INCLUDE_PATHS += -I./Src/Controller
-#INCLUDE_PATHS += -I./Src/Communication
-#INCLUDE_PATHS += -I./Src/Communication/frozen
-#INCLUDE_PATHS += -I./Src/Devices
-#INCLUDE_PATHS += -I./Src/Devices/Actuators
-#INCLUDE_PATHS += -I./Src/Devices/Sensors
-#INCLUDE_PATHS += -I./Src/Events
-#INCLUDE_PATHS += -I./Src/Tasks
-#INCLUDE_PATHS += -I./Src/Utils
-OBJECTS += ./Src/mainPLC.o
-#OBJECTS += ./Src/Conditions/UCondition.o
-#OBJECTS += ./Src/Controller/UController.o
-#OBJECTS += ./Src/Communication/UComDriverIn.o
-#OBJECTS += ./Src/Communication/UComDriverOut.o
-#OBJECTS += ./Src/Communication/UMsgHandler.o
-#OBJECTS += ./Src/Communication/frozen/frozen.o
-#OBJECTS += ./Src/Devices/UDevice.o
-#OBJECTS += ./Src/Devices/Actuators/FakeActuator.o
-#OBJECTS += ./Src/Devices/Actuators/UActuatorHandler.o
-#OBJECTS += ./Src/Devices/Sensors/USensor.o
-#OBJECTS += ./Src/Devices/Sensors/USensorLight.o
-#OBJECTS += ./Src/Devices/Sensors/USensorTemperature.o
-#OBJECTS += ./Src/Devices/Sensors/USensorHandler.o
-#OBJECTS += ./Src/Tasks/UScenario.o
-#OBJECTS += ./Src/Tasks/UTask.o
-#OBJECTS += ./Src/Tasks/UTaskHandler.o
-#OBJECTS += ./Src/Utils/UPinUtils.o
-#OBJECTS += ./Src/Utils/UMathUtils.o
+INCLUDE_PATHS += -I.
+INCLUDE_PATHS += -I./Src/
+INCLUDE_PATHS += -I./Src/TaskHandler
+INCLUDE_PATHS += -I./Src/Tasks
+INCLUDE_PATHS += -I./Src/Utils
+INCLUDE_PATHS += -I./Src/Scenario
+INCLUDE_PATHS += -I./Src/Communication
+INCLUDE_PATHS += -I./Src/Platform
+INCLUDE_PATHS += -I./Src/MbedJSONValue
+INCLUDE_PATHS += -I./Src/NTPClient
+INCLUDE_PATHS += -I./Src/Conditions
+INCLUDE_PATHS += -I./Src/Devices
+INCLUDE_PATHS += -I./Src/Devices/Actuators
+INCLUDE_PATHS += -I./Src/Devices/Sensors
+INCLUDE_PATHS += -I./Src/Communication/frozen
+
+#OBJECTS += ./Src/mainPLC.o
+OBJECTS += ./Src/main.o
+
+OBJECTS += ./Src/TaskHandler/UTaskHandler.o
+OBJECTS += ./Src/Tasks/UTask.o
+OBJECTS += ./Src/Utils/UJsonUtils.o
+OBJECTS += ./Src/Utils/UMathUtils.o
+OBJECTS += ./Src/Utils/UPinUtils.o
+OBJECTS += ./Src/Scenario/UScenario.o
+OBJECTS += ./Src/Communication/UComDriverOut.o
+OBJECTS += ./Src/Communication/UMsgHandler.o
+OBJECTS += ./Src/Communication/UComDriverIn.o
+OBJECTS += ./Src/Platform/UPlatform.o
+OBJECTS += ./Src/MbedJSONValue/MbedJSONValue.o
+OBJECTS += ./Src/EthernetInterface/EthernetInterface.o
+OBJECTS += ./Src/EthernetInterface/Socket/Endpoint.o
+OBJECTS += ./Src/EthernetInterface/Socket/TCPSocketServer.o
+OBJECTS += ./Src/EthernetInterface/Socket/UDPSocket.o
+OBJECTS += ./Src/EthernetInterface/Socket/Socket.o
+OBJECTS += ./Src/EthernetInterface/Socket/TCPSocketConnection.o
+OBJECTS += ./Src/NTPClient/NTPClient.o
+OBJECTS += ./Src/Conditions/UCondition.o
+OBJECTS += ./Src/Devices/UDeviceHandler.o
+OBJECTS += ./Src/Devices/UDevice.o
+OBJECTS += ./Src/Devices/Actuators/USwitchActuator.o
+OBJECTS += ./Src/Devices/Actuators/UActuator.o
+OBJECTS += ./Src/Devices/Sensors/USensorLight.o
+OBJECTS += ./Src/Devices/Sensors/USensor.o
+OBJECTS += ./Src/Devices/Sensors/USensorTemperature.o
+OBJECTS += ./Src/Communication/frozen/frozen.o
+OBJECTS += ./Src/Communication/frozen/unit_test.o
 
 ###############################################################################
 #Makefile target build

@@ -61,3 +61,4 @@ int json_emit_raw_str(char *buf, int buf_len, const char *str);
 #endif // __cplusplus
 
 #endif // FROZEN_HEADER_INCLUDED
+

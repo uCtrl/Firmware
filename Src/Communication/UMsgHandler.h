@@ -14,9 +14,20 @@
 #include "UMsgHandlerMailType.h"
 #include "frozen.h"
 #include "UScenario.h"
+#include "UTaskHandler.h"
+#include "UDeviceType.h"
+#include "UJsonUtils.h"
+#include "MbedJSONValue.h"
 
-extern Mail<UMsgHandlerMailType, 2> msgHandlerMail;
-extern Mail<UMsgHandlerMailType, 2> comDriverOutMail;
+#include "UPlatform.h"
+#include "UDevice.h"
+#include "UScenario.h"
+#include "UTask.h"
+#include "UCondition.h"
+#include "MbedJSONValue.h"
+
+extern Mail<UMsgHandlerMailType, MSGHANDLER_MAIL_SIZE> msgHandlerMail;
+extern Mail<UMsgHandlerMailType, COMDRIVER_OUT_MAIL_SIZE> comDriverOutMail;
 
 /**
  * ENUM Message Type
@@ -47,18 +58,37 @@ enum
 	RES_SAVESCENARIOS  = 16,
 	RES_SAVETASKS = 18,
 	RES_SAVECONDITIONS = 20,
+	
+	EVT_UPDATESENSOR = 21,
+	
+	REQ_DELETEDEVICE = 33,
+	REQ_DELETESCENARIO = 35,
+	REQ_DELETETASK = 37,
+	REQ_DELETECONDITION = 39,
 };
 
 class UMsgHandler
 {
     private:
+		void parseTokens(UMsgHandlerMailType *aMail, json_token* tokens, int size, const struct json_token *tok, int messageType);
+		MbedJSONValue parser;
 
     public:
         UMsgHandler();
         void start();
-        void parse(UMsgHandlerMailType *aMail);
+        void parseMessage(UMsgHandlerMailType *aMail);
         void create(const char* aInput);
         ~UMsgHandler();
+
+		static void SendMessage(char* message, Endpoint* endpoint);
+		static void SendBroadcast(char* message);
+		void ParseInnerJson(uint16_t messageType, int size, int parent, Endpoint* endpoint, json_token* tokens);
+		
+		void handleGet(UMsgHandlerMailType *aMail, int messageType);
+		void handleSave(UMsgHandlerMailType *aMail, int messageType);
+		void handleEvent(UMsgHandlerMailType *aMail, int messageType);
+		void handleDelete(UMsgHandlerMailType *aMail, int messageType);
 };
 
 #endif  //UMSGHANDLER_H_
+

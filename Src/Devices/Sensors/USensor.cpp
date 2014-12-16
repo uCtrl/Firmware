@@ -1,4 +1,5 @@
 #include "USensor.h"
+#include "UDevice.h"
 
 //int FakeSensor::s_threadId = 0;
 
@@ -14,37 +15,33 @@ extern "C"
 
 // Constructor
 USensor::USensor()
-: UDevice(),
-  analogIn(UPinUtils::analogIn[0])
-
 {
-    m_sensorId = 0;
+	Device = NULL;
     m_timeBetweenReads = 1000;
 }
 
-USensor::USensor(int a_id, int a_pin, int a_timeBetweenReads, char* a_deviceName)
-: UDevice(a_id, a_deviceName),
-  analogIn(UPinUtils::analogIn[a_pin])
-
+USensor::USensor(UDevice* device, int a_pin, int a_timeBetweenReads)
 {
     m_timeBetweenReads = a_timeBetweenReads;
-    m_sensorId = a_id;
+    Device = device;
 }
 
 
 // Destructor
 USensor::~USensor()
 {
-
+	delete Device;
 }
 
 // Read a new value from the sensor,
 int USensor::ReadValue()
 {
-	return analogIn.read_u16();
+	//Can be reimplemented
+	return -1;
 }
 
 void USensor::Read()
 {
 	// To be implemented
 }
+

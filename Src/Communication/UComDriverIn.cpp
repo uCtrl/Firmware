@@ -7,10 +7,12 @@
 
 #include "UComDriverIn.h"
 
+extern Serial usbSerial;
+
 /*
  * Constructor
  * */
-UComDriverIn::UComDriverIn() : m_uart(USBTX, USBRX), m_led(LED1)
+UComDriverIn::UComDriverIn() : m_uart(USBTX, USBRX), m_led(LED2)
 {
 	m_uart.baud(SERIAL_BAUD);
 	m_rxCount = 0;
@@ -34,28 +36,74 @@ void UComDriverIn::start()
 	m_led = true;
 	if(USE_LWIP)
 	{
-		printf("\n\r - LWIP Mode - \n\r");
+		usbSerial.printf("\n\r - LWIP Mode - \n\r");
 
 	    EthernetInterface eth;
-	    eth.init(); //Use DHCP
+	    if(USE_DHCP) 
+	    {
+			usbSerial.printf("\n\r - DHCP - \n\r");
+	    	eth.init(); //Use DHCP
+	    	usbSerial.printf("MAC address : %s\n\r", eth.getMACAddress());
+    	}
+	    else 
+	    {
+	    	eth.init("192.168.0.120", "255.255.255.0", "192.168.0.1"); //Use DHCP
+	    }
 	    eth.connect();
-	    printf("IP Address is %s\n", eth.getIPAddress());
+	    
+	    UJsonUtils::SetIpAddress(eth.getIPAddress());
+	    usbSerial.printf("IP Address is %s\n\r", UJsonUtils::GetIpAddress());
 
-	    m_udpSocket.bind(UDPSOCKET_PORT);
+		NTPClient ntp;
 
-	    printf("UDP Socket binded to port %d\n\r", UDPSOCKET_PORT);
+		if (ntp.setTime("0.ca.pool.ntp.org") == 0)
+		{
+		  time_t ctTime;
+		  ctTime = time(NULL);
+		  printf("Time is set to (UTC): %s\r\n", ctime(&ctTime));
+		}
+		else
+		{
+		  printf("Time Set Error\r\n");
+		} 
+
+	    m_udpSocket.bind(UDPSOCKET_PORT);	    
+	    usbSerial.printf("UDP Socket binded to port %d\n\r", UDPSOCKET_PORT);
+	    
+	    // Enable broadcast or multicast
+	    if(USE_BROADCAST)
+	    {
+	    	m_udpSocket.set_broadcasting();
+		}
+    	if(USE_MULTICAST)
+		{
+		    const char* group = "224.1.1.1";
+		    if (m_udpSocket.join_multicast_group(group) != 0) 
+		    {
+		        printf("Error joining the multicast group %s\r\n", group);
+		        while (true) {}
+		    }
+		    else
+		    {
+		        printf("Joined multicast group %s\r\n", group);
+	    	}
+	    }
+
 	    while(true)
 		{
-			printf("Waiting for packet...\n\r");
-	        m_rxCount = m_udpSocket.receiveFrom(m_udpClient, m_rxBuffer, sizeof(m_rxBuffer));
-	        m_rxBuffer[m_rxCount] = '\0';
-	        m_led = !m_led;	//led flashing on input
+#ifdef DEBUG_PRINT
+	    	usbSerial.printf("Waiting for packet...\n\r");
+#endif
+	        m_rxCount = m_udpSocket.receiveFrom(m_udpClient, m_rxBuffer, sizeof(m_rxBuffer));    	 	
+	        m_rxBuffer[m_rxCount++] = '\0';
 	        handleMsg();
+	        //m_led = !m_led;	//led flashing on input
+	    	Thread::wait(10);
 		}
 	}
 	else
 	{
-		printf("\n\r - Serial Mode - \n\r");
+		usbSerial.printf("\n\r - Serial Mode - \n\r");
 		//SERIAL handle one char at the time
 		char c;
 		while(true)
@@ -94,11 +142,22 @@ void UComDriverIn::start()
 void UComDriverIn::handleMsg()
 {
 	UMsgHandlerMailType *mail = msgHandlerMail.alloc();
+
 	if(USE_LWIP)
 	{
-		mail->endPoint = m_udpClient;
+		mail->endPoint = new Endpoint(m_udpClient);
+		
+		//char* host = new char[17];
+		//strcpy(host, m_udpClient.get_address());		
+	    //mail->endPoint->set_address(host,  m_udpClient.get_port());
 	}
-	strncpy(mail->msg, m_rxBuffer, sizeof(m_rxBuffer));
+	
+	strncpy(mail->msg, m_rxBuffer, m_rxCount);
+
+#ifdef DEBUG_PRINT
+	usbSerial.printf("Message recieved from %s\n\r", m_udpClient.get_address());
+#endif
+
 	msgHandlerMail.put(mail);
 }
 
@@ -109,3 +168,4 @@ UComDriverIn::~UComDriverIn()
 {
 	m_udpSocket.close();
 }
+

@@ -12,8 +12,9 @@
 #include "EthernetInterface.h"
 
 typedef struct {
-	Endpoint endPoint;
+	Endpoint* endPoint;
 	char msg[COM_BUFFER_SIZE];
 } UMsgHandlerMailType;
 
 #endif  // UMSGHANDLERMAILTYPE_H_
+

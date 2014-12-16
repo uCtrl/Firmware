@@ -10,11 +10,16 @@
 
 #include "mbed.h"
 #include "rtos.h"
+#include "NTPClient.h"
+
 #include "cfg.h"
 #include "EthernetInterface.h"
 #include "UMsgHandlerMailType.h"
+#include "UJsonUtils.h"
 
-extern Mail<UMsgHandlerMailType, 2> msgHandlerMail;
+//#include "redefinitionOfNewAndDelete.h"
+
+extern Mail<UMsgHandlerMailType, MSGHANDLER_MAIL_SIZE> msgHandlerMail;
 
 class UComDriverIn
 {
@@ -34,3 +39,4 @@ class UComDriverIn
 };
 
 #endif  // UCOMDRIVERIN_H_
+

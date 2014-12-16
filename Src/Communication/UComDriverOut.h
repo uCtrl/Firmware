@@ -14,7 +14,7 @@
 #include "EthernetInterface.h"
 #include "UMsgHandlerMailType.h"
 
-extern Mail<UMsgHandlerMailType, 2> comDriverOutMail;
+extern Mail<UMsgHandlerMailType, COMDRIVER_OUT_MAIL_SIZE> comDriverOutMail;
 
 class UComDriverOut
 {
@@ -22,7 +22,7 @@ class UComDriverOut
         UDPSocket m_udpSocket;
         //Endpoint m_udpClient;
         Serial m_uart;
-        DigitalOut m_led;
+        //DigitalOut m_led;
         uint16_t m_rxCount;
     public:
         UComDriverOut();
@@ -32,3 +32,4 @@ class UComDriverOut
 };
 
 #endif  // UCOMDRIVEROUT_H_
+

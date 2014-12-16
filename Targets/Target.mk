@@ -73,4 +73,4 @@ OBJECTS += $(MBED_RTOS_PATH)rtos/Mutex.o
 INCLUDE_PATHS += -I$(MBED_RTOS_PATH) -I$(MBED_RTOS_PATH)rtx/ -I$(MBED_RTOS_PATH)rtx/TARGET_CORTEX_M/ -I$(MBED_RTOS_PATH)rtos/
 
 #common PLC files
-include ./Targets/TargetsExtension/plc.mk
+#include ./Targets/TargetsExtension/plc.mk
