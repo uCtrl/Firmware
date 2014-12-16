@@ -5,6 +5,7 @@
 #include "TaskHandlerConfigFile.h"
 #include "UScenario.h"
 #include "UDeviceType.h"
+#include <string>
 
 class UScenario;
 

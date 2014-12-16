@@ -344,7 +344,8 @@ GET(std::string, *_value.asString)
 
 
 //Input class for JSON parser
-class input {
+class input
+{
 protected:
     const char * cur_;
     const char * end_;
@@ -352,58 +353,78 @@ protected:
     bool ungot_;
     int line_;
 public:
-    input(const char * first, const char * last) : cur_(first), end_(last), last_ch_(-1), ungot_(false), line_(1) {};
+    input(const char * first, const char * last) :
+    cur_(first),
+    end_(last),
+    last_ch_(-1),
+    ungot_(false),
+    line_(1) {};
 
-    int getc() {
-        if (ungot_) {
+    int getc()
+    {
+        if (ungot_)
+        {
             ungot_ = false;
             return last_ch_;
         }
-        if (cur_ == end_) {
+        if (cur_ == end_)
+        {
             last_ch_ = -1;
             return -1;
         }
-        if (last_ch_ == '\n') {
+        if (last_ch_ == '\n')
+        {
             line_++;
         }
         last_ch_ = *cur_++ & 0xff;
         return last_ch_;
     }
 
-    void ungetc() {
-        if (last_ch_ != -1) {
+    void ungetc()
+    {
+        if (last_ch_ != -1)
+        {
             ungot_ = true;
         }
     }
 
-    const char * cur() const {
+    const char * cur() const
+    {
         return cur_;
     }
-    int line() const {
+    int line() const
+    {
         return line_;
     }
-    void skip_ws() {
+    void skip_ws()
+    {
         while (1) {
             int ch = getc();
-            if (! (ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r')) {
+            if (! (ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r'))
+            {
                 ungetc();
                 break;
             }
         }
     }
-    int expect(int expect) {
+    int expect(int expect)
+    {
         skip_ws();
-        if (getc() != expect) {
+        if (getc() != expect)
+        {
             ungetc();
             return false;
         }
         return true;
     }
-    bool match(const std::string& pattern) {
+    bool match(const std::string& pattern)
+    {
         for (std::string::const_iterator pi(pattern.begin());
                 pi != pattern.end();
-                ++pi) {
-            if (getc() != *pi) {
+                ++pi)
+        {
+            if (getc() != *pi)
+            {
                 ungetc();
                 return false;
             }
@@ -411,7 +432,6 @@ public:
         return true;
     }
 };
-
 
 
 inline const char * parse(MbedJSONValue& out, const char * first, const char * last, std::string* err);
