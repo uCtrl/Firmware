@@ -1,6 +1,6 @@
 # uCtrl 
 #if this line generate an error, it is probably because the target is not supported
-#Supported board: FRDM-K64F LPC1768 FRDM-KL25Z
+#Supported board: FRDM-K64F
 include ./Targets/$(TARGET).mk
 
 #common files
@@ -48,12 +48,29 @@ OBJECTS += $(MBED_COMMON_PATH)TimerEvent.o
 OBJECTS += $(MBED_COMMON_PATH)us_ticker_api.o
 OBJECTS += $(MBED_COMMON_PATH)wait_api.o
 
-INCLUDE_PATHS += -I. -I$(MBED_COMMON_PATH) -I$(CMSIS_PATH) -I$(MBED_PATH)api -I$(MBED_PATH)hal
+INCLUDE_PATHS += -I.  -I$(MBED_PATH) -I$(MBED_PATH)targets -I$(MBED_COMMON_PATH) -I$(CMSIS_PATH) -I$(MBED_PATH)api -I$(MBED_PATH)hal -I$(MBED_PATH)targets/hal
 
 
 #common MBED-RTOS files
-OBJECTS += $(MBED_RTOS_PATH)rtx/rt_Task.o $(MBED_RTOS_PATH)rtx/rt_System.o $(MBED_RTOS_PATH)rtx/rt_List.o $(MBED_RTOS_PATH)rtx/rt_Time.o $(MBED_RTOS_PATH)rtx/rt_Semaphore.o $(MBED_RTOS_PATH)rtx/rt_Mailbox.o $(MBED_RTOS_PATH)rtx/rt_CMSIS.o $(MBED_RTOS_PATH)rtx/HAL_CM.o $(MBED_RTOS_PATH)rtx/rt_Robin.o $(MBED_RTOS_PATH)rtx/rt_MemBox.o $(MBED_RTOS_PATH)rtx/RTX_Conf_CM.o $(MBED_RTOS_PATH)rtx/rt_Event.o $(MBED_RTOS_PATH)rtx/rt_Mutex.o $(MBED_RTOS_PATH)rtos/Thread.o $(MBED_RTOS_PATH)rtos/RtosTimer.o $(MBED_RTOS_PATH)rtos/Semaphore.o $(MBED_RTOS_PATH)rtos/Mutex.o
-INCLUDE_PATHS += -I./mbed-rtos -I$(MBED_RTOS_PATH)rtx -I$(MBED_RTOS_PATH)rtos
+OBJECTS += $(MBED_RTOS_PATH)rtx/TARGET_CORTEX_M/rt_Task.o
+OBJECTS += $(MBED_RTOS_PATH)rtx/TARGET_CORTEX_M/rt_System.o
+OBJECTS += $(MBED_RTOS_PATH)rtx/TARGET_CORTEX_M/rt_List.o
+OBJECTS += $(MBED_RTOS_PATH)rtx/TARGET_CORTEX_M/rt_Time.o
+OBJECTS += $(MBED_RTOS_PATH)rtx/TARGET_CORTEX_M/rt_Semaphore.o
+OBJECTS += $(MBED_RTOS_PATH)rtx/TARGET_CORTEX_M/rt_Mailbox.o
+OBJECTS += $(MBED_RTOS_PATH)rtx/TARGET_CORTEX_M/rt_CMSIS.o
+OBJECTS += $(MBED_RTOS_PATH)rtx/TARGET_CORTEX_M/HAL_CM.o
+OBJECTS += $(MBED_RTOS_PATH)rtx/TARGET_CORTEX_M/rt_Robin.o
+OBJECTS += $(MBED_RTOS_PATH)rtx/TARGET_CORTEX_M/rt_MemBox.o
+OBJECTS += $(MBED_RTOS_PATH)rtx/TARGET_CORTEX_M/RTX_Conf_CM.o
+OBJECTS += $(MBED_RTOS_PATH)rtx/TARGET_CORTEX_M/rt_Event.o
+OBJECTS += $(MBED_RTOS_PATH)rtx/TARGET_CORTEX_M/rt_Mutex.o
+
+OBJECTS += $(MBED_RTOS_PATH)rtos/Thread.o
+OBJECTS += $(MBED_RTOS_PATH)rtos/RtosTimer.o
+OBJECTS += $(MBED_RTOS_PATH)rtos/Semaphore.o
+OBJECTS += $(MBED_RTOS_PATH)rtos/Mutex.o
+INCLUDE_PATHS += -I$(MBED_RTOS_PATH) -I$(MBED_RTOS_PATH)rtx/ -I$(MBED_RTOS_PATH)rtx/TARGET_CORTEX_M/ -I$(MBED_RTOS_PATH)rtos/
 
 #common PLC files
 include ./Targets/TargetsExtension/plc.mk

@@ -16,4 +16,5 @@ config.mk
 *.o
 *.bin
 *.elf
+*.map
 

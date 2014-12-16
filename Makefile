@@ -11,15 +11,15 @@ OBJECTS =
 
 include ./config.mk
 
-TARGET ?= FRDM-KL25Z
+TARGET ?= FRDM-K64F
 MBED_RTOS_PATH ?= ../mbed/libraries/rtos/
 MBED_PATH ?= ../mbed/libraries/mbed/
 NET_PATH ?= ../mbed/libraries/net/
-PLC_PATH ?= ../uPLC/
+PLC_PATH ?= ./Src/PLC/
 ETH_PATH = $(NET_PATH)eth/
 LWIP_PATH = $(NET_PATH)lwip/
 
-#to be usedf by targets
+#to be used by targets
 ARM_TOOLCHAIN = TOOLCHAIN_GCC_ARM
 TOOLCHAIN = TOOLCHAIN_GCC
 CPU = 
@@ -52,37 +52,36 @@ include ./Targets/Target.mk
 ###############################################################################
 #uCtrl sources
 ###############################################################################
-INCLUDE_PATHS += -I./Src
-INCLUDE_PATHS += -I./Src/Conditions
-INCLUDE_PATHS += -I./Src/Controller
-INCLUDE_PATHS += -I./Src/Communication
-INCLUDE_PATHS += -I./Src/Communication/frozen
-INCLUDE_PATHS += -I./Src/Devices
-INCLUDE_PATHS += -I./Src/Devices/Actuators
-INCLUDE_PATHS += -I./Src/Devices/Sensors
-INCLUDE_PATHS += -I./Src/Events
-INCLUDE_PATHS += -I./Src/Tasks
-INCLUDE_PATHS += -I./Src/Utils
-OBJECTS += ./Src/cfg.o
-OBJECTS += ./Src/main.o
-OBJECTS += ./Src/Conditions/UCondition.o
-OBJECTS += ./Src/Controller/UController.o
-OBJECTS += ./Src/Communication/UComDriverIn.o
-OBJECTS += ./Src/Communication/UComDriverOut.o
-OBJECTS += ./Src/Communication/UMsgHandler.o
-OBJECTS += ./Src/Communication/frozen/frozen.o
-OBJECTS += ./Src/Devices/UDevice.o
-OBJECTS += ./Src/Devices/Actuators/FakeActuator.o
-OBJECTS += ./Src/Devices/Actuators/UActuatorHandler.o
-OBJECTS += ./Src/Devices/Sensors/USensor.o
-OBJECTS += ./Src/Devices/Sensors/USensorLight.o
-OBJECTS += ./Src/Devices/Sensors/USensorTemperature.o
-OBJECTS += ./Src/Devices/Sensors/USensorHandler.o
-OBJECTS += ./Src/Tasks/UScenario.o
-OBJECTS += ./Src/Tasks/UTask.o
-OBJECTS += ./Src/Tasks/UTaskHandler.o
-OBJECTS += ./Src/Utils/UPinUtils.o
-OBJECTS += ./Src/Utils/UMathUtils.o
+#INCLUDE_PATHS += -I./Src
+#INCLUDE_PATHS += -I./Src/Conditions
+#INCLUDE_PATHS += -I./Src/Controller
+#INCLUDE_PATHS += -I./Src/Communication
+#INCLUDE_PATHS += -I./Src/Communication/frozen
+#INCLUDE_PATHS += -I./Src/Devices
+#INCLUDE_PATHS += -I./Src/Devices/Actuators
+#INCLUDE_PATHS += -I./Src/Devices/Sensors
+#INCLUDE_PATHS += -I./Src/Events
+#INCLUDE_PATHS += -I./Src/Tasks
+#INCLUDE_PATHS += -I./Src/Utils
+OBJECTS += ./Src/mainPLC.o
+#OBJECTS += ./Src/Conditions/UCondition.o
+#OBJECTS += ./Src/Controller/UController.o
+#OBJECTS += ./Src/Communication/UComDriverIn.o
+#OBJECTS += ./Src/Communication/UComDriverOut.o
+#OBJECTS += ./Src/Communication/UMsgHandler.o
+#OBJECTS += ./Src/Communication/frozen/frozen.o
+#OBJECTS += ./Src/Devices/UDevice.o
+#OBJECTS += ./Src/Devices/Actuators/FakeActuator.o
+#OBJECTS += ./Src/Devices/Actuators/UActuatorHandler.o
+#OBJECTS += ./Src/Devices/Sensors/USensor.o
+#OBJECTS += ./Src/Devices/Sensors/USensorLight.o
+#OBJECTS += ./Src/Devices/Sensors/USensorTemperature.o
+#OBJECTS += ./Src/Devices/Sensors/USensorHandler.o
+#OBJECTS += ./Src/Tasks/UScenario.o
+#OBJECTS += ./Src/Tasks/UTask.o
+#OBJECTS += ./Src/Tasks/UTaskHandler.o
+#OBJECTS += ./Src/Utils/UPinUtils.o
+#OBJECTS += ./Src/Utils/UMathUtils.o
 
 ###############################################################################
 #Makefile target build
@@ -118,7 +117,7 @@ configure:
 	$(CC)  $(CC_FLAGS) $(CC_SYMBOLS) -std=gnu99   $(INCLUDE_PATHS) -o $@ $<
 
 .cpp.o:
-	$(CPP) $(CC_FLAGS) $(CC_SYMBOLS) -std=gnu++98 $(INCLUDE_PATHS) -o $@ $<
+	$(CPP) $(CC_FLAGS) $(CC_SYMBOLS) -std=gnu++98 -fno-rtti $(INCLUDE_PATHS) -o $@ $<
 
 
 $(PROJECT).elf: $(OBJECTS) $(SYS_OBJECTS)
@@ -126,3 +125,6 @@ $(PROJECT).elf: $(OBJECTS) $(SYS_OBJECTS)
 
 $(PROJECT).bin: $(PROJECT).elf
 	$(OBJCOPY) -O binary $< $@
+	
+$(PROJECT).lst: $(PROJECT).elf
+	@$(OBJDUMP) -Sdh $< > $@

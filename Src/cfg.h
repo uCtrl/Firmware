@@ -35,17 +35,17 @@ extern osPriority MESSAGE_HANDLER_PRIORITY;
 extern uint32_t MESSAGE_HANDLER_STACK_SIZE;
 
 //PLC threads
-osPriority PLC_DRIVER_IN_PRIORITY = osPriorityAboveNormal;
-int PLC_DRIVER_IN_STACK_SIZE = 512;
+osPriority PLC_DRIVER_IN_PRIORITY = osPriorityRealtime;
+const uint32_t PLC_DRIVER_IN_STACK_SIZE = 2048;
+unsigned char PLC_DRIVER_IN_STACK[PLC_DRIVER_IN_STACK_SIZE];
 
-osPriority PLC_DRIVER_OUT_PRIORITY = osPriorityAboveNormal;
-int PLC_DRIVER_OUT_STACK_SIZE = 512;
+osPriority PLC_DRIVER_OUT_PRIORITY = osPriorityRealtime;
+const uint32_t PLC_DRIVER_OUT_STACK_SIZE = 2048;
+unsigned char PLC_DRIVER_OUT_STACK[PLC_DRIVER_OUT_STACK_SIZE];
 
 osPriority PLC_HANDLER_PRIORITY = osPriorityAboveNormal;
-int PLC_HANDLER_STACK_SIZE = 512;
-
-
-
+const uint32_t PLC_HANDLER_STACK_SIZE = 4096;
+unsigned char PLC_HANDLER_STACK[PLC_HANDLER_STACK_SIZE];
 
 #endif /* CFG_H_ */
 
